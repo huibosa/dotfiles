@@ -2,6 +2,14 @@
 # DISABLE_UPDATE_PROMPT="true"
 # export UPDATE_ZSH_DAYS=13
 # ENABLE_CORRECTION="true"
+#
+if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
+  alias open="explorer.exe"
+
+  export WINHOME="/mnt/c/Users/huibo"
+
+  source "$HOME/.scripts/wslProxy"
+fi
 
 # give color to manpage
 export LESS_TERMCAP_mb=$'\E[1m\E[32m'
@@ -23,18 +31,17 @@ alias vi="nvim"
 alias py="python3"
 alias mv="mv -iv"
 alias cp="cp -iv"
+alias rm="rm -v"
 alias px="proxychains"
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 ######################## Evironment Variables ###########################
 export Go111MODULE="on"
 export GOPROXY="https://goproxy.io"
-
 export EDITOR="nvim"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.scripts:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
-
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 #########################################################################
@@ -50,7 +57,7 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 ############################# Set Vi Mode ###############################
 bindkey -v
-KEYTIMEOUT=5
+KEYTIMEOUT=10
 
 bindkey -M vicmd "H" vi-beginning-of-line
 bindkey -M vicmd "L" vi-end-of-line
