@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# convert all *.py file to *.ipynb
+if [[ $UID -eq 0 ]]; then
+  sudo find . -type f -name '*.py' -exec jupytext --to notebook {} +
+fi

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# jupytext --sync **/*.ipynb
+# find . -type f -name '*.ipynb' -exec jupytext --sync {} +
+if [[ $UID -eq 0 ]]; then
+  sudo find . -type f -name '*.ipynb' -exec jupytext --set-formats ipynb,py {} +
+fi
