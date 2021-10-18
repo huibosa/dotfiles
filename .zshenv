@@ -9,6 +9,7 @@ export READER="zathura"
 export BROWSER="chromium"
 export PAPER="less"
 export WM="dwm"
+export TERMINAL="st"
 
 # Path
 export PATH="$HOME/.local/bin:$PATH"

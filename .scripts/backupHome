@@ -2,4 +2,4 @@
 
 rsync -aAXHv --delete --quiet --exclude={"home/huibosa/.cache"} /home/huibosa /backup/home
 
-echo -e "$(date) (Home backup)" >> /home/huibosa/tmp/backup.log
+echo -e "$(date) (Home backup)" >> /tmp/backup.log

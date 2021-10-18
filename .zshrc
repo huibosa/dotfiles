@@ -1,13 +1,10 @@
-# DISABLE_AUTO_UPDATE="true"
-# DISABLE_UPDATE_PROMPT="true"
-# export UPDATE_ZSH_DAYS=13
-# ENABLE_CORRECTION="true"
-#
+# case command for wsl
 if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
   alias open="explorer.exe"
   source "$HOME/.scripts/wslProxy"
 fi
-########################## Command Aliases ################################
+
+# aliases
 alias vi="nvim"
 alias py="python3"
 alias mv="mv -iv"
@@ -15,20 +12,22 @@ alias cp="cp -iv"
 alias rm="rm -v"
 alias px="proxychains"
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-#########################################################################
+
+# oh my zsh settings
 plugins=(z zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
-#########################################################################
+
+# my prompt
 PROMPT='%{$fg_bold[cyan]%}%c%{$reset_color%}$(git_prompt_info)%{$fg[green]%}'
 PROMPT+="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%}) > %{$reset_color%}"
-
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}(%{$fg_bold[red]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
-############################# Set Vi Mode ###############################
+
+# vi mode settings
 bindkey -v
-KEYTIMEOUT=10
+KEYTIMEOUT=5
 
 bindkey -M vicmd "H" vi-beginning-of-line
 bindkey -M vicmd "L" vi-end-of-line
@@ -76,7 +75,7 @@ autoload edit-command-line; zle -N edit-command-line
 
 bindkey ',' autosuggest-accept
 
-############################Git#################################
+# my owm git plugin
 
 # The name of the current branch
 # Back-compatibility wrapper for when this function was defined here in
