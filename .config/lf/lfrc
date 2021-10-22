@@ -9,7 +9,6 @@ set ifs "\n"
 # basic settings
 set scrolloff 10
 set drawbox
-set icons
 
 # custom functions
 cmd open ${{
@@ -23,9 +22,10 @@ cmd open ${{
 
 # chmod
 cmd chmod %{{
-  for file in "$fx"; do
-    chmod "$1" "${file}"
+  for f in $fx; do
+    chmod $1 $f
   done
+  lf -remote "send $id reload"
 }}
 
 # move to trash
@@ -66,11 +66,15 @@ map mf push %touch <space>
 map ch push :chmod<space>
 
 map D trash
-map R reload
+map <c-l> reload
+map <c-z> $ kill -STOP $PPID
 map U clear
 map M mark-save 
+map x $$f
+map X !$f
 
 map gc cd ~/.config
+map gr cd /
 map gt cd ~/tmp
 map gT cd ~/.trash
 map gv cd ~/.config/nvim
