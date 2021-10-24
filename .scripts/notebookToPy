@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# convert all *.ipynb file to *.py
+
+read -p "To convert all .ipynb to .py recursively, type \"convert\": " input
+
+if [[ "${input}" == "convert" ]]; then
+  find . -type f -name '*.ipynb' -exec jupytext --set-formats ipynb,py {} +
+fi
