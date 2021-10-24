@@ -51,7 +51,6 @@ cmd tarbz %tar cjvf "$f.tar.bz2" "$f"
 
 # unmap default mappings
 map c
-map m
 
 # archive mappings
 map az zip 
@@ -61,15 +60,14 @@ map ab tarbz
 map au unarchive
 
 # basic mappings
-map md push %mkdir<space>-p<space>
-map mf push %touch <space>
+map A push %mkdir<space>-p<space>
+# map a push %touch <space>
 map ch push :chmod<space>
 
 map D trash
 map <c-l> reload
 map <c-z> $ kill -STOP $PPID
 map U clear
-map M mark-save 
 map x $$f
 map X !$f
 
