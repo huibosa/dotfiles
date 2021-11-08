@@ -22,10 +22,10 @@ cmd open ${{
 
 # chmod
 cmd chmod %{{
-  for f in $fx; do
-    chmod $1 $f
-  done
-  lf -remote "send $id reload"
+    for f in $fx; do
+        chmod $1 $f
+    done
+    lf -remote "send $id reload"
 }}
 
 # y (select for copy) and P to paste soft-link
@@ -47,7 +47,16 @@ cmd link %{{
     rm ~/.local/share/lf/files
     lf -remote "send clear"
 }}
-map P :link
+
+cmd compile %{{
+    ext="${fx##*.}"
+    case "$ext" in
+        cpp) g++ $fx;;
+        c) gcc $fx;;
+        *) echo "Wrong file format";;
+    esac
+    lf -remote "send unselect"
+}}
 
 # move to trash
 %mkdir -p ~/.trash
@@ -84,8 +93,10 @@ map au unarchive
 map A push %mkdir<space>-p<space>
 # map a push %touch <space>
 map ch push :chmod<space>
+map cc compile
 
 map D trash
+map P :link
 map <c-l> reload
 map <c-z> $ kill -STOP $PPID
 map U clear

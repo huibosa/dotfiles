@@ -2,7 +2,7 @@
 
 DataAnalysisModules="pandas numpy matplotlib jupytext notebook pynvim"
 OcrModules="pytesseract pillow pynvim"
-PdfModules="PyPDF2 pynvim"
+PdfModules="PyPDF2 pynvim pdfplumber"
 
 # test if python has been installed
 function checkPyPath() {
