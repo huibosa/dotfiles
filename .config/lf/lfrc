@@ -48,12 +48,13 @@ cmd link %{{
     lf -remote "send clear"
 }}
 
-cmd compile %{{
+cmd compile !{{
+    set -f
     ext="${fx##*.}"
     case "$ext" in
         cpp) g++ $fx;;
         c) gcc $fx;;
-        *) echo "Wrong file format";;
+        *) echo "File format not supported";;
     esac
     lf -remote "send unselect"
 }}
