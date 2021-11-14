@@ -26,6 +26,7 @@ cmd chmod %{{
         chmod $1 $f
     done
     lf -remote "send $id reload"
+    lf -remote "send unselect"
 }}
 
 # y (select for copy) and P to paste soft-link
