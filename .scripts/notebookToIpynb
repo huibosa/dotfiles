@@ -2,8 +2,12 @@
 
 # convert all *.py file to *.ipynb
 
-read -p "To convert all .py to .ipynb recursively, type \"convert\": " input
+if [[ $# -eq 0 ]]; then
+  read -p "To convert all .py to .ipynb recursively, type \"convert\": "
 
-if [[ "${input}" == "convert" ]]; then
-  find . -type f -name '*.py' -exec jupytext --to notebook {} +
+  if [[ "$REPLY" == "convert" ]]; then
+    find . -type f -name '*.py' -exec jupytext --to notebook {} +
+  fi
+else
+  jupytext --to notebook "$@"
 fi

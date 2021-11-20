@@ -22,9 +22,7 @@ cmd open ${{
 
 # chmod
 cmd chmod %{{
-    for f in $fx; do
-        chmod $1 $f
-    done
+    chmod $1 $fx
     lf -remote "send $id reload"
     lf -remote "send unselect"
 }}

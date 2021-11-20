@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DataAnalysisModules="pandas numpy matplotlib jupytext notebook pynvim"
+DataAnalysisModules="pandas numpy matplotlib jupytext notebook pynvim selenium"
 OcrModules="pytesseract pillow pynvim"
 PdfModules="PyPDF2 pynvim pdfplumber"
 
@@ -32,7 +32,7 @@ function checkArguments() {
 function installModules() {
   # activate venv
   printf "Activating venv..."
-  source "$HOME/.venv/${venvDir}/bin/activate"
+  source "$HOME/.venv/$venvDir/bin/activate"
   printf "Success\n"
 
   # check if pypi installed
@@ -44,10 +44,8 @@ function installModules() {
   printf "Found: pip\n"
 
   # install data analysis module
-  printf "Start installing %s module..." "${venvDir}"
-
+  printf "Start installing %s module..." "$venvDir"
   pip install $1 &> /dev/null
-
   printf "Complete\n"
 
   # exit venv
@@ -56,18 +54,19 @@ function installModules() {
 
 # initialization venv directory
 function initVenv() {
-  # create venv
-  "${PY}" -m venv "$HOME/.venv/${venvDir}"
+  [[ ! -d "$HOME/.venv" ]] && mkdir "$HOME/.venv"
+  
+  $PY -m venv "$HOME/.venv/$venvDir"
 
-  if [[ "${venvDir}" == "DataAnalysis" ]]; then
-    installModules "${DataAnalysisModules}"
-  elif [[ "${venvDir}" == "OCR" ]]; then
-    installModules "${OcrModules}"
-  elif [[ "${venvDir}" == "PDF" ]]; then
-    installModules "${PdfModules}"
+  if [[ "$venvDir" == "DataAnalysis" ]]; then
+    installModules "$DataAnalysisModules"
+  elif [[ "$venvDir" == "OCR" ]]; then
+    installModules "$OcrModules"
+  elif [[ "$venvDir" == "PDF" ]]; then
+    installModules "$PdfModules"
   fi
 
-  printf "venv: %s Initialization complete\n" "${venvDir}"
+  printf "venv: %s Initialization complete\n" "$venvDir"
 }
 
 function main() {
