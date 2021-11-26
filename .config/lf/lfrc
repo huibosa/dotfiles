@@ -14,7 +14,8 @@ set drawbox
 cmd open ${{
     test -L $f && f=$(readlink -f $f)
     case $(file --mime-type $f -b) in
-        text/*|application/json) $EDITOR $fx;;
+        text/* | application/json | inode/x-empty) $EDITOR $fx;;
+        application/x-pie-executable) $fx;;
         application/pdf) zathura $fx;;
         *) for f in $fx; do setsid $OPENER $f > /dev/null 2> /dev/null & done;;
     esac
@@ -51,8 +52,8 @@ cmd compile !{{
     set -f
     ext="${fx##*.}"
     case "$ext" in
-        cpp) g++ $fx;;
-        c) gcc $fx;;
+        cpp) g++ $fx -o ${fx[0]%%.*};;
+        c) gcc $fx -o ${fx[0]%%.*};;
         *) echo "File format not supported";;
     esac
     lf -remote "send unselect"
@@ -83,15 +84,15 @@ cmd tarbz %tar cjvf "$f.tar.bz2" "$f"
 map c
 
 # archive mappings
-map az zip 
-map at tar
-map ag targz
-map ab tarbz
-map au unarchive
+map Zz zip 
+map Zt tar
+map Zg targz
+map Zb tarbz
+map Zu unarchive
 
 # basic mappings
 map A push %mkdir<space>-p<space>
-# map a push %touch <space>
+map a push %touch<space>
 map ch push :chmod<space>
 map cc compile
 
