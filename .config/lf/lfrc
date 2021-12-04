@@ -50,12 +50,17 @@ cmd link %{{
 
 cmd compile !{{
     set -f
-    ext="${fx##*.}"
+    
+    firstFile="$(echo "$fx" | cut -d' ' -f1)"
+    firstFileNoExtension="${firstFile%%.*}"
+    ext="${firstFile##*.}"
+    
     case "$ext" in
-        cpp) g++ $fx -o ${fx[0]%%.*};;
-        c) gcc $fx -o ${fx[0]%%.*};;
+        cpp) g++ $fx -o "${firstFileNoExtension}";;
+        c) gcc $fx -o "${firstFileNoExtension}";;
         *) echo "File format not supported";;
     esac
+    
     lf -remote "send unselect"
 }}
 
