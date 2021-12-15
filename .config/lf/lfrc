@@ -64,6 +64,22 @@ cmd compile !{{
     lf -remote "send unselect"
 }}
 
+cmd debug !{{
+    set -f
+    
+    firstFile="$(echo "$fx" | cut -d' ' -f1)"
+    firstFileNoExtension="${firstFile%%.*}"
+    ext="${firstFile##*.}"
+    
+    case "$ext" in
+        cpp) g++ -g $fx -o "${firstFileNoExtension}";;
+        c) gcc -g $fx -o "${firstFileNoExtension}";;
+        *) echo "File format not supported";;
+    esac
+    
+    lf -remote "send unselect"
+}}
+
 # move to trash
 %mkdir -p ~/.trash
 cmd trash %set -f; mv $fx ~/.trash
@@ -89,17 +105,18 @@ cmd tarbz %tar cjvf "$f.tar.bz2" "$f"
 map c
 
 # archive mappings
-map Zz zip 
-map Zt tar
-map Zg targz
-map Zb tarbz
-map Zu unarchive
+map az zip 
+map at tar
+map ag targz
+map ab tarbz
+map au unarchive
 
 # basic mappings
-map A push %mkdir<space>-p<space>
-map a push %touch<space>
+map O push %mkdir<space>-p<space>
+map o push %touch<space>
 map ch push :chmod<space>
 map cc compile
+map cd debug
 
 map D trash
 map P :link
@@ -111,6 +128,4 @@ map X !$f
 
 map gc cd ~/.config
 map gr cd /
-map gt cd ~/tmp
 map gT cd ~/.trash
-map gv cd ~/.config/nvim
