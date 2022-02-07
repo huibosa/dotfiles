@@ -28,27 +28,27 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 #  # vi mode settings
 #  bindkey -v
 #  KEYTIMEOUT=5
-#  
+#
 #  bindkey -M vicmd "H" vi-beginning-of-line
 #  bindkey -M vicmd "L" vi-end-of-line
 #  bindkey -M vicmd "j" down-line-or-history
 #  bindkey -M vicmd "k" up-line-or-history
 #  bindkey -M viins 'jk' vi-cmd-mode
 #  bindkey -M viins 'kj' vi-cmd-mode
-#  
+#
 #  # use vim keybindings in tab complete menu
 #  bindkey -M menuselect "h" vi-backward-char
 #  bindkey -M menuselect "k" vi-up-line-or-history
 #  bindkey -M menuselect "l" vi-forward-char
 #  bindkey -M menuselect "j" vi-down-line-or-history
 #  bindkey -M menuselect "h" vi-backward-char
-#  
+#
 #  # fix delete behaviour in insert mode
 #  bindkey "^e" edit-command-line
 #  bindkey "^h" backward-delete-char
 #  bindkey "^w" backward-kill-word
 #  bindkey "^u" backward-kill-line
-#  
+#
 #  # change cursor shape for different vi modes
 #  function zle-keymap-select {
 #    if [[ ${KEYMAP} == vicmd ]] ||
@@ -61,16 +61,16 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 #      echo -ne '\e[5 q'
 #    fi
 #  }
-#  
+#
 #  # Use beam shape cursor on startup.
 #  echo -ne '\e[5 q'
 #  # Use beam shape cursor for each new prompt.
 #  preexec() { echo -ne '\e[5 q' }
 #  _fix_cursor() { echo -ne '\e[5 q' }
 #  precmd_functions+=(_fix_cursor)
-#  
+#
 #  zle -N zle-keymap-select
-#  
+#
 #  autoload edit-command-line; zle -N edit-command-line
 
 bindkey ',' autosuggest-accept
