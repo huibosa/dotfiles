@@ -16,63 +16,6 @@ alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # oh my zsh settings
 plugins=(z zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
-
-# my prompt
-PROMPT='%{$fg_bold[cyan]%}%c%{$reset_color%}$(git_prompt_info)%{$fg[green]%}'
-PROMPT+="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%}) > %{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}(%{$fg_bold[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
-
-#  # vi mode settings
-#  bindkey -v
-#  KEYTIMEOUT=5
-#
-#  bindkey -M vicmd "H" vi-beginning-of-line
-#  bindkey -M vicmd "L" vi-end-of-line
-#  bindkey -M vicmd "j" down-line-or-history
-#  bindkey -M vicmd "k" up-line-or-history
-#  bindkey -M viins 'jk' vi-cmd-mode
-#  bindkey -M viins 'kj' vi-cmd-mode
-#
-#  # use vim keybindings in tab complete menu
-#  bindkey -M menuselect "h" vi-backward-char
-#  bindkey -M menuselect "k" vi-up-line-or-history
-#  bindkey -M menuselect "l" vi-forward-char
-#  bindkey -M menuselect "j" vi-down-line-or-history
-#  bindkey -M menuselect "h" vi-backward-char
-#
-#  # fix delete behaviour in insert mode
-#  bindkey "^e" edit-command-line
-#  bindkey "^h" backward-delete-char
-#  bindkey "^w" backward-kill-word
-#  bindkey "^u" backward-kill-line
-#
-#  # change cursor shape for different vi modes
-#  function zle-keymap-select {
-#    if [[ ${KEYMAP} == vicmd ]] ||
-#       [[ $1 = 'block' ]]; then
-#      echo -ne '\e[1 q'
-#    elif [[ ${KEYMAP} == main ]] ||
-#         [[ ${KEYMAP} == viins ]] ||
-#         [[ ${KEYMAP} = '' ]] ||
-#         [[ $1 = 'beam' ]]; then
-#      echo -ne '\e[5 q'
-#    fi
-#  }
-#
-#  # Use beam shape cursor on startup.
-#  echo -ne '\e[5 q'
-#  # Use beam shape cursor for each new prompt.
-#  preexec() { echo -ne '\e[5 q' }
-#  _fix_cursor() { echo -ne '\e[5 q' }
-#  precmd_functions+=(_fix_cursor)
-#
-#  zle -N zle-keymap-select
-#
-#  autoload edit-command-line; zle -N edit-command-line
-
 bindkey ',' autosuggest-accept
 
 # my owm git plugin

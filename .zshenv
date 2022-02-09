@@ -24,6 +24,17 @@ export LC_ALL=en_US.UTF-8
 
 # ZSH
 export ZSH="$HOME/.oh-my-zsh"
+export HISTSIZE=10000000
+export SAVEHIST=$HISTSIZE
+setopt EXTENDED_HISTORY
+
+# my prompt
+PROMPT='%{$fg_bold[cyan]%}%c%{$reset_color%}$(git_prompt_info)%{$fg[green]%}'
+PROMPT+="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%}) > %{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}(%{$fg_bold[red]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
  
 # give color to manpage
 export LESS_TERMCAP_mb=$'\E[1m\E[32m'
@@ -39,5 +50,3 @@ export LESS_TERMCAP_ZN=""
 export LESS_TERMCAP_se=$'\E[27m\E(B\E[m'
 export LESS_TERMCAP_ZV=""
 export LESS_TERMCAP_so=$'\E[1m\E[33m\E[44m'
-
-
