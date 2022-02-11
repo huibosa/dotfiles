@@ -80,6 +80,10 @@ cmd debug !{{
     lf -remote "send unselect"
 }}
 
+cmd code ${{
+  code .
+}}
+
 # move to trash
 %mkdir -p ~/.trash
 cmd trash %set -f; mv $fx ~/.trash
@@ -117,6 +121,7 @@ map o push %touch<space>
 map ch push :chmod<space>
 map cc compile
 map cd debug
+map C code
 
 map D trash
 map P :link

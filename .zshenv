@@ -14,10 +14,12 @@ export TERMINAL="st"
 # Path
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.scripts:$PATH"
+export PATH="$HOME/.go/bin:$PATH"
+export PATH="/usr/local/go/bin:$PATH"
 
 # Golang
-export Go111MODULE="on"
 export GOPROXY="https://goproxy.io"
+export GOPATH="$HOME/.go"
  
 # Lang
 export LC_ALL=en_US.UTF-8

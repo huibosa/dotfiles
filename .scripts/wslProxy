@@ -9,7 +9,7 @@ function setGitProxy {
 }
 
 function setProxychain() {
-  sed -i "66c socks5  ${proxy}  7890" /etc/proxychains.conf
+  sed -i "66c socks5  ${proxy}  7890" /etc/proxychains4.conf
 }
 
 # set global proxy
