@@ -48,7 +48,7 @@ cmd link %{{
     lf -remote "send clear"
 }}
 
-cmd compile !{{
+cmd compile ${{
     set -f
     
     firstFile="$(echo "$fx" | cut -d' ' -f1)"
@@ -58,6 +58,7 @@ cmd compile !{{
     case "$ext" in
         cpp) g++ $fx -o "${firstFileNoExtension}";;
         c) gcc $fx -o "${firstFileNoExtension}";;
+        go) go build $f;;
         *) echo "File format not supported";;
     esac
     
@@ -105,6 +106,15 @@ cmd tar %tar cvf "$f.tar" "$f"
 cmd targz %tar cvzf "$f.tar.gz" "$f"
 cmd tarbz %tar cjvf "$f.tar.bz2" "$f"
 
+cmd execute !{{
+    set -f
+    case "$f" in
+        *.go) go run "$f";;
+        *) "$f";;
+    esac
+}}
+
+
 # unmap default mappings
 map c
 
@@ -129,7 +139,7 @@ map <c-l> reload
 map <c-z> $ kill -STOP $PPID
 map U clear
 map x $$f
-map X !$f
+map X execute
 
 map gc cd ~/.config
 map gr cd /
