@@ -87,7 +87,16 @@ cmd code ${{
 
 # move to trash
 %mkdir -p ~/.trash
-cmd trash $set -f; mv $fx ~/.trash
+
+cmd trash ${{
+    for f in "$fx"; do
+        fname=${f##*/}
+        if [[ -e ~/.trash/$fname ]]; then
+            fname+=$RANDOM
+        fi
+        mv $f ~/.trash/$fname
+    done
+}}
 
 cmd unarchive ${{
     set -f
