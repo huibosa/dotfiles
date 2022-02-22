@@ -29,6 +29,9 @@ export ZSH="$HOME/.oh-my-zsh"
 export HISTSIZE=10000000
 export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
+
+# LFCD
+LFCD="$HOME/.config/lf/lfcd.sh"
  
 # give color to manpage
 export LESS_TERMCAP_mb=$'\E[1m\E[32m'
