@@ -12,7 +12,7 @@ toDir() {
   fi
 }
 
-for f in *.go; do
-  dirName=${f%.*}
+for f in *; do
+  dirName="${f%.*}"
   toDir "$f"
 done

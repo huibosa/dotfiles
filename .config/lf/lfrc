@@ -48,7 +48,7 @@ cmd link %{{
     lf -remote "send clear"
 }}
 
-cmd compile ${{
+cmd compile !{{
     set -f
     
     firstFile="$(echo "$fx" | cut -d' ' -f1)"
@@ -87,7 +87,7 @@ cmd code ${{
 
 # move to trash
 %mkdir -p ~/.trash
-cmd trash %set -f; mv $fx ~/.trash
+cmd trash $set -f; mv $fx ~/.trash
 
 cmd unarchive ${{
     set -f
@@ -119,15 +119,15 @@ cmd execute !{{
 map c
 
 # archive mappings
-map az zip 
-map at tar
-map ag targz
-map ab tarbz
-map au unarchive
+map Rz zip 
+map Rt tar
+map Rg targz
+map Rb tarbz
+map Ru unarchive
 
 # basic mappings
-map O push %mkdir<space>-p<space>
-map o push %touch<space>
+map A push %mkdir<space>-p<space>
+map a push %touch<space>
 map ch push :chmod<space>
 map cc compile
 map cd debug
