@@ -2,7 +2,7 @@
 %[ $LF_LEVEL -eq 1 ] || echo "WARNING: You're in a nested lf instance!"
 
 # options for shell commands
-set shell sh
+set shell bash
 set shellopts '-eu'
 set ifs "\n"
 
@@ -89,9 +89,9 @@ cmd code ${{
 %mkdir -p ~/.trash
 
 cmd trash ${{
-    for f in "$fx"; do
-        fname=${f##*/}
-        if [[ -e ~/.trash/$fname ]]; then
+    for f in $fx; do
+        fname="${f##*/}"
+        if [ -e ~/.trash/$fname ]; then
             fname+=$RANDOM
         fi
         mv $f ~/.trash/$fname
