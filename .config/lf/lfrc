@@ -126,6 +126,7 @@ cmd execute !{{
 
 # unmap default mappings
 map c
+map w
 
 # archive mappings
 map Rz zip 
