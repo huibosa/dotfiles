@@ -5,6 +5,7 @@ source $ZSH/oh-my-zsh.sh
 
 # lfcd
 source $HOME/.config/lf/lfcd.sh
+source $HOME/.scripts/proxy.sh
 
 
 # case command for wsl
