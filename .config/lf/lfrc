@@ -88,7 +88,7 @@ cmd code ${{
 # move to trash
 %mkdir -p ~/.trash
 
-cmd trash ${{
+cmd trash %{{
     for f in $fx; do
         fname="${f##*/}"
         if [ -e ~/.trash/$fname ]; then
