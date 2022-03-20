@@ -148,7 +148,6 @@ map P :link
 map <c-l> reload
 map <c-z> $ kill -STOP $PPID
 map U clear
-map x $$f
 map X execute
 
 map gc cd ~/.config

@@ -1,6 +1,27 @@
-# oh my zsh settings
-plugins=(z zsh-autosuggestions zsh-syntax-highlighting)
-source $ZSH/oh-my-zsh.sh
+# bindkey -e
+# 
+# # color for prompt
+# autoload -U colors && colors
+# 
+# # always refresh prompt
+# setopt prompt_subst
+# 
+# autoload -Uz compinit
+# compinit -u
+# alias compinit="echo no more compinit!"
+
+
+#+use antigen
+source $HOME/.scripts/antigen.zsh
+
+antigen use oh-my-zsh
+
+antigen bundle z
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-syntax-highlighting
+
+antigen apply
+#-use antigen
 
 
 # lfcd
