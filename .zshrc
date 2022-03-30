@@ -26,7 +26,6 @@ antigen apply
 
 source $HOME/.config/lf/lfcd.sh
 source $HOME/.scripts/proxy.sh
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 
 # case command for wsl
