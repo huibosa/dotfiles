@@ -50,6 +50,11 @@ function updateAll() {
 	done
 }
 
+if ! command -v jupytext &> /dev/null ; then
+  echo "jupytext not installed, installing use pip..."
+  pip install jupytext
+fi
+
 if [[ $# -eq 0 ]]; then
 	updateAll
 elif [[ "$1" == *.ipynb ]]; then
