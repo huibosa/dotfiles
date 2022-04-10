@@ -9,7 +9,7 @@ setGitProxy() {
 }
 
 setProxychain() {
-	sed -i "66c socks5  ${proxy}  7890" /etc/proxychains4.conf
+	sed -i "64c socks5  ${proxy}  7890" /etc/proxychains.conf
 }
 
 if [[ $UID -ne 0 ]]; then

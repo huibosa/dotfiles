@@ -1,14 +1,13 @@
 # show a waring on startup if lf is running as a nested instance
-%[ $LF_LEVEL -eq 1 ] || echo "WARNING: You're in a nested lf instance!"
+# %[ $LF_LEVEL -eq 1 ] || echo "WARNING: You're in a nested lf instance!"
 
-# options for shell commands
+# basic settings
 set shell bash
 set shellopts '-eu'
 set ifs "\n"
-
-# basic settings
 set scrolloff 10
 set drawbox
+set period 1
 
 # custom functions
 cmd open ${{

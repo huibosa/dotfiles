@@ -15,15 +15,24 @@ get_proxy() {
 # set global proxy
 proxy_on() {
 	get_proxy
-	export http_proxy="${proxy}"
-	export https_proxy="${proxy}"
-	export all_proxy="${proxy}"
-	echo -e "Proxy set sucessfully"
+	export http_proxy="${proxy}" \
+         https_proxy="${proxy}" \
+         ftp_proxy="${proxy}" \
+         rsync_proxy="${proxy}" \
+         HTTP_PROXY="${proxy}" \
+         HTTPS_PROXy="${proxy}" \
+         FTP_PROXY="${proxy}" \
+         RSYNC_PROXy="${proxy}" \
+         all_proxy="${proxy}" \
+         ALL_PROXY="${proxy}"
+  echo -e "Proxy environment variable set."
+  return 0
 }
 
 # unset global proxy
 proxy_off() {
-	unset http_proxy
-	unset https_proxy
-	echo -e "Unset all proxy"
+	unset http_proxy https_proxy ftp_proxy rsync_proxy all_proxy \
+	      HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY ALL_PROXY
+        
+	echo -e "Proxy environment variable removed"
 }

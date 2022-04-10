@@ -41,7 +41,5 @@ alias py="python3"
 alias mv="mv -iv"
 alias cp="cp -iv"
 alias rm="rm -v"
-alias px="proxychains"
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias lf="lfcd"
-
