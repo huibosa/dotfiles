@@ -31,7 +31,6 @@ source $HOME/.scripts/proxy.sh
 # case command for wsl
 if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
   alias open="explorer.exe"
-  source "$HOME/.scripts/wsl-proxy.sh"
 fi
 
 
