@@ -53,18 +53,16 @@ cmd link %{{
 #-Create link
 
 #+Yank file path to system clipboard
-cmd yankpath %{{
-    clipper=""
-    path=$(readlink -f $fx)
-
+cmd yankpath &{{
     if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
-        printf "%s" "$path" | clip.exe
+        printf '%s' "$fx" | clip.exe
     else
-        printf "%s" "$path" | xclip -selection clipboard
+        printf '%s' "$fx" | xclip -i -selection clipboard
     fi
 
     lf -remote "send unselect"
-    echo "File path copied to clipboard"
+    lf -remote "send $id echo File path copied to clipboard"
+    exit 0
 }}
 #-Yank file path to system clipboard
 
