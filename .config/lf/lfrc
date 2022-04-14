@@ -1,15 +1,16 @@
 # show a waring on startup if lf is running as a nested instance
 # %[ $LF_LEVEL -eq 1 ] || echo "WARNING: You're in a nested lf instance!"
 
-# basic settings
+#+Basic settings
 set shell bash
 set shellopts '-eu'
 set ifs "\n"
 set scrolloff 10
 set drawbox
 set period 1
+#-Basic settings
 
-# custom functions
+#+Set opener
 cmd open ${{
     test -L $f && f=$(readlink -f $f)
     case $(file --mime-type $f -b) in
@@ -19,14 +20,17 @@ cmd open ${{
         *) for f in $fx; do setsid $OPENER $f > /dev/null 2> /dev/null & done;;
     esac
 }}
+#-Set opener
 
-# chmod
+#+Change mode
 cmd chmod %{{
     chmod $1 $fx
     lf -remote "send $id reload"
     lf -remote "send unselect"
 }}
+#-Change mode
 
+#+Create link
 # y (select for copy) and P to paste soft-link
 # d (select for cut) and P to paste hard-link
 cmd link %{{
@@ -46,7 +50,25 @@ cmd link %{{
     rm ~/.local/share/lf/files
     lf -remote "send clear"
 }}
+#-Create link
 
+#+Yank file path to system clipboard
+cmd yankpath %{{
+    clipper=""
+    path=$(readlink -f $fx)
+
+    if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
+        printf "%s" "$path" | clip.exe
+    else
+        printf "%s" "$path" | xclip -selection clipboard
+    fi
+
+    lf -remote "send unselect"
+    echo "File path copied to clipboard"
+}}
+#-Yank file path to system clipboard
+
+#+Build options
 cmd compile !{{
     set -f
     
@@ -79,24 +101,24 @@ cmd debug !{{
     
     lf -remote "send unselect"
 }}
+#-Build options
 
-cmd code ${{
-  code .
-}}
-
-# move to trash
+#+Move to trash
 %mkdir -p ~/.trash
-
 cmd trash %{{
     for f in $fx; do
         fname="${f##*/}"
+        random=$(mktemp -u)
+        suffix=${random#*.}
         if [ -e ~/.trash/$fname ]; then
-            fname+=$RANDOM
+            fname+=".$suffix"
         fi
         mv $f ~/.trash/$fname
     done
 }}
+#-Move to trash
 
+#+Archive options
 cmd unarchive %{{
     set -f
     case "$f" in
@@ -113,34 +135,47 @@ cmd zip %zip -r "$f" "$f"
 cmd tar %tar cvf "$f.tar" "$f"
 cmd targz %tar cvzf "$f.tar.gz" "$f"
 cmd tarbz %tar cjvf "$f.tar.bz2" "$f"
+#-Archive options
 
+#+Execute as script
 cmd execute !{{
     set -f
     case "$f" in
-        *.go) go run "$f";;
-        *) "$f";;
+        *.go)   go run "$f";;
+        *.c)    target=$(mktemp -u)
+                gcc "$f" -o "$target"
+                "$target"
+                ;;
+        *.cpp)  target=$(mktemp -u)
+                g++ "$f" -o "$target"
+                "$target"
+                ;;
+        *)      "$f";;
     esac
 }}
+#-Execute as script
 
-
-# unmap default mappings
+#+Unmap default mappings
 map c
 map w
+map <c-r>
+#-Unmap default mappings
 
-# archive mappings
-map Rz zip 
-map Rt tar
-map Rg targz
-map Rb tarbz
-map Ru unarchive
+#+Archive mappings
+map Zz zip 
+map Zt tar
+map Zg targz
+map Zb tarbz
+map Zx unarchive
+#-Archive mappings
 
-# basic mappings
+#+Basic mappings
 map A push %mkdir<space>-p<space>
 map a push %touch<space>
 map ch push :chmod<space>
-map cc compile
-map cd debug
-map C code
+map bc compile
+map bd debug
+map C $code .
 
 map D trash
 map P :link
@@ -148,7 +183,10 @@ map <c-l> reload
 map <c-z> $ kill -STOP $PPID
 map U clear
 map X execute
+map x $$f
+map Y yankpath
 
 map gc cd ~/.config
 map gr cd /
 map gT cd ~/.trash
+#-Basic mappings
