@@ -5,9 +5,10 @@
 set shell bash
 set shellopts '-eu'
 set ifs "\n"
-set scrolloff 10
+set scrolloff 4
 set drawbox
 set period 1
+# set info size:time
 #-Basic settings
 
 #+Set opener
@@ -22,13 +23,13 @@ cmd open ${{
 }}
 #-Set opener
 
-#+Change mode
-cmd chmod %{{
-    chmod $1 $fx
-    lf -remote "send $id reload"
-    lf -remote "send unselect"
-}}
-#-Change mode
+##+Change mode
+#cmd chmod %{{
+#    chmod $1 $fx
+#    lf -remote "send $id reload"
+#    lf -remote "send unselect"
+#}}
+##-Change mode
 
 #+Create link
 # y (select for copy) and P to paste soft-link
@@ -154,9 +155,7 @@ cmd execute !{{
 #-Execute as script
 
 #+Unmap default mappings
-map c
 map w
-map <c-r>
 #-Unmap default mappings
 
 #+Archive mappings
@@ -168,21 +167,16 @@ map Zx unarchive
 #-Archive mappings
 
 #+Basic mappings
+map <c-z> $ kill -STOP $PPID
 map A push %mkdir<space>-p<space>
 map a push %touch<space>
-map ch push :chmod<space>
-map bc compile
-map bd debug
-map C $code .
-
 map D trash
-map P :link
-map <c-l> reload
-map <c-z> $ kill -STOP $PPID
-map U clear
+map P link
+map Y yankpath
 map X execute
 map x $$f
-map Y yankpath
+map bc compile
+map bd debug
 
 map gc cd ~/.config
 map gr cd /
