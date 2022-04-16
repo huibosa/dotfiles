@@ -39,7 +39,7 @@ cmd link %{{
     mode="$1"
     shift
     if [ "$#" -lt 1 ]; then
-        lf -remote "send $id echo no files to link"
+        lf -remote "send $id echo WARNING: No files to link"
         exit 0
     fi
     case "$mode" in
@@ -79,7 +79,7 @@ cmd compile !{{
         cpp) g++ $fx -o "${firstFileNoExtension}";;
         c) gcc $fx -o "${firstFileNoExtension}";;
         go) go build $f;;
-        *) echo "File format not supported";;
+        *) echo "WARNING: File format not supported";;
     esac
     
     lf -remote "send unselect"
@@ -95,7 +95,7 @@ cmd debug !{{
     case "$ext" in
         cpp) g++ -g $fx -o "${firstFileNoExtension}";;
         c) gcc -g $fx -o "${firstFileNoExtension}";;
-        *) echo "File format not supported";;
+        *) echo "WARNING: File format not supported";;
     esac
     
     lf -remote "send unselect"
@@ -118,7 +118,7 @@ cmd trash %{{
 #-Move to trash
 
 #+Archive options
-cmd unarchive %{{
+cmd extract !{{
     set -f
     case "$f" in
         *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf "$f";;
@@ -127,6 +127,7 @@ cmd unarchive %{{
         *.zip) unzip "$f";;
         *.rar) unrar x "$f";;
         *.7z) 7z x "$f";;
+        *) echo "WARNING: File format not supported";;
     esac
 }}
 
@@ -159,24 +160,32 @@ map w
 #-Unmap default mappings
 
 #+Archive mappings
-map Zz zip 
-map Zt tar
-map Zg targz
-map Zb tarbz
-map Zx unarchive
+map Cz zip
+map Ct tar
+map Cg targz
+map Cb tarbz
+map E extract
 #-Archive mappings
 
 #+Basic mappings
 map <c-z> $ kill -STOP $PPID
+map <enter> shell
+
 map A push %mkdir<space>-p<space>
 map a push %touch<space>
+
 map D trash
 map P link
 map Y yankpath
+
 map X execute
 map x $$f
-map bc compile
-map bd debug
+
+map o &mimeopen $f
+map O $mimeopen --ask $f
+
+map Bc compile
+map Bd debug
 
 map gc cd ~/.config
 map gr cd /
