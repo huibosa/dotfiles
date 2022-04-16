@@ -13,8 +13,8 @@ function ipynbToPy() {
 }
 
 function update() {
-	[[ "$1" == *.ipynb ]] && ipynbToPy $1
-	[[ "$1" == *.py ]] && pyToIpynb $1
+	[[ "$1" == *.ipynb ]] && ipynbToPy "$1"
+	[[ "$1" == *.py ]] && pyToIpynb "$1"
 }
 
 function getRival() {

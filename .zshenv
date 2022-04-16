@@ -50,5 +50,8 @@ export LESS_TERMCAP_ZV=""
 export LESS_TERMCAP_so=$'\E[1m\E[33m\E[44m'
 
 # my prompt
+PROMPT_SUCCESS_COLOR='%{$fg_bold[green]%}'
+PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
 PROMPT='%{$fg_bold[cyan]%}%c%{$reset_color%}%{$fg[green]%}'
-PROMPT+="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%}) > %{$reset_color%}"
+PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%} > "
+PROMPT+='%{$reset_color%}'
