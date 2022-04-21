@@ -5,7 +5,7 @@
 set shell bash
 set shellopts '-eu'
 set ifs "\n"
-set scrolloff 4
+set scrolloff 10
 set drawbox
 set period 1
 # set info size:time
@@ -22,14 +22,6 @@ cmd open ${{
     esac
 }}
 #-Set opener
-
-##+Change mode
-#cmd chmod %{{
-#    chmod $1 $fx
-#    lf -remote "send $id reload"
-#    lf -remote "send unselect"
-#}}
-##-Change mode
 
 #+Create link
 # y (select for copy) and P to paste soft-link
@@ -141,6 +133,8 @@ cmd tarbz %tar cjvf "$f.tar.bz2" "$f"
 cmd execute !{{
     set -f
     case "$f" in
+        *.py)   /usr/bin/env python3 "$f";;
+        *.sh)   /usr/bin/env bash "$f";;
         *.go)   go run "$f";;
         *.c)    target=$(mktemp -u)
                 gcc "$f" -o "$target"
@@ -169,6 +163,7 @@ map E extract
 
 #+Basic mappings
 map <c-z> $ kill -STOP $PPID
+map <c-l> reload; redraw
 map <enter> shell
 
 map A push %mkdir<space>-p<space>
