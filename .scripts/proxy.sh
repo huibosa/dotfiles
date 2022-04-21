@@ -29,27 +29,27 @@ if uname -a | grep -qEi '(microsoft|wsl)' &>/dev/null; then
 #     proxy+=":20170"
 fi
 
-# # set global proxy
-# proxy_on() {
-# 	export http_proxy="${proxy}" \
-#          https_proxy="${proxy}" \
-#          ftp_proxy="${proxy}" \
-#          rsync_proxy="${proxy}" \
-#          HTTP_PROXY="${proxy}" \
-#          HTTPS_PROXy="${proxy}" \
-#          FTP_PROXY="${proxy}" \
-#          RSYNC_PROXy="${proxy}" \
-#          all_proxy="${proxy}" \
-#          ALL_PROXY="${proxy}"
-#   echo -e "Proxy environment variable set."
-#   return 0
-# }
+# set global proxy
+proxy-on() {
+	export http_proxy="${proxy}" \
+         https_proxy="${proxy}" \
+         ftp_proxy="${proxy}" \
+         rsync_proxy="${proxy}" \
+         HTTP_PROXY="${proxy}" \
+         HTTPS_PROXy="${proxy}" \
+         FTP_PROXY="${proxy}" \
+         RSYNC_PROXy="${proxy}" \
+         all_proxy="${proxy}" \
+         ALL_PROXY="${proxy}"
+  echo -e "Proxy environment variable set."
+  return 0
+}
 
-# # unset global proxy
-# proxy_off() {
-# 	unset http_proxy https_proxy ftp_proxy rsync_proxy all_proxy \
-# 	      HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY ALL_PROXY
+# unset global proxy
+proxy-off() {
+	unset http_proxy https_proxy ftp_proxy rsync_proxy all_proxy \
+	      HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY ALL_PROXY
         
-# 	echo -e "Proxy environment variable removed"
-#   return 0
-# }
+	echo -e "Proxy environment variable removed"
+  return 0
+}
