@@ -1,8 +1,12 @@
 #!/bin/bash
-# backup the home directory every three days
 
-backupFile="$(date +%Y-%m-%d)"
-rmFile="$(date --date="a weeks ago" +%Y-%m-%d)"
-echo ${rmFile}
+today="$(date +%Y-%m-%d)"
+monthBack="$(date --date="a month ago" +%Y-%m-%d)"
 
-# rsync -aAXHv --delete --quiet --exclude={"/home/huibosa/.cache/*"} /home/huibosa /backup/home/
+rsync -aAXHv --delete --quiet --exclude={"/home/huibosa/.cache/*"} $HOME $BACKUP/home/$today
+echo -e "$(date) (Home backup)" >> /tmp/backup.log
+
+if [[ -e $BACKUP/home/$monthBack ]]; then
+  rm -rf $BACKUP/home/$monthBack
+  echo -e "$(date) (Remove backup)" >> /tmp/backup.log
+fi
