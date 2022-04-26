@@ -138,6 +138,7 @@ cmd execute !{{
     case "$f" in
         *.py)   /usr/bin/env python3 "$f";;
         *.sh)   /usr/bin/env bash "$f";;
+        *.lua)  /usr/bin/env lua "$f";;
         *.go)   go run "$f";;
         *.c)    target=$(mktemp -u)
                 gcc "$f" -o "$target"

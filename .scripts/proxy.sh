@@ -30,15 +30,15 @@ if uname -a | grep -qEi '(microsoft|wsl)' &>/dev/null; then
 fi
 
 # set global proxy
-proxy-on() {
+proxy() {
 	export http_proxy="${proxy}" \
          https_proxy="${proxy}" \
          ftp_proxy="${proxy}" \
          rsync_proxy="${proxy}" \
          HTTP_PROXY="${proxy}" \
-         HTTPS_PROXy="${proxy}" \
+         HTTPS_PROXY="${proxy}" \
          FTP_PROXY="${proxy}" \
-         RSYNC_PROXy="${proxy}" \
+         RSYNC_PROXY="${proxy}" \
          all_proxy="${proxy}" \
          ALL_PROXY="${proxy}"
   echo -e "Proxy environment variable set."
@@ -46,7 +46,7 @@ proxy-on() {
 }
 
 # unset global proxy
-proxy-off() {
+noproxy() {
 	unset http_proxy https_proxy ftp_proxy rsync_proxy all_proxy \
 	      HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY ALL_PROXY
         
