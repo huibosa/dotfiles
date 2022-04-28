@@ -24,12 +24,13 @@ antigen apply
 #-use antigen
 
 
-source $HOME/.config/lf/lfcd.sh
 source $HOME/.scripts/proxy.sh
+source $HOME/.scripts/lfcd.sh
 
 
 # case command for wsl
 if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
+  alias display="eog"
   alias open="explorer.exe"
 fi
 
