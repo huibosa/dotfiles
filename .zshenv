@@ -8,8 +8,8 @@ export EDITOR="nvim"
 export READER="zathura"
 export BROWSER="chromium"
 export PAPER="less"
-export WM="dwm"
-export TERMINAL="st"
+# export WM="dwm"
+# export TERMINAL="st"
 export BACKUP="/backup"
 
 # Path
