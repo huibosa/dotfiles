@@ -7,7 +7,7 @@ function usage() {
 
 oldPath=$(pwd)
 pack=
-path="$HOME/Packages"
+path="$HOME/Downloads"
 
 case "$1" in
 chrome) pack="google-chrome" ;;
