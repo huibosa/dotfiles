@@ -45,7 +45,7 @@ mergeSubs() {
   # Get subtitles
   cp subs/* .
 
-  # Get auto-generated subtitles
+  # Get subtitles only in auto-sub
   while read -r line; do
     file=$(echo "$line" | cut -d' ' -f4-)
     cp auto-subs/"$file" .
