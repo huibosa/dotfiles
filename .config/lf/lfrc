@@ -3,7 +3,7 @@
 
 #+Basic settings
 set shell bash
-set shellopts '-eu'
+set shellopts '-e'
 set ifs "\n"
 set scrolloff 10
 set drawbox

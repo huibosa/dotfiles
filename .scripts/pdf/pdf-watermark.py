@@ -4,6 +4,7 @@
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from copy import copy
+import sys
 
 fname = "a.pdf"
 target = "fileWithWaterMark.pdf"
@@ -22,3 +23,8 @@ for i in range(ifstrm.getNumPages()):
 
 with open(target, "wb") as f:
     ofstrm.write(f)
+
+
+# TODO:
+if __name__ == "__main__":
+    fnames = [sys.argv[1], sys.argv[2]]
