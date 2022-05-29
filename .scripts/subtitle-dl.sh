@@ -12,7 +12,7 @@ writeSubs() {
     cd subs || exit
 
     printf "Downloading subtitles...\n"
-    yt-dlp --write-subs --skip-download --sub-lang=en "$1"
+    yt-dlp --write-subs --skip-download --sub-lang=en -o "%(title)s.%(ext)s" "$1"
 
     convertSubs
     clean
@@ -26,13 +26,14 @@ writeAutoSubs() {
     cd auto-subs || exit
 
     printf "Downloading auto-generated subtitles...\n"
-    yt-dlp --write-auto-subs --skip-download --sub-lang=en "$1"
+    yt-dlp --write-auto-subs --skip-download --sub-lang=en -o "%(title)s.%(ext)s" "$1"
 
     convertSubs
     clean
   )
 }
 
+# Convert format from vtt to ass
 convertSubs() {
   for fname in *; do
     if [[ "$fname" == *.vtt ]]; then
