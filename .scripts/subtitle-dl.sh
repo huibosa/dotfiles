@@ -44,7 +44,7 @@ convertSubs() {
 
 mergeSubs() {
   # Get subtitles
-  cp subs/* .
+  cp subs/* ./
 
   # Get subtitles only in auto-sub
   while read -r line; do
@@ -59,7 +59,7 @@ mergeSubs() {
 }
 
 clean() {
-  rm -rf *.vtt
+  rm -rf ./*.vtt
 }
 
 if [[ $# == 0 ]]; then

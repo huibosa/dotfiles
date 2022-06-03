@@ -6,7 +6,7 @@ lfcd () {
         rm -f "$tmp" &> /dev/null
         if [ -d "$dir" ]; then
             if [ "$dir" != "$(pwd)" ]; then
-                cd "$dir"
+                cd "$dir" || exit
             fi
         fi
     fi

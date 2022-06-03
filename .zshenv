@@ -8,8 +8,6 @@ export EDITOR="nvim"
 export READER="zathura"
 export BROWSER="chromium"
 export PAPER="less"
-# export WM="dwm"
-# export TERMINAL="st"
 export BACKUP="/backup"
 
 # Path
@@ -27,7 +25,7 @@ export GOPATH="$HOME/.go"
 export LC_ALL=en_US.UTF-8
 
 # ZSH
-export ZSH="$HOME/.oh-my-zsh"
+export HISTFILE="$HOME/.zsh_history"
 export HISTSIZE=10000000
 # export HISTCONTROL=ignorespace
 export SAVEHIST=$HISTSIZE
