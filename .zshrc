@@ -1,14 +1,14 @@
 # zmodload zsh/zprof
 
-# Ban ctrl-s which freese terminal
+# Forbid <c-s> to freeze terminal
 unsetopt flow_control
 
 
 # Commandline editting
-bindkey -e  # Emacs keybindings
+bindkey -e                       # Emacs keybindings
 autoload -z edit-command-line
 zle -N edit-command-line
-bindkey "^X^E" edit-command-line # <C-X><C-E> to edit in $EDITOR
+bindkey "^X^E" edit-command-line # <C-X><C-E> to edit command in $EDITOR
 
 
 # No back-word-kill-word on directory delimiter
@@ -22,8 +22,10 @@ setopt prompt_subst
 
 
 # Completion
+zstyle ':completion:*' menu select=1 # menu block selection
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 autoload -Uz compinit && compinit -u
-zstyle ':completion:*' menu select # menu block selection
 
 
 # Use antigen
@@ -36,7 +38,8 @@ antigen apply
 
 # Scripts
 source $HOME/.scripts/proxy.sh    # proxy settings
-source $HOME/.scripts/lfcd.sh     # for auto change directory
+source $HOME/.scripts/lfcd.sh     # auto change directory with lfcd
+bindkey -s '^o' 'lfcd\n'          # bind lfcd to <c-o>
 
 
 # WSL setting
@@ -58,7 +61,6 @@ alias l="ls -lah --color=auto"
 alias ll="ls -lh --color=auto"
 
 alias vi="nvim"
-alias lf="lfcd"
 
 alias mv="mv -iv"
 alias cp="cp -iv"
