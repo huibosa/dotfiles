@@ -31,7 +31,7 @@ function getRival() {
 
 function updateAll() {
 	read -r -p "To convert all jupyter file recursively type \"CONVERT\": "
-	[[ "$REPLY" != "CONVERT" ]] && echo "hello"
+	[[ "$REPLY" != "CONVERT" ]] && exit 0
 
 	readarray -d '' fnames < <(find ./ -type f \( -name '*.py' -o -name '*.ipynb' \) -print0)
 
