@@ -24,9 +24,9 @@ if uname -a | grep -qEi '(microsoft|wsl)' &>/dev/null; then
 
     # Set proxy for proxychains
     sed -i "2c socks5  ${ipAddr}  ${port}"  "$HOME/.proxychains/proxychains.conf"
-# elif uname -a | grep -qEi 'arch' &>/dev/null; then
-#     proxy="127.0.0.1"
-#     proxy+=":20170"
+elif uname -a | grep -qEi 'arch' &>/dev/null; then
+    proxy="127.0.0.1"
+    proxy+=":20171"
 fi
 
 # set global proxy
