@@ -3,8 +3,8 @@ local wezterm = require 'wezterm'
 local window_padding = {
   left = "0.2cell",
   right = "0.1cell",
-  top = "0.1cell",
-  bottom = "0.1cell",
+  top = "0.2cell",
+  bottom = "0cell",
 }
 
 local mouse_bindings = {
@@ -65,7 +65,7 @@ return {
   enable_tab_bar = false,
 
   colors = colors,
-  font = wezterm.font("Source Code Pro"),
-  -- font = wezterm.font("JetBrains Mono"),
-  font_size = 15,
+  -- font = wezterm.font("Source Code Pro"),
+  font = wezterm.font("JetBrains Mono"),
+  font_size = 14.6,
 }
