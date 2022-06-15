@@ -46,6 +46,9 @@ bindkey -s '^o' 'lfcd\n'          # bind lfcd to <c-o>
 if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
   alias display="eog"
   alias open="explorer.exe"
+  alias typora="Typora.exe"
+  alias sumatra="SumatraPDF.exe"
+  alias potplayer="PotPlayerMini64.exe"
 fi
 
 
