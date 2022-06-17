@@ -39,6 +39,7 @@ antigen apply
 # Scripts
 source $HOME/.scripts/proxy.sh    # proxy settings
 source $HOME/.scripts/lfcd.sh     # auto change directory with lfcd
+source $HOME/.scripts/utils.sh
 bindkey -s '^o' 'lfcd\n'          # bind lfcd to <c-o>
 
 
@@ -71,5 +72,6 @@ alias rm="rm -v"
 
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias screenkey="screenkey --scr 1 --opacity 0.5"
+alias ytd="yt-dlp -o %(title)s.%(ext)s"
 
 # zprof

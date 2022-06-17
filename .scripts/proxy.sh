@@ -1,33 +1,36 @@
 #!/usr/bin/env bash
 
 
-if [[ ! -d "$HOME/.proxychains" ]]; then
+setProxychains() {
+  if [[ ! -d "$HOME/.proxychains" ]]; then
     mkdir "$HOME/.proxychains"
     # add default settings for v2raya archlinux
     echo "[ProxyList]" > "$HOME/.proxychains/proxychains.conf"
     echo "socks5 127.0.0.1 20170" >> "$HOME/.proxychains/proxychains.conf"
-fi
+  fi
+}
 
 
 # Get proxy variable
-proxy=""
-if uname -a | grep -qEi '(microsoft|wsl)' &>/dev/null; then
+getproxy() {
+  if uname -a | grep -qEi '(microsoft|wsl)' &>/dev/null; then
     proxy="$(grep 'nameserver' /etc/resolv.conf | cut -d ' ' -f 2)"
     proxy+=":7890"
 
-    ipAddr="${proxy%:*}"
-    port="${proxy#*:}"
+    local ipAddr="${proxy%:*}"
+    local port="${proxy#*:}"
 
     # Set proxy for git
-    pattern='s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}:[0-9]\{4,5\}'
+    local pattern='s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}:[0-9]\{4,5\}'
     sed -i "${pattern}/${proxy}/g" "$HOME/.gitconfig"
 
     # Set proxy for proxychains
     sed -i "2c socks5  ${ipAddr}  ${port}"  "$HOME/.proxychains/proxychains.conf"
-elif uname -a | grep -qEi 'arch' &>/dev/null; then
+  elif uname -a | grep -qEi 'arch' &>/dev/null; then
     proxy="127.0.0.1"
     proxy+=":20171"
-fi
+  fi
+}
 
 # set global proxy
 proxy() {
@@ -53,3 +56,7 @@ noproxy() {
 	echo -e "Proxy environment variable removed"
   return 0
 }
+
+proxy=""
+setProxychains
+getproxy
