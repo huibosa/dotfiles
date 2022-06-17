@@ -56,6 +56,7 @@ return {
   window_padding = window_padding,
   window_decorations = "NONE",
   window_background_opacity = 1.0,
+  adjust_window_size_when_changing_font_size = false,
 
   mouse_bindings = mouse_bindings,
   disable_default_key_bindings = true,
