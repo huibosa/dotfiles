@@ -13,15 +13,19 @@ setProxychains() {
 
 # Get proxy variable
 getproxy() {
+  local ipAddr
+  local port
+  local pattern
+
   if uname -a | grep -qEi '(microsoft|wsl)' &>/dev/null; then
     proxy="$(grep 'nameserver' /etc/resolv.conf | cut -d ' ' -f 2)"
     proxy+=":7890"
 
-    local ipAddr="${proxy%:*}"
-    local port="${proxy#*:}"
+    ipAddr="${proxy%:*}"
+    port="${proxy#*:}"
 
     # Set proxy for git
-    local pattern='s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}:[0-9]\{4,5\}'
+    pattern='s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}:[0-9]\{4,5\}'
     sed -i "${pattern}/${proxy}/g" "$HOME/.gitconfig"
 
     # Set proxy for proxychains

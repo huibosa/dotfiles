@@ -66,7 +66,14 @@ return {
   enable_tab_bar = false,
 
   colors = colors,
-  -- font = wezterm.font("Source Code Pro"),
-  font = wezterm.font("JetBrains Mono"),
+  font = wezterm.font_with_fallback({
+    {
+      family="JetBrains Mono",
+      harfbuzz_features={"calt=0", "clig=0", "liga=0"},
+    },
+    {
+      family="Microsoft YaHei",
+    }
+  }),
   font_size = 14.6,
 }
