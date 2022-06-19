@@ -38,7 +38,6 @@ antigen apply
 
 # Scripts
 source $HOME/.scripts/proxy.sh    # proxy settings
-source $HOME/.scripts/lfcd.sh     # auto change directory with lfcd
 source $HOME/.scripts/utils.sh
 bindkey -s '^o' 'lfcd\n'          # bind lfcd to <c-o>
 
