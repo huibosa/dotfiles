@@ -69,7 +69,7 @@ return {
   font = wezterm.font_with_fallback({
     {
       family="JetBrains Mono",
-      harfbuzz_features={"calt=0", "clig=0", "liga=0"},
+      -- harfbuzz_features={"calt=0", "clig=0", "liga=0"},
     },
     {
       family="Microsoft YaHei",
