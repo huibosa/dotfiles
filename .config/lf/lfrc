@@ -8,10 +8,10 @@ set ifs "\n"
 set scrolloff 10
 set drawbox
 set period 1
-# set previewer ~/.config/lf/preview
-# set cleaner ~/.config/lf/cleaner
-# set ratios 1:2:3
-# set info size:time
+set previewer ctpv
+set cleaner ctpvclear
+&ctpv -s $id
+cmd on-quit $ctpv -e $id
 #-Basic settings
 
 #+Set opener

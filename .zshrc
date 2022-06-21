@@ -71,6 +71,5 @@ alias rm="rm -v"
 
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias screenkey="screenkey --scr 1 --opacity 0.5"
-alias ytd="yt-dlp -o %(title)s.%(ext)s"
 
 # zprof
