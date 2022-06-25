@@ -6,6 +6,7 @@ ytdlp() {
 
 
 lfcd () {
+    local tmp
     tmp="$(mktemp)"
     lf -last-dir-path="$tmp" "$@"
     if [ -f "$tmp" ]; then
