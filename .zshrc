@@ -64,6 +64,7 @@ alias l="ls -lah --color=auto"
 alias ll="ls -lh --color=auto"
 
 alias vi="nvim"
+alias emacs="emacs -nw"
 
 alias mv="mv -iv"
 alias cp="cp -iv"
