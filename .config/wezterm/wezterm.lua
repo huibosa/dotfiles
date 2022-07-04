@@ -23,6 +23,18 @@ local mouse_bindings = {
   },
 }
 
+wezterm.on("toggle-ligature", function(window, pane)
+  local overrides = window:get_config_overrides() or {}
+  if not overrides.harfbuzz_features then
+    -- If we haven't overridden it yet, then override with ligatures disabled
+    overrides.harfbuzz_features =  {"calt=0", "clig=0", "liga=0"}
+  else
+    -- else we did already, and we should disable out override now
+    overrides.harfbuzz_features = nil
+  end
+  window:set_config_overrides(overrides)
+end)
+
 local keys = {
   { key='=', mods="CTRL", action="IncreaseFontSize" },
   { key='-', mods="CTRL", action="DecreaseFontSize" },
@@ -41,6 +53,8 @@ local keys = {
 
   { key="C", mods="CTRL|SHIFT", action=wezterm.action{CopyTo="Clipboard"} },
   { key="V", mods="CTRL|SHIFT", action=wezterm.action{PasteFrom="Clipboard"} },
+
+  { key="E", mods="CTRL|SHIFT", action=wezterm.action.EmitEvent("toggle-ligature") },
 }
 
 local colors = {
@@ -69,7 +83,6 @@ return {
   font = wezterm.font_with_fallback({
     {
       family="JetBrains Mono",
-      -- harfbuzz_features={"calt=0", "clig=0", "liga=0"},
     },
     {
       family="Microsoft YaHei",
