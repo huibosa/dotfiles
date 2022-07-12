@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 function usage() {
-	echo "Usage $0 [*.py || *.ipynb]"
+  local scriptName
+  scriptName=$(basename "$0")
+	echo "Usage: $scriptName [*.py || *.ipynb]"
 }
 
 function pyToIpynb() {

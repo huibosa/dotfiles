@@ -24,12 +24,12 @@ lfcd () {
 # in every window.  If an application is currently running in a given pane
 # (e.g., vim), it is suspended and then resumed so the command can be run.
 tmux-all-panes() {
-  all-panes-bg_ "$1" &
+  _tmux-all-panes-bg "$1" &
 }
 
 # The actual implementation of `all-panes` that runs in a background process.
 # This prevents the function from being suspended when we press ^z in each pane.
-tmux-all-panes-bg_() {
+_tmux-all-panes-bg() {
   # Assign the argument to something readable
   local COMMAND="$1"
   local ORIG_WINDOW_INDEX

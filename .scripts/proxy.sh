@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-setProxychains() {
+_setProxychains() {
   if [[ ! -d "$HOME/.proxychains" ]]; then
     mkdir "$HOME/.proxychains"
     # add default settings for v2raya archlinux
@@ -12,7 +12,7 @@ setProxychains() {
 
 
 # Get proxy variable
-getproxy() {
+_getproxy() {
   local ipAddr
   local port
   local pattern
@@ -62,5 +62,5 @@ noproxy() {
 }
 
 proxy=""
-setProxychains
-getproxy
+_setProxychains
+_getproxy
