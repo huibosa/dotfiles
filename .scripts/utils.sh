@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+mirror() {
+  wget -r -np -k "$1"
+}
+
+count-non-empty-line() {
+  find ./ \( -name '*.py' -o -name '*.sh' -o -name '*.cpp' -o -name '*.c' -o -name '*.go' -o -name '*.h' -o -name '*.md' \) -print0 | xargs -0 grep -Ev '^\s*$|^.{1}$' | wc -l
+}
+
+sort-by-length() {
+  awk '{ print length, $0 }' "$1" | sort -n -s | uniq | cut -d' ' -f2- > "./sorted-$(basename $1)"
+}
+
 ytdlp() {
   yt-dlp -o "%(title)s.%(ext)s" "$1"
 }
@@ -18,6 +30,14 @@ lfcd () {
             fi
         fi
     fi
+}
+
+mount-win-disk () {
+  sudo mount -t drvfs "$1": /mnt/"$1"
+}
+
+umount-win-disk () {
+  sudo umount "/mnt/$1"
 }
 
 # Runs the specified command (provided by the first argument) in all tmux panes

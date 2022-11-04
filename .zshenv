@@ -24,6 +24,9 @@ export GOPATH="$HOME/.go"
 # Locale
 export LC_ALL=en_US.UTF-8
 
+# Set runtime library path
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
+
 # ZSH
 export HISTFILE="$HOME/.zsh_history"
 export HISTSIZE=10000000

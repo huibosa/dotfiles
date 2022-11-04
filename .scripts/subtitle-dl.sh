@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
 
 usage() {
   printf "Usage: %s [url]\n" "$0"

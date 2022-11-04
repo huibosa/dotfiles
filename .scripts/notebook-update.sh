@@ -1,25 +1,27 @@
 #!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
 
-function usage() {
+usage() {
   local scriptName
   scriptName=$(basename "$0")
 	echo "Usage: $scriptName [*.py || *.ipynb]"
 }
 
-function pyToIpynb() {
+pyToIpynb() {
 	jupytext --to notebook "$@"
 }
 
-function ipynbToPy() {
+ipynbToPy() {
 	jupytext --set-formats ipynb,py "$@"
 }
 
-function update() {
+update() {
 	[[ "$1" == *.ipynb ]] && ipynbToPy "$1"
 	[[ "$1" == *.py ]] && pyToIpynb "$1"
 }
 
-function getRival() {
+getRival() {
 	[[ $# -ne 1 ]] && echo "${FUNCNAME[0]}: Wrong argument count" && exit 1
 	if [[ "$1" == *.ipynb ]]; then
 		echo "${fname/%.ipynb/.py}"
@@ -31,7 +33,7 @@ function getRival() {
 	fi
 }
 
-function updateAll() {
+updateAll() {
 	read -r -p "To convert all jupyter file recursively type \"CONVERT\": "
 	[[ "$REPLY" != "CONVERT" ]] && exit 0
 

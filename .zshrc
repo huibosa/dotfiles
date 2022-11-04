@@ -70,6 +70,7 @@ alias mv="mv -iv"
 alias cp="cp -iv"
 alias rm="rm -v"
 
+alias python='python3'
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias screenkey="screenkey --scr 1 --opacity 0.5"
 
