@@ -1,4 +1,4 @@
-# zmodload zsh/zprof
+# zmodload zsh/zprofa
 
 # Forbid <c-s> to freeze terminal
 unsetopt flow_control
@@ -75,3 +75,4 @@ alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias screenkey="screenkey --scr 1 --opacity 0.5"
 
 # zprof
+
