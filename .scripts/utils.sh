@@ -16,8 +16,7 @@ ytdlp() {
   yt-dlp -o "%(title)s.%(ext)s" "$1"
 }
 
-
-lfcd () {
+lfcd() {
     local tmp
     tmp="$(mktemp)"
     lf -last-dir-path="$tmp" "$@"
@@ -31,15 +30,6 @@ lfcd () {
         fi
     fi
 }
-
-mount-win-disk () {
-  sudo mount -t drvfs "$1": /mnt/"$1"
-}
-
-umount-win-disk () {
-  sudo umount "/mnt/$1"
-}
-
 # Runs the specified command (provided by the first argument) in all tmux panes
 # in every window.  If an application is currently running in a given pane
 # (e.g., vim), it is suspended and then resumed so the command can be run.
