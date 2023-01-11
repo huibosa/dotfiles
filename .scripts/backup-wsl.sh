@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
 # This backup script make a local and remote disk backup separately
+if [ "$EUID" -eq 0 ]; then
+  WSL_DISTRO_NAME="Arch"
+fi
 
-DEST1="/home/$USER/winhome/backup/${WSL_DISTRO_NAME}"
+DEST1="/home/huibo/winhome/backup/${WSL_DISTRO_NAME}"
 DEST2="/mnt/d/backup/${WSL_DISTRO_NAME}"
-LOGFILE1="/home/$USER/winhome/backup/${WSL_DISTRO_NAME}.log"
+LOGFILE1="/home/huibo/winhome/backup/${WSL_DISTRO_NAME}.log"
 LOGFILE2="/mnt/d/backup/${WSL_DISTRO_NAME}.log"
 
-if [ ! -e "/home/$USER/winhome/" ]; then
+if [ ! -e "/home/huibo/winhome/" ]; then
     echo "ERROR: ~/winhome/ is broken, cannot backup ${WSL_DISTRO_NAME}" | tee -a "$LOGFILE1"
     exit
 fi
@@ -22,8 +25,8 @@ fi
     echo "==> Syncing files <=="
     echo
 
-    mkdir -p "/home/$USER/winhome/backup/${WSL_DISTRO_NAME}/"
-    time rsync -rltD --delete --verbose --exclude '.cache/*' "/home/$USER/" "$DEST1"
+    [ -d "${DEST1}" ] || mkdir -p "${DEST1}"
+    time rsync -rltD --delete --verbose --exclude '.cache/*' "/home/huibo/" "${DEST1}"
     echo
     echo "=====> " "$(date '+%F %T')" "FINISHED" "${WSL_DISTRO_NAME}"
     echo
@@ -31,7 +34,7 @@ fi
 } 2>&1 | tee "${LOGFILE1}"
 
 # Check if a removeable disk connected
-if [[ -d /mnt/d/backup ]]; then
+if [ -d /mnt/d/backup ]; then
 {
     echo "=====>"
     echo "=====> Starting ${WSL_DISTRO_NAME} Backup"
@@ -42,8 +45,8 @@ if [[ -d /mnt/d/backup ]]; then
     echo "==> Syncing files <=="
     echo
 
-    mkdir -p "$DEST2"
-    time rsync -rltD --delete --verbose --exclude '.cache/*' "/home/$USER/" "$DEST2"
+    [ -d "${DEST2}" ] || mkdir -p "${DEST2}"
+    time rsync -rltD --delete --verbose --exclude '.cache/*' "/home/huibo/" "${DEST2}"
     echo
     echo "=====> " "$(date '+%F %T')" "FINISHED" "${WSL_DISTRO_NAME}"
     echo

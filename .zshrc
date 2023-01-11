@@ -1,4 +1,4 @@
-# zmodload zsh/zprofa
+# zmodload zsh/zprof
 
 # Forbid <c-s> to freeze terminal
 unsetopt flow_control
@@ -43,12 +43,12 @@ bindkey -s '^o' 'lfcd\n'          # bind lfcd to <c-o>
 
 
 # WSL setting
+# if command -v "wsl.exe" &> /dev/null ; then
 if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
-  alias display="eog"
-  alias open="explorer.exe"
   alias typora="Typora.exe"
   alias sumatra="SumatraPDF.exe"
   alias potplayer="PotPlayerMini64.exe"
+  source $HOME/.scripts/utils-wsl.sh
 fi
 
 
@@ -75,4 +75,3 @@ alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias screenkey="screenkey --scr 1 --opacity 0.5"
 
 # zprof
-

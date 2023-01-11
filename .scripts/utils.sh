@@ -16,6 +16,34 @@ ytdlp() {
   yt-dlp -o "%(title)s.%(ext)s" "$1"
 }
 
+md2docx() {
+  local md
+  local html
+
+  converter="pandoc"
+  if command -v wsl.exe &> /dev/null; then
+    converter="pandoc.exe"
+  fi
+
+  md="$1"
+  docx="${md%.*}.docx"
+  $converter -f markdown "$1" -t docx -o "${docx}"
+}
+
+html2md() {
+  local md
+  local url
+
+  converter="pandoc"
+  if command -v wsl.exe &> /dev/null; then
+    converter="pandoc.exe"
+  fi
+
+  url="$1"
+  md="pandoc-markdown-output.md"
+  $converter -f html "$url" -t commonmark-raw_html -o "${md}"
+}
+
 lfcd() {
     local tmp
     tmp="$(mktemp)"

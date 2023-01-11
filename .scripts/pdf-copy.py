@@ -32,6 +32,7 @@ if __name__ == "__main__":
     content = pyperclip.paste()
 
     while True:
+        time.sleep(1)
         try:
             content_tmp = pyperclip.paste()
 

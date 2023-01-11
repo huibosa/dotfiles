@@ -1,8 +1,3 @@
-# ENV just for wsl
-if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
-  export WINHOME="/mnt/c/Users/huibo"
-fi
-
 # Default APPS
 export EDITOR="nvim"
 export READER="zathura"
@@ -18,7 +13,8 @@ export PATH="$HOME/.go/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 
 # Golang
-export GOPROXY="https://goproxy.io"
+# export GOPROXY="https://goproxy.io"
+export GOPROXY=https://goproxy.cn,direct
 export GOPATH="$HOME/.go"
  
 # Locale
