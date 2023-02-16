@@ -1,4 +1,4 @@
-# .dotfiles
+## Ignore all files
 *
 
 !.gitignore
@@ -6,19 +6,45 @@
 !.xinitrc
 !.Xmodmap
 
-!.config/chromium-flags.conf
-!.config/fanyi/.fanyirc
-!.config/lf/*
-!.config/lf/*
-!.config/picom/picom.conf
-!.config/wezterm/wezterm.lua
-!.config/zathura/zathurarc
-
-!.scripts/*
-
-!.pip/pip.conf
 !.tmux.conf
-!.docker
 
 !.zshenv
 !.zshrc
+
+# To exclude folder but include specific subfolder, you have to “unignore”every parent directory
+# of anything that you want to “unignore”.
+# https://stackoverflow.com/questions/5533050/gitignore-exclude-folder-but-include-specific-subfolder
+
+!.config/
+
+.config/*
+!.config/chromium-flags.conf
+
+!.config/wezterm/
+!.config/wezterm/*
+
+!.config/fanyi/
+!.config/fanyi/.fanyirc
+
+!.config/picom/
+!.config/picom/picom.conf
+
+.config/zathura
+!.config/zathura/zathurarc
+
+.config/lf/
+!.config/lf/*
+
+
+!.scripts/
+.scripts/*
+!.scripts/*
+
+
+!.pip/
+.pip/*
+!.pip/pip.conf
+
+!.docker/
+.docker/*
+!.docker/config.json

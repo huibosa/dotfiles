@@ -1,0 +1,111 @@
+local wezterm = require 'wezterm'
+
+local wsl_domains = wezterm.default_wsl_domains()
+
+for _, dom in ipairs(wsl_domains) do
+  if dom.name == "WSL:Arch" then
+    dom.default_cwd = "/home/huibo"
+  end
+end
+
+local window_padding = {
+  left = "0.5cell",
+  right = "0.5cell",
+  top = "0.2cell",
+  bottom = "0cell",
+}
+
+local mouse_bindings = {
+  -- Change the default click behavior so that it only selects
+  -- text and doesn't open hyperlinks
+  {
+    event={Up={streak=1, button="Left"}},
+    mods="NONE",
+    action=wezterm.action{CompleteSelection="PrimarySelection"},
+  },
+  -- and make CTRL-Click open hyperlinks
+  {
+    event={Up={streak=1, button="Left"}},
+    mods="CTRL",
+    action="OpenLinkAtMouseCursor",
+  },
+}
+
+local keys = {
+  { key='=',      mods="CTRL",        action="IncreaseFontSize" },
+  { key='-',      mods="CTRL",        action="DecreaseFontSize" },
+  { key='0',      mods="CTRL",        action="ResetFontSize" },
+
+  { key="X",      mods="CTRL|SHIFT",  action="ActivateCopyMode" },
+  { key="N",      mods="CTRL|SHIFT",  action="SpawnWindow" },
+  { key="Enter",  mods="ALT",         action="ToggleFullScreen" },
+  { key=" ",      mods="SHIFT|CTRL",  action="QuickSelect" },
+  { key="F",      mods="CTRL|SHIFT",  action=wezterm.action{Search={CaseSensitiveString=""}} },
+
+  { key="W",      mods="CTRL|SHIFT",  action=wezterm.action{CloseCurrentTab={confirm=true}} },
+  { key="T",      mods="CTRL|SHIFT",  action=wezterm.action{SpawnTab="CurrentPaneDomain"} },
+  { key="Tab",    mods="CTRL",        action=wezterm.action{ActivateTabRelative=1} },
+  { key="Tab",    mods="CTRL|SHIFT",  action=wezterm.action{ActivateTabRelative=-1} },
+
+  { key="C",      mods="CTRL|SHIFT",  action=wezterm.action{CopyTo="Clipboard"} },
+  { key="V",      mods="CTRL|SHIFT",  action=wezterm.action{PasteFrom="Clipboard"} },
+}
+
+local everforest = {
+  foreground = "#d3c6aa",
+  -- background = "#2b3339",
+  background = "272e33",
+  selection_bg = "#3B5360",
+  scrollbar_thumb = "#222222",
+  ansi = {"#4b565c",     "#e67e80",  "#a7c080",  "#dbbc7f",  "#7fbbb3",  "#d699b6",  "#83c092",  "#d3c6aa"},
+  brights = {"#4b565c",  "#e67e80",  "#a7c080",  "#dbbc7f",  "#7fbbb3",  "#d699b6",  "#83c092",  "#d3c6aa"},
+  indexed = { [16] = "#ffa066", [17] = "#ff5d62" },
+}
+
+local kanagawa = {
+		foreground = "#dcd7ba",
+		background = "#1f1f28",
+
+		cursor_bg = "#c8c093",
+		cursor_fg = "#c8c093",
+		cursor_border = "#c8c093",
+
+		selection_fg = "#c8c093",
+		selection_bg = "#2d4f67",
+
+		scrollbar_thumb = "#16161d",
+		split = "#16161d",
+
+		ansi = { "#090618",     "#c34043",  "#76946a",  "#c0a36e",  "#7e9cd8",  "#957fb8",  "#6a9589",  "#c8c093" },
+		brights = { "#727169",  "#e82424",  "#98bb6c",  "#e6c384",  "#7fb4ca",  "#938aa9",  "#7aa89f",  "#dcd7ba" },
+		indexed = { [16] = "#ffa066", [17] = "#ff5d62" },
+}
+
+return {
+  colors = everforest,
+
+  wsl_domains = wsl_domains,
+  default_domain = "WSL:Arch",
+
+  window_padding = window_padding,
+  -- window_decorations = "NONE",
+
+  mouse_bindings = mouse_bindings,
+  disable_default_key_bindings = true,
+  keys = keys,
+
+  force_reverse_video_cursor = true,
+  enable_tab_bar = false,
+
+  -- font_size = 14,
+  font_size = 12.2,
+  font = wezterm.font_with_fallback({
+    {
+      family="JetBrains Mono",
+      -- harfbuzz_features={"calt=0", "clig=0", "liga=0"},
+    },
+    {
+      family="Microsoft YaHei",
+    }
+  }),
+}
