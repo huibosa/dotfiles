@@ -3,6 +3,9 @@
 # Forbid <c-s> to freeze terminal
 unsetopt flow_control
 
+# Append history immediatly
+setopt incappendhistory
+setopt sharehistory
 
 # Commandline editting
 bindkey -e                       # Emacs keybindings
@@ -45,9 +48,6 @@ bindkey -s '^o' 'lfcd\n'          # bind lfcd to <c-o>
 # WSL setting
 # if command -v "wsl.exe" &> /dev/null ; then
 if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
-  alias typora="Typora.exe"
-  alias sumatra="SumatraPDF.exe"
-  alias potplayer="PotPlayerMini64.exe"
   source $HOME/.scripts/utils-wsl.sh
 fi
 
@@ -73,5 +73,6 @@ alias rm="rm -v"
 alias python='python3'
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias screenkey="screenkey --scr 1 --opacity 0.5"
+alias jsonfmt='python3 -m json.tool'
 
 # zprof

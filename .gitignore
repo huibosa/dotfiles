@@ -1,0 +1,24 @@
+# .dotfiles
+*
+
+!.gitignore
+
+!.xinitrc
+!.Xmodmap
+
+!.config/chromium-flags.conf
+!.config/fanyi/.fanyirc
+!.config/lf/*
+!.config/lf/*
+!.config/picom/picom.conf
+!.config/wezterm/wezterm.lua
+!.config/zathura/zathurarc
+
+!.scripts/*
+
+!.pip/pip.conf
+!.tmux.conf
+!.docker
+
+!.zshenv
+!.zshrc
