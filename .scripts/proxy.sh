@@ -6,7 +6,7 @@ _setProxychains() {
     mkdir "$HOME/.proxychains"
     # add default settings for v2raya archlinux
     echo "[ProxyList]" > "$HOME/.proxychains/proxychains.conf"
-    echo "socks5 127.0.0.1 20170" >> "$HOME/.proxychains/proxychains.conf"
+    echo "socks5 127.0.0.1 7890" >> "$HOME/.proxychains/proxychains.conf"
   fi
 }
 
@@ -33,6 +33,9 @@ _getproxy() {
   elif uname -a | grep -qEi 'arch' &>/dev/null; then
     proxy="127.0.0.1"
     proxy+=":20171"
+  elif uname -a | grep -qEi 'Darwin' &>/dev/null; then
+    proxy="127.0.0.1"
+    proxy+=":7890"
   fi
 }
 

@@ -11,6 +11,8 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.scripts:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 
 # Golang
 # export GOPROXY="https://goproxy.io"
@@ -29,6 +31,13 @@ export HISTSIZE=10000000
 # export HISTCONTROL=ignorespace
 export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
+
+# brew mirror
+export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+export HOMEBREW_PIP_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
 
 # Give color to manpage
 export LESS_TERMCAP_mb=$'\E[1m\E[32m'

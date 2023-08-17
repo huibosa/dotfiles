@@ -51,15 +51,18 @@ local keys = {
   { key="Tab", mods="CTRL", action=wezterm.action{ActivateTabRelative=1} },
   { key="Tab", mods="CTRL|SHIFT", action=wezterm.action{ActivateTabRelative=-1} },
 
-  { key="C", mods="CTRL|SHIFT", action=wezterm.action{CopyTo="Clipboard"} },
-  { key="V", mods="CTRL|SHIFT", action=wezterm.action{PasteFrom="Clipboard"} },
+  -- { key="C", mods="CTRL|SHIFT", action=wezterm.action{CopyTo="Clipboard"} },
+  -- { key="V", mods="CTRL|SHIFT", action=wezterm.action{PasteFrom="Clipboard"} },
+  { key="c", mods="SUPER", action=wezterm.action{CopyTo="Clipboard"} },
+  { key="v", mods="SUPER", action=wezterm.action{PasteFrom="Clipboard"} },
 
   { key="E", mods="CTRL|SHIFT", action=wezterm.action.EmitEvent("toggle-ligature") },
 }
 
 local colors = {
   foreground = "#d3c6aa",
-  background = "#2b3339",
+  -- background = "#2b3339",
+  background = "#272e33",
   selection_bg = "#3B5360",
   scrollbar_thumb = "#222222",
   ansi = {"#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa"},
@@ -84,9 +87,6 @@ return {
     {
       family="JetBrains Mono",
     },
-    {
-      family="Microsoft YaHei",
-    }
   }),
   font_size = 14.6,
 }

@@ -15,7 +15,8 @@ cmd open ${{
     test -L $f && f=$(readlink -f $f)
     case $(file --mime-type $f -b) in
         text/* | application/json | inode/x-empty) $EDITOR $fx;;
-        application/pdf) nohup zathura $fx > /dev/null 2>&1 & disown;;
+        # application/pdf) nohup zathura $fx > /dev/null 2>&1 & disown;;
+        application/pdf) open $fx;;
         # image/*) feh $fx & ;;
         # video/*) vlc $fx & ;;
         *) lf -remote "send $id echo WARNING: No opener set for this file format";;

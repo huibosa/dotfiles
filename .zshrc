@@ -75,4 +75,23 @@ alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias screenkey="screenkey --scr 1 --opacity 0.5"
 alias jsonfmt='python3 -m json.tool'
 
+# My prompt
+
+if [[ -n "$SSH_CLIENT" ]]; then
+  PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
+  PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
+  PROMPT='%{$fg_bold[green]%}%n'
+  PROMPT+='%{$reset_color%}@'
+  PROMPT+='%{$fg_bold[yellow]%}%m '
+  PROMPT+='%{$fg_bold[green]%}%~'
+  PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
+  PROMPT+='%{$reset_color%}'
+else
+  PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
+  PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
+  PROMPT='%{$fg_bold[cyan]%}%c%{$reset_color%}%{$fg[green]%}'
+  PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
+  PROMPT+='%{$reset_color%}'
+fi
+
 # zprof
