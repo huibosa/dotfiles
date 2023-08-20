@@ -76,6 +76,14 @@ alias screenkey="screenkey --scr 1 --opacity 0.5"
 alias jsonfmt='python3 -m json.tool'
 
 # My prompt
+#
+# Load version control information
+autoload -Uz vcs_info
+precmd() { vcs_info }
+
+# Format the vcs_info_msg_0_ variable
+zstyle ':vcs_info:git:*' formats '(on %b)'
+RPROMPT=%{$fg_bold[yellow]%}\$vcs_info_msg_0_
 
 if [[ -n "$SSH_CLIENT" ]]; then
   PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
