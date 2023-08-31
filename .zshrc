@@ -30,6 +30,8 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 autoload -U compinit && compinit -u
 
+# Enter directory without type "cd"
+setopt autocd
 
 # Use antigen
 source $HOME/.scripts/antigen.zsh
