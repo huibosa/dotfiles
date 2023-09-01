@@ -1,42 +1,50 @@
 #!/usr/bin/env bash
 
 
-_setProxychains() {
+# Get proxy variable
+_getproxy() {
+  local host_pattern
+  local network_output
+
+  # Get host and port
+  if uname -a | grep -qEi '(microsoft|wsl)' &>/dev/null; then
+    host="$(grep 'nameserver' /etc/resolv.conf | cut -d ' ' -f 2)"
+    port="7890"
+  elif uname -a | grep -qEi 'arch' &>/dev/null; then
+    host="127.0.0.1"
+    port="20171"
+  elif uname -a | grep -qEi 'Darwin' &>/dev/null; then
+    network_output="$(networksetup -getwebproxy 'Wi-Fi')"
+
+    # Check proxy status
+    if echo "${network_output}" | grep "Enabled: Yes" &>/dev/null; then
+      host_pattern='[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+
+      host="$(echo "${network_output}" | grep -oE "${host_pattern}")"
+      port="$(echo "${network_output}" | grep "Port" | grep -oE '[0-9]+')"
+    fi
+  fi
+
+  proxy="${host}:${port}"
+}
+
+_set_git_proxy() {
+  local proxy_pattern
+
+  proxy_pattern='[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}:[0-9]\{4,5\}'
+  sed -i -- "s/${proxy_pattern}/${proxy}/g" "$HOME/.gitconfig"
+}
+
+_set_proxychains() {
   if [[ ! -d "$HOME/.proxychains" ]]; then
     mkdir "$HOME/.proxychains"
     # add default settings for v2raya archlinux
     echo "[ProxyList]" > "$HOME/.proxychains/proxychains.conf"
     echo "socks5 127.0.0.1 7890" >> "$HOME/.proxychains/proxychains.conf"
   fi
-}
 
-
-# Get proxy variable
-_getproxy() {
-  local ipAddr
-  local port
-  local pattern
-
-  if uname -a | grep -qEi '(microsoft|wsl)' &>/dev/null; then
-    proxy="$(grep 'nameserver' /etc/resolv.conf | cut -d ' ' -f 2)"
-    proxy+=":7890"
-
-    ipAddr="${proxy%:*}"
-    port="${proxy#*:}"
-
-    # Set proxy for git
-    pattern='s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}:[0-9]\{4,5\}'
-    sed -i "${pattern}/${proxy}/g" "$HOME/.gitconfig"
-
-    # Set proxy for proxychains
-    sed -i "2c socks5  ${ipAddr}  ${port}"  "$HOME/.proxychains/proxychains.conf"
-  elif uname -a | grep -qEi 'arch' &>/dev/null; then
-    proxy="127.0.0.1"
-    proxy+=":20171"
-  elif uname -a | grep -qEi 'Darwin' &>/dev/null; then
-    proxy="127.0.0.1"
-    proxy+=":7890"
-  fi
+  # Set proxy for proxychains
+  sed -i -- "2s/.*/socks5  ${host}  ${port}/"  "$HOME/.proxychains/proxychains.conf"
 }
 
 # set global proxy
@@ -64,6 +72,9 @@ noproxy() {
   return 0
 }
 
+host=""
+port=""
 proxy=""
-_setProxychains
 _getproxy
+_set_git_proxy
+_set_proxychains
