@@ -69,24 +69,22 @@ local colors = {
   brights = {"#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa"},
 }
 
-return {
-  window_padding = window_padding,
-  window_decorations = "NONE",
-  window_background_opacity = 1.0,
-  adjust_window_size_when_changing_font_size = false,
+config = wezterm.config_builder()
 
-  mouse_bindings = mouse_bindings,
-  disable_default_key_bindings = true,
-  keys = keys,
+config.window_padding = window_padding
+-- window_decorations = "NONE"
+config.window_background_opacity = 1.0
+config.adjust_window_size_when_changing_font_size = false
 
-  force_reverse_video_cursor = true,
-  enable_tab_bar = false,
+config.mouse_bindings = mouse_bindings
+config.disable_default_key_bindings = true
+config.keys = keys
 
-  colors = colors,
-  font = wezterm.font_with_fallback({
-    {
-      family="JetBrains Mono",
-    },
-  }),
-  font_size = 14.6,
-}
+config.force_reverse_video_cursor = true
+config.enable_tab_bar = false
+
+config.colors = colors
+config.font = wezterm.font_with_fallback{ family="JetBrains Mono" }
+config.font_size = 14.6
+
+return config
