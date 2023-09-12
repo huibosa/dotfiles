@@ -18,7 +18,7 @@ local mouse_bindings = {
   -- and make CTRL-Click open hyperlinks
   {
     event={Up={streak=1, button="Left"}},
-    mods="CTRL",
+    mods="SUPER",
     action="OpenLinkAtMouseCursor",
   },
 }
@@ -36,40 +36,38 @@ wezterm.on("toggle-ligature", function(window, pane)
 end)
 
 local keys = {
-  { key='=', mods="CTRL", action="IncreaseFontSize" },
-  { key='-', mods="CTRL", action="DecreaseFontSize" },
-  { key='0', mods="CTRL", action="ResetFontSize" },
+  { key='=', mods="SUPER", action="IncreaseFontSize" },
+  { key='-', mods="SUPER", action="DecreaseFontSize" },
+  { key='0', mods="SUPER", action="ResetFontSize" },
 
-  { key="X", mods="CTRL|SHIFT", action="ActivateCopyMode" },
-  { key="N", mods="CTRL|SHIFT", action="SpawnWindow" },
+  { key="X", mods="SUPER|SHIFT", action="ActivateCopyMode" },
+  { key="N", mods="SUPER|SHIFT", action="SpawnWindow" },
   { key="Enter", mods="ALT", action="ToggleFullScreen" },
-  { key=" ", mods="SHIFT|CTRL", action="QuickSelect" },
+  { key=" ", mods="SHIFT|SUPER", action="QuickSelect" },
   -- { key="F", mods="CTRL|SHIFT", action=wezterm.action{Search={CaseSensitiveString=""}} },
 
-  { key="W", mods="CTRL|SHIFT", action=wezterm.action{CloseCurrentTab={confirm=true}} },
-  { key="T", mods="CTRL|SHIFT", action=wezterm.action{SpawnTab="CurrentPaneDomain"} },
+  { key="W", mods="SUPER|SHIFT", action=wezterm.action{CloseCurrentTab={confirm=true}} },
+  { key="T", mods="SUPER|SHIFT", action=wezterm.action{SpawnTab="CurrentPaneDomain"} },
   { key="Tab", mods="CTRL", action=wezterm.action{ActivateTabRelative=1} },
   { key="Tab", mods="CTRL|SHIFT", action=wezterm.action{ActivateTabRelative=-1} },
 
-  -- { key="C", mods="CTRL|SHIFT", action=wezterm.action{CopyTo="Clipboard"} },
-  -- { key="V", mods="CTRL|SHIFT", action=wezterm.action{PasteFrom="Clipboard"} },
   { key="c", mods="SUPER", action=wezterm.action{CopyTo="Clipboard"} },
   { key="v", mods="SUPER", action=wezterm.action{PasteFrom="Clipboard"} },
 
-  { key="E", mods="CTRL|SHIFT", action=wezterm.action.EmitEvent("toggle-ligature") },
+  { key="E", mods="SUPER|SHIFT", action=wezterm.action.EmitEvent("toggle-ligature") },
 }
 
-local colors = {
-  foreground = "#d3c6aa",
-  -- background = "#2b3339",
-  background = "#272e33",
-  selection_bg = "#3B5360",
-  scrollbar_thumb = "#222222",
-  ansi = {"#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa"},
-  brights = {"#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa"},
-}
+-- local colors = {
+--   foreground = "#d3c6aa",
+--   -- background = "#2b3339",
+--   background = "#272e33",
+--   selection_bg = "#3B5360",
+--   scrollbar_thumb = "#222222",
+--   ansi = {"#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa"},
+--   brights = {"#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa"},
+-- }
 
-config = wezterm.config_builder()
+local config = wezterm.config_builder()
 
 config.window_padding = window_padding
 -- window_decorations = "NONE"
@@ -83,8 +81,10 @@ config.keys = keys
 config.force_reverse_video_cursor = true
 config.enable_tab_bar = false
 
-config.colors = colors
+-- config.colors = colors
+config.color_scheme = 'Gruvbox Material (Gogh)'
 config.font = wezterm.font_with_fallback{ family="JetBrains Mono" }
 config.font_size = 14.6
+config.use_ime = false
 
 return config

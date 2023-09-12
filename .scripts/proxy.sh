@@ -33,8 +33,8 @@ _set_git_proxy() {
   local git_config_file="$HOME/.gitconfig"
 
   proxy_pattern='[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}:[0-9]\{4,5\}'
-  sed -i -- "/${proxy_pattern}/d" "${git_config_file}"
-  sed -i -- "/http/d" "${git_config_file}"
+  sed -i '' "/${proxy_pattern}/d" "${git_config_file}"
+  sed -i '' "/http/d" "${git_config_file}"
 
   echo "[http]" >> "${git_config_file}"
   echo "  proxy = http://${proxy}" >> "${git_config_file}"
@@ -49,7 +49,7 @@ _set_proxychains() {
   fi
 
   # Set proxy for proxychains
-  sed -i -- "2s/.*/socks5  ${host}  ${port}/"  "$HOME/.proxychains/proxychains.conf"
+  sed -i '' "2s/.*/socks5  ${host}  ${port}/"  "$HOME/.proxychains/proxychains.conf"
 }
 
 # set global proxy
