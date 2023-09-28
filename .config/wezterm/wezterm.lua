@@ -55,15 +55,15 @@ local keys = {
 	{ key = "E", mods = "SUPER|SHIFT", action = wezterm.action.EmitEvent("toggle-ligature") },
 }
 
--- local everforest_colors = {
--- 	foreground = "#d3c6aa",
--- 	-- background = "#2b3339",
--- 	background = "#272e33",
--- 	selection_bg = "#3B5360",
--- 	scrollbar_thumb = "#222222",
--- 	ansi = { "#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa" },
--- 	brights = { "#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa" },
--- }
+local everforest_colors = {
+	foreground = "#d3c6aa",
+	-- background = "#2b3339",
+	background = "#272e33",
+	selection_bg = "#3B5360",
+	scrollbar_thumb = "#222222",
+	ansi = { "#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa" },
+	brights = { "#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa" },
+}
 
 local config = wezterm.config_builder()
 
@@ -79,8 +79,8 @@ config.keys = keys
 config.force_reverse_video_cursor = true
 config.enable_tab_bar = false
 
--- config.colors = colors
-config.color_scheme = "Gruvbox Material (Gogh)"
+config.colors = everforest_colors
+-- config.color_scheme = "Gruvbox Material (Gogh)"
 config.font = wezterm.font_with_fallback({ family = "JetBrains Mono" })
 config.font_size = 14.6
 config.use_ime = false
