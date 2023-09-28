@@ -66,6 +66,7 @@ alias l="ls -lah --color=auto"
 alias ll="ls -lh --color=auto"
 
 alias vi="nvim"
+alias vir="nvim -R"
 alias gdb="gdb -q"
 
 alias mv="mv -iv"
@@ -74,8 +75,6 @@ alias rm="rm -v"
 
 alias python='python3'
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias screenkey="screenkey --scr 1 --opacity 0.5"
-alias jsonfmt='python3 -m json.tool'
 
 # My prompt
 #
