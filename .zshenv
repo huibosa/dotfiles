@@ -18,6 +18,8 @@ export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PA
 # export GOPROXY="https://goproxy.io"
 export GOPROXY=https://goproxy.cn,direct
 export GOPATH="$HOME/.go"
+
+export ERL_AFLAGS="-kernel shell_history enabled"
  
 # Locale
 export LC_ALL=en_US.UTF-8

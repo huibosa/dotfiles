@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+os_name=$(uname -s)
+
 # Get proxy variable
 _getproxy() {
     local host_pattern
@@ -32,15 +34,21 @@ _set_git_proxy() {
     local git_config_file="$HOME/.gitconfig"
 
     proxy_pattern='[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}:[0-9]\{4,5\}'
-    sed -i '' "/${proxy_pattern}/d" "${git_config_file}"
-    sed -i '' "/http/d" "${git_config_file}"
+
+    if [ "$os_name" = "Linux" ]; then
+        sed -i "/${proxy_pattern}/d" "${git_config_file}"
+        sed -i "/http/d" "${git_config_file}"
+    elif [ "$os_name" = "Darwin" ]; then
+        sed -i "" "/${proxy_pattern}/d" "${git_config_file}"
+        sed -i "" "/http/d" "${git_config_file}"
+    fi
 
     echo "[http]" >> "${git_config_file}"
     echo "  proxy = http://${proxy}" >> "${git_config_file}"
 }
 
 _set_proxychains() {
-    if [[ ! -d "$HOME/.proxychains" ]]; then
+    if [ ! -d "$HOME/.proxychains" ]; then
         mkdir "$HOME/.proxychains"
         # add default settings for v2raya archlinux
         echo "[ProxyList]" > "$HOME/.proxychains/proxychains.conf"
@@ -48,7 +56,11 @@ _set_proxychains() {
     fi
 
     # Set proxy for proxychains
-    sed -i '' "2s/.*/socks5  ${host}  ${port}/" "$HOME/.proxychains/proxychains.conf"
+    if [ "$os_name" = "Linux" ]; then
+        sed -i "2s/.*/socks5  ${host}  ${port}/" "$HOME/.proxychains/proxychains.conf"
+    elif [ "$os_name" = "Darwin" ]; then
+        sed -i "" "2s/.*/socks5  ${host}  ${port}/" "$HOME/.proxychains/proxychains.conf"
+    fi
 }
 
 # set global proxy
