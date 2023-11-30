@@ -83,8 +83,10 @@ autoload -Uz vcs_info
 precmd() { vcs_info }
 
 # Format the vcs_info_msg_0_ variable
-zstyle ':vcs_info:git:*' formats '(on %b)'
-RPROMPT=%{$fg_bold[yellow]%}\$vcs_info_msg_0_
+# zstyle ':vcs_info:git:*' formats '(on %b)'
+# RPROMPT=%{$fg_bold[yellow]%}\$vcs_info_msg_0_
+zstyle ':vcs_info:git:*' formats ' (%b)'
+VCS_PROMPT=%{$fg_bold[yellow]%}\$vcs_info_msg_0_%{$reset_color%}
 
 if [[ -n "$SSH_CLIENT" ]]; then
   PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
@@ -99,6 +101,7 @@ else
   PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
   PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
   PROMPT='%{$fg_bold[cyan]%}%c%{$reset_color%}%{$fg[green]%}'
+  PROMPT+="$VCS_PROMPT"
   PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
   PROMPT+='%{$reset_color%}'
 fi
