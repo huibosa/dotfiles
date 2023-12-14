@@ -18,7 +18,11 @@ local win_config = function(config)
 
 	for _, key in ipairs(config.keys) do
 		if key.mods == "SUPER" then
-			key.mods = "CTRL"
+			if key.key == "c" or key.key == "v" then
+				key.mods = "CTRL|SHIFT"
+			else
+				key.mods = "CTRL"
+			end
 		elseif key.mods == "SUPER|SHIFT" then
 			key.mods = "CTRL|SHIFT"
 		end
