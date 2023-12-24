@@ -23,6 +23,8 @@ _getproxy() {
 
             host="$(echo "${network_output}" | grep -oE "${host_pattern}")"
             port="$(echo "${network_output}" | grep "Port" | grep -oE '[0-9]+')"
+        else
+            echo "Mac proxy not set, check the wifi configuration"
         fi
     fi
 
