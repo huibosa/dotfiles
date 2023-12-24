@@ -1,0 +1,10 @@
+BasedOnStyle: Google
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+IncludeBlocks: Merge
+
+IndentWidth: 2
+ColumnLimit: 0
+Cpp11BracedListStyle: true
+SpacesBeforeTrailingComments: 1
