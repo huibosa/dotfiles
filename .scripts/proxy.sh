@@ -9,7 +9,8 @@ _getproxy() {
 
     # Get host and port
     if uname -a | grep -qEi '(microsoft|wsl)' &> /dev/null; then
-        host="$(grep 'nameserver' /etc/resolv.conf | cut -d ' ' -f 2)"
+        # host="$(grep 'nameserver' /etc/resolv.conf | cut -d ' ' -f 2)"
+        host="127.0.0.1"
         port="7890"
     elif uname -a | grep -qEi 'arch' &> /dev/null; then
         host="127.0.0.1"
