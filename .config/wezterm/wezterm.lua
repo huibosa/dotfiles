@@ -104,22 +104,28 @@ local base_config = function()
 	local config = wezterm.config_builder()
 
 	-- config.window_decorations = "NONE"
+	config.native_macos_fullscreen_mode = true
+	config.adjust_window_size_when_changing_font_size = false
+
 	config.colors = everforest_colors
 	config.window_background_opacity = 1.0
-	config.adjust_window_size_when_changing_font_size = false
+
 	config.disable_default_key_bindings = true
 	config.force_reverse_video_cursor = true
 	config.enable_tab_bar = false
 	config.use_ime = false
+
+	config.window_padding = window_padding
+	config.mouse_bindings = mouse_bindings
+	config.keys = keys
+
 	config.font = wezterm.font_with_fallback({
 		{ family = "JetBrains Mono" },
 		{ family = "Microsoft YaHei" },
 	})
 
-	config.window_padding = window_padding
-	config.mouse_bindings = mouse_bindings
-	config.keys = keys
-	config.font_size = 14.6
+	-- config.font_size = 14.8
+	config.font_size = 16.4
 
 	return config
 end
