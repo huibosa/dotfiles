@@ -34,6 +34,7 @@ local win_config = function(config)
 		end
 	end
 
+	config.window_decorations = "TITLE | RESIZE"
 	config.wsl_domains = wsl_domains
 	config.default_domain = "WSL:Arch"
 	config.window_padding = window_padding
@@ -84,9 +85,9 @@ local base_config = function()
 	}
 
 	local window_padding = {
-		left = "0.2cell",
+		left = "0.8cell",
 		right = "0.1cell",
-		top = "0.2cell",
+		top = "1.4cell",
 		bottom = "0cell",
 	}
 
@@ -103,7 +104,7 @@ local base_config = function()
 
 	local config = wezterm.config_builder()
 
-	-- config.window_decorations = "NONE"
+	config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 	config.native_macos_fullscreen_mode = true
 	config.adjust_window_size_when_changing_font_size = false
 
