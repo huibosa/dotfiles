@@ -16,8 +16,14 @@ ytdlp() {
     yt-dlp -o "%(title)s.%(ext)s" "$1"
 }
 
-fyssh() {
-    ssh arch fy "$@"
+fy() {
+    cmd="fy"
+
+    if [ -x "$(command -v "$cmd")" ]; then
+        command "$cmd" "$@"
+    else
+        ssh arch "$cmd" "$@"
+    fi
 }
 
 md2docx() {
