@@ -136,6 +136,38 @@ local os_uname = function()
 	return (sep == "/") and "UNIX" or "WIN"
 end
 
+local function recompute_padding(window)
+	local window_dims = window:get_dimensions()
+	local overrides = window:get_config_overrides() or {}
+
+	if not window_dims.is_full_screen then
+		if not overrides.window_padding then
+			-- not changing anything
+			return
+		end
+		overrides.window_padding = nil
+	else
+		local new_padding = {
+			left = "0.7cell",
+			right = "0.1cell",
+			top = "0.2cell",
+			bottom = "0cell",
+		}
+		if
+			overrides.window_padding
+			and new_padding.left == overrides.window_padding.left
+			and new_padding.right == overrides.window_padding.right
+			and new_padding.top == overrides.window_padding.top
+			and new_padding.bottom == overrides.window_padding.bottom
+		then
+			-- padding is same, avoid triggering further changes
+			return
+		end
+		overrides.window_padding = new_padding
+	end
+	window:set_config_overrides(overrides)
+end
+
 -------------------------------------------------------------------------------
 
 wezterm.on("toggle-ligature", function(window, _)
@@ -150,10 +182,20 @@ wezterm.on("toggle-ligature", function(window, _)
 	window:set_config_overrides(overrides)
 end)
 
+-------------------------------------------------------------------------------
+
 local config = base_config()
 
 if os_uname() == "WIN" then
 	win_config(config)
+else
+	wezterm.on("window-resized", function(window, _)
+		recompute_padding(window)
+	end)
+
+	wezterm.on("window-config-reloaded", function(window)
+		recompute_padding(window)
+	end)
 end
 
 return config
