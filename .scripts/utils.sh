@@ -16,14 +16,110 @@ ytdlp() {
     yt-dlp -o "%(title)s.%(ext)s" "$1"
 }
 
-fy() {
-    cmd="fy"
+# fy() {
+#     cmd="fy"
+#
+#     if [ -x "$(command -v "$cmd")" ]; then
+#         command "$cmd" "$@"
+#     else
+#         ssh arch "$cmd" "$@"
+#     fi
+# }
 
-    if [ -x "$(command -v "$cmd")" ]; then
-        command "$cmd" "$@"
-    else
-        ssh arch "$cmd" "$@"
+merge-zsh-history() {
+    history1=$1
+    history2=$2
+    merged=$3
+
+    echo "Merging history files: $history1 + $history2"
+
+    test ! -f "$history1" && echo "File $history1 not found" && exit 1
+    test ! -f "$history2" && echo "File $history2 not found" && exit 1
+
+    cat "$history1" "$history2" | awk -v date="WILL_NOT_APPEAR$(date +"%s")" '{if (sub(/\\$/,date)) printf "%s", $0; else print $0}' | LC_ALL=C sort -u | awk -v date="WILL_NOT_APPEAR$(date +"%s")" '{gsub('date',"\\\n"); print $0}' > "$merged"
+
+    echo "Merged to: $merged"
+}
+
+backup-root() {
+    rsync -aAXSHv --delete --quiet --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/backup/*","/var/lib/dhcpcd/*","/home/*"} / /backup/root
+
+    echo -e "$(date) (Root backup)" >> /tmp/backup.log
+}
+
+backup-home() {
+    rsync -aAXHv --delete --quiet --exclude={"home/huibosa/.cache"} /home/huibosa /backup/home
+
+    echo -e "$(date) (Home backup)" >> /tmp/backup.log
+}
+
+backup-wsl() {
+    # This backup script make a local and remote disk backup separately
+    if [ "$EUID" -eq 0 ]; then
+        WSL_DISTRO_NAME="Arch"
     fi
+
+    DEST1="/home/huibo/winhome/backup/${WSL_DISTRO_NAME}"
+    DEST2="/mnt/d/backup/${WSL_DISTRO_NAME}"
+    LOGFILE1="/home/huibo/winhome/backup/${WSL_DISTRO_NAME}.log"
+    LOGFILE2="/mnt/d/backup/${WSL_DISTRO_NAME}.log"
+
+    if [ ! -e "/home/huibo/winhome/" ]; then
+        echo "ERROR: ~/winhome/ is broken, cannot backup ${WSL_DISTRO_NAME}" | tee -a "$LOGFILE1"
+        exit
+    fi
+
+    {
+        echo "=====>"
+        echo "=====> Starting ${WSL_DISTRO_NAME} Backup"
+        echo "=====> " "$(date '+%F %T')"
+        echo "=====>"
+
+        echo
+        echo "==> Syncing files <=="
+        echo
+
+        [ -d "${DEST1}" ] || mkdir -p "${DEST1}"
+        time rsync -rltD --delete --verbose --exclude '.cache/*' "/home/huibo/" "${DEST1}"
+        echo
+        echo "=====> " "$(date '+%F %T')" "FINISHED" "${WSL_DISTRO_NAME}"
+        echo
+
+    } 2>&1 | tee "${LOGFILE1}"
+
+    # Check if a removeable disk connected
+    if [ -d /mnt/d/backup ]; then
+        {
+            echo "=====>"
+            echo "=====> Starting ${WSL_DISTRO_NAME} Backup"
+            echo "=====> " "$(date '+%F %T')"
+            echo "=====>"
+
+            echo
+            echo "==> Syncing files <=="
+            echo
+
+            [ -d "${DEST2}" ] || mkdir -p "${DEST2}"
+            time rsync -rltD --delete --verbose --exclude '.cache/*' "/home/huibo/" "${DEST2}"
+            echo
+            echo "=====> " "$(date '+%F %T')" "FINISHED" "${WSL_DISTRO_NAME}"
+            echo
+
+        } 2>&1 | tee "${LOGFILE2}"
+    fi
+}
+
+make-mpl-font() {
+    # mplrcPath=$(echo 'import matplotlib; print(matplotlib.matplotlib_fname())' | python)
+    mplrcPath=$(python -c 'import matplotlib; print(matplotlib.matplotlib_fname())')
+
+    mplDataPath="${mplrcPath%/*}"
+
+    echo $mplrcPath
+    echo $mplDataPath
+
+    # cp "$@" mplDataPath="${mplrcPath%/*}/fonts/ttf/"
+    # rm -rf ~/.cache/matplotlib
 }
 
 md2docx() {
