@@ -75,7 +75,7 @@ _getproxy() {
             proxy_port="$(echo "${network_output}" | grep "Port" | grep -oE '[0-9]+')"
         elif _mac_proxy_check | grep "VPN: on" &> /dev/null; then
             proxy_host="127.0.0.1"
-            proxy_port="1802"
+            proxy_port="1082"
         fi
     fi
 
