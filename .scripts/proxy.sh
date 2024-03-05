@@ -8,8 +8,6 @@ _mac_proxy_on() {
     networksetup -setwebproxy "${wifi_name}" "${proxy_host}" "${proxy_port}"
     networksetup -setsecurewebproxy "${wifi_name}" "${proxy_host}" "${proxy_port}"
     networksetup -setsocksfirewallproxy "${wifi_name}" "${proxy_host}" "${proxy_port}"
-
-    echo 'Proxy: on'
 }
 
 _mac_proxy_off() {
@@ -19,34 +17,27 @@ _mac_proxy_off() {
     networksetup -setwebproxystate "${wifi_name}" off
     networksetup -setsecurewebproxystate "${wifi_name}" off
     networksetup -setsocksfirewallproxystate "${wifi_name}" off
-
-    echo 'Proxy: off'
-}
-
-_mac_vpn_on() {
-    scutil --nc start Shadowrocket
-    echo 'VPN: on'
-}
-
-_mac_vpn_off() {
-    scutil --nc stop Shadowrocket
-    echo 'VPN: off'
 }
 
 _mac_proxy_check() {
-    network_output="$(networksetup -getwebproxy 'Wi-Fi')"
+    proxy_on="$(networksetup -getwebproxy 'Wi-Fi' | grep 'Enabled: Yes')"
+    shadow_on="$(scutil --nc list | grep "Connect.*Shadowrocket")"
+    quant_on="$(scutil --nc list | grep "Connect.*Quantumult")"
 
-    # Check proxy status
-    if echo "${network_output}" | grep "Enabled: Yes" &> /dev/null; then
-        echo "Proxy: on"
-    else
-        echo "Proxy: off"
+    if [ -n "${quant_on}" ]; then
+        echo "Quantumult X"
     fi
 
-    if scutil --nc list | grep "Connect" &> /dev/null; then
-        echo "VPN: on"
-    else
-        echo "VPN: off"
+    if [ -n "${shadow_on}" ]; then
+        echo "Shadowrocket"
+    fi
+
+    if [ -n "${proxy_on}" ]; then
+        echo "Proxy"
+    fi
+
+    if [ -z "${proxy_on}" ] && [ -z "${quant_on}" ] && [ -z "${shadow_on}" ]; then
+        echo "No proxy"
     fi
 }
 
@@ -165,24 +156,54 @@ shellproxy() {
 }
 
 macproxy() {
-    if [ "$1" = "-v" ]; then
-        _mac_vpn_on
+    case "$1" in
+    "-s" | "--shadow")
+        scutil --nc stop 'Quantumult X'
         _mac_proxy_off
+        scutil --nc start Shadowrocket
 
         proxy="$(_getproxy)"
         _set_git_proxy "${proxy}"
-    elif [ "$1" = "-p" ]; then
-        _mac_vpn_off
+
+        echo "Shadowrocket"
+        ;;
+    "-p" | "--proxy")
+        scutil --nc stop Shadowrocket
+        scutil --nc stop 'Quantumult X'
         _mac_proxy_on
 
         proxy="$(_getproxy)"
         _set_git_proxy "${proxy}"
-    elif [ "$1" = "-c" ]; then
+        echo "Proxy"
+        ;;
+    "-q" | "--quant")
+        scutil --nc stop Shadowrocket
+        _mac_proxy_off
+        scutil --nc start 'Quantumult X'
+
+        proxy="$(_getproxy)"
+        _set_git_proxy "${proxy}"
+
+        echo "Quantumult X"
+        ;;
+    "-n" | "--noproxy")
+        scutil --nc stop Shadowrocket
+        scutil --nc stop 'Quantumult X'
+        _mac_proxy_off
+
+        proxy="$(_getproxy)"
+        _set_git_proxy "${proxy}"
+
+        echo "No proxy"
+        ;;
+    "-c" | "--check")
         _mac_proxy_check
-    else
-        echo "Usage: macproxy [-v|-p|-c]"
+        ;;
+    *)
+        echo "Usage: macproxy [-p|-q|-s|-c-n]"
         return 1
-    fi
+        ;;
+    esac
 }
 
 proxy="$(_getproxy)"
