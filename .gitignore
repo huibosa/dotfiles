@@ -51,9 +51,15 @@
 !.config/nvim-vscode/init.vim
 
 !.scripts/
-.scripts/*
 !.scripts/*
 
+!.scripts/boot/
+!.scripts/boot/*
+
+!.scripts/zsh/
+!.scripts/zsh/*
+!.scripts/zsh/completions/
+!.scripts/zsh/completions/*
 
 !.pip/
 .pip/*

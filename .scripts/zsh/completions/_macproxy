@@ -1,0 +1,7 @@
+#compdef macproxy
+
+_arguments \
+  '(-p --proxy)'{-p,--proxy}'[Use system proxy]' \
+  '(-c --check)'{-c,--check}'[Check proxy status]' \
+  '(-n --noproxy)'{-n,--noproxy}'[Do not use proxy]' \
+  '(-v --vpn)'{-v,--vpn=}'[Use VPN (Quantumult X or Shadowrocket)]:vpn_type:(quant shadow)' \

@@ -25,6 +25,7 @@ setopt prompt_subst
 
 
 # Completion
+fpath+="$HOME/.scripts/zsh/completions/"
 zstyle ':completion:*' menu select=1 # menu block selection
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
@@ -34,7 +35,7 @@ autoload -U compinit && compinit -u
 setopt autocd
 
 # Use antigen
-source $HOME/.scripts/zsh/antigen.zsh
+source $HOME/.scripts/boot/antigen.zsh
 antigen bundle agkozak/zsh-z
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
