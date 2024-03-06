@@ -34,7 +34,7 @@ autoload -U compinit && compinit -u
 setopt autocd
 
 # Use antigen
-source $HOME/.scripts/antigen.zsh
+source $HOME/.scripts/zsh/antigen.zsh
 antigen bundle agkozak/zsh-z
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
