@@ -42,15 +42,15 @@ antigen apply
 
 
 # Scripts
-source $HOME/.scripts/proxy.sh    # proxy settings
-source $HOME/.scripts/utils.sh
+source $HOME/.scripts/boot/proxy.sh
+source $HOME/.scripts/boot/utils.sh
 bindkey -s '^o' 'lfcd\n'          # bind lfcd to <c-o>
 
 
 # WSL setting
 # if command -v "wsl.exe" &> /dev/null ; then
 if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
-  source $HOME/.scripts/utils-wsl.sh
+  source $HOME/.scripts/boot/utils-wsl.sh
 fi
 
 
