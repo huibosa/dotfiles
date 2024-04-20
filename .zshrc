@@ -47,6 +47,8 @@ source $HOME/.scripts/boot/proxy.sh
 source $HOME/.scripts/boot/utils.sh
 bindkey -s '^o' 'lfcd\n'          # bind lfcd to <c-o>
 
+eval "$(fzf --zsh)"
+
 
 # WSL setting
 # if command -v "wsl.exe" &> /dev/null ; then
