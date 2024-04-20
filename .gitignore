@@ -13,9 +13,6 @@
 
 !.gitignore
 
-!.xinitrc
-!.Xmodmap
-
 !.tmux.conf
 
 !.zshenv
