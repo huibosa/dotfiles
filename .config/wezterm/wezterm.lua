@@ -91,24 +91,15 @@ local base_config = function()
 		bottom = "0cell",
 	}
 
-	local everforest_colors = {
-		foreground = "#d3c6aa",
-		-- background = "#2b3339",
-		background = "#272e33",
-		selection_bg = "#3B5360",
-		scrollbar_thumb = "#222222",
-		ansi = { "#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa" },
-		brights = { "#4b565c", "#e67e80", "#a7c080", "#dbbc7f", "#7fbbb3", "#d699b6", "#83c092", "#d3c6aa" },
-		indexed = { [16] = "#ffa066", [17] = "#ff5d62" },
-	}
-
 	local config = wezterm.config_builder()
 
 	config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 	config.native_macos_fullscreen_mode = true
 	config.adjust_window_size_when_changing_font_size = false
 
-	config.colors = everforest_colors
+	config.color_scheme = "Gruvbox Material (Gogh)"
+	-- config.color_scheme = "Everforest Dark (Gogh)"
+
 	config.window_background_opacity = 1.0
 
 	config.disable_default_key_bindings = true
@@ -122,7 +113,7 @@ local base_config = function()
 
 	config.font = wezterm.font_with_fallback({
 		{ family = "JetBrains Mono" },
-		{ family = "Microsoft YaHei" },
+		{ family = "Microsoft YaHei", scale = 1.1 },
 	})
 
 	-- config.font_size = 14.8
