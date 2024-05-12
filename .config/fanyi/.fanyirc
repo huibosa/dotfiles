@@ -2,6 +2,6 @@
   "iciba": true,
   "youdao": true,
   "dictionaryapi": false,
-  "say": false,
+  "say": true,
   "color": true
 }

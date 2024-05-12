@@ -58,13 +58,13 @@ _getproxy() {
         proxy_host="127.0.0.1"
         proxy_port="20171"
     elif uname -a | grep -qEi 'Darwin' &> /dev/null; then
-        if _mac_proxy_check | grep "Proxy: on" &> /dev/null; then
+        if _mac_proxy_check | grep "Proxy" &> /dev/null; then
             network_output="$(networksetup -getwebproxy 'Wi-Fi')"
             host_pattern='[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
 
             proxy_host="$(echo "${network_output}" | grep -oE "${host_pattern}")"
             proxy_port="$(echo "${network_output}" | grep "Port" | grep -oE '[0-9]+')"
-        elif _mac_proxy_check | grep "VPN: on" &> /dev/null; then
+        elif _mac_proxy_check | grep "Shadowrocket" &> /dev/null; then
             proxy_host="127.0.0.1"
             proxy_port="1082"
         fi
@@ -158,7 +158,7 @@ shellproxy() {
 macproxy() {
     case "$1" in
     "--vpn=shadow")
-        scutil --nc stop 'Quantumult X'
+        scutil --nc stop 'Quantumult X 2'
         _mac_proxy_off
         scutil --nc start Shadowrocket
 
@@ -170,7 +170,7 @@ macproxy() {
     "--vpn=quant")
         scutil --nc stop Shadowrocket
         _mac_proxy_off
-        scutil --nc start 'Quantumult X'
+        scutil --nc start 'Quantumult X 2'
 
         proxy="$(_getproxy)"
         _set_git_proxy "${proxy}"
@@ -179,7 +179,7 @@ macproxy() {
         ;;
     "-p" | "--proxy")
         scutil --nc stop Shadowrocket
-        scutil --nc stop 'Quantumult X'
+        scutil --nc stop 'Quantumult X 2'
         _mac_proxy_on
 
         proxy="$(_getproxy)"
@@ -188,7 +188,7 @@ macproxy() {
         ;;
     "-n" | "--noproxy")
         scutil --nc stop Shadowrocket
-        scutil --nc stop 'Quantumult X'
+        scutil --nc stop 'Quantumult X 2'
         _mac_proxy_off
 
         proxy="$(_getproxy)"
