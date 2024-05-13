@@ -17,13 +17,10 @@ local win_config = function(config)
 	}
 
 	for _, key in ipairs(config.keys) do
-		if key.mods == "SUPER" then
-			if key.key == "c" or key.key == "v" then
-				key.mods = "CTRL|SHIFT"
-			else
-				key.mods = "CTRL"
-			end
-		elseif key.mods == "SUPER|SHIFT" then
+		local k = key.key
+
+		if k == "n" or k == "q" or k == "h" or k == "w" or k == "t" or k == "c" or k == "v" then
+			key.key = string.upper(k)
 			key.mods = "CTRL|SHIFT"
 		end
 	end
@@ -50,38 +47,41 @@ local base_config = function()
 		{
 			event = { Up = { streak = 1, button = "Left" } },
 			mods = "NONE",
-			action = wezterm.action({ CompleteSelection = "PrimarySelection" }),
+			action = wezterm.action.CompleteSelection("PrimarySelection"),
 		},
 		-- and make CTRL-Click open hyperlinks
 		{
 			event = { Up = { streak = 1, button = "Left" } },
 			mods = "SUPER",
-			action = "OpenLinkAtMouseCursor",
+			action = wezterm.action.OpenLinkAtMouseCursor,
 		},
 	}
 
 	local keys = {
-		{ key = "=", mods = "SUPER", action = "IncreaseFontSize" },
-		{ key = "-", mods = "SUPER", action = "DecreaseFontSize" },
-		{ key = "0", mods = "SUPER", action = "ResetFontSize" },
+		{ key = "=", mods = "CTRL|SHIFT", action = wezterm.action.IncreaseFontSize },
+		{ key = "-", mods = "CTRL|SHIFT", action = wezterm.action.DecreaseFontSize },
+		{ key = "0", mods = "CTRL|SHIFT", action = wezterm.action.ResetFontSize },
 
-		{ key = "X", mods = "SUPER|SHIFT", action = "ActivateCopyMode" },
-		{ key = " ", mods = "SUPER|SHIFT", action = "QuickSelect" },
+		{ key = "X", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCopyMode },
+		{ key = " ", mods = "CTRL|SHIFT", action = wezterm.action.QuickSelect },
 
-		{ key = "Enter", mods = "ALT", action = "ToggleFullScreen" },
-		{ key = "N", mods = "SUPER|SHIFT", action = "SpawnWindow" },
+		{ key = "Enter", mods = "ALT", action = wezterm.action.ToggleFullScreen },
 
-		{ key = "W", mods = "SUPER|SHIFT", action = wezterm.action({ CloseCurrentTab = { confirm = true } }) },
-		{ key = "T", mods = "SUPER|SHIFT", action = wezterm.action({ SpawnTab = "CurrentPaneDomain" }) },
-		{ key = "Tab", mods = "SUPER", action = wezterm.action({ ActivateTabRelative = 1 }) },
-		{ key = "Tab", mods = "SUPER|SHIFT", action = wezterm.action({ ActivateTabRelative = -1 }) },
+		{ key = "n", mods = "SUPER", action = wezterm.action.SpawnWindow },
+		{ key = "q", mods = "SUPER", action = wezterm.action.QuitApplication },
+		{ key = "h", mods = "SUPER", action = wezterm.action.Hide },
+
+		{ key = "w", mods = "SUPER", action = wezterm.action.CloseCurrentTab({ confirm = true }) },
+		{ key = "t", mods = "SUPER", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+		{ key = "Tab", mods = "CTRL", action = wezterm.action.ActivateTabRelative(1) },
+		{ key = "Tab", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
 
 		-- { key = "F", mods = "SUPER|SHIFT", action = wezterm.action({ Search = { CaseSensitiveString = "" } }) },
 
-		{ key = "c", mods = "SUPER", action = wezterm.action({ CopyTo = "Clipboard" }) },
-		{ key = "v", mods = "SUPER", action = wezterm.action({ PasteFrom = "Clipboard" }) },
+		{ key = "c", mods = "SUPER", action = wezterm.action.CopyTo("Clipboard") },
+		{ key = "v", mods = "SUPER", action = wezterm.action.PasteFrom("Clipboard") },
 
-		{ key = "E", mods = "SUPER|SHIFT", action = wezterm.action.EmitEvent("toggle-ligature") },
+		{ key = "E", mods = "CTRL|SHIFT", action = wezterm.action.EmitEvent("toggle-ligature") },
 	}
 
 	local window_padding = {
@@ -93,6 +93,7 @@ local base_config = function()
 
 	local config = wezterm.config_builder()
 
+	config.window_close_confirmation = "NeverPrompt"
 	config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 	config.native_macos_fullscreen_mode = true
 	config.adjust_window_size_when_changing_font_size = false
