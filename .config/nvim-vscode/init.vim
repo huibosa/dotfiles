@@ -45,13 +45,26 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  {"kylechui/nvim-surround", config = true},
-  {"numToStr/Comment.nvim", config = true},
   -- {"windwp/nvim-autopairs", config = function()
   --   local autopairs = require("nvim-autopairs")
   --     autopairs.setup({ map_c_h = true, })
   --   end
   -- },
+  {
+    "echasnovski/mini.surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    opts = {
+        mappings = {
+            add = "gsa", -- Add surrounding in Normal and Visual modes
+            delete = "gsd", -- Delete surrounding
+            find = "gsf", -- Find surrounding (to the right)
+            find_left = "gsF", -- Find surrounding (to the left)
+            highlight = "gsh", -- Highlight surrounding
+            replace = "gsr", -- Replace surrounding
+            update_n_lines = "gsn", -- Update `n_lines`
+        },
+    },
+  },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     dependencies = {"nvim-treesitter/nvim-treesitter"},
@@ -164,8 +177,14 @@ au TextChanged * silent! lua vim.treesitter.get_parser():parse()
 " xnoremap = <Cmd>call VSCodeCall('editor.action.formatSelection')<CR>
 nnoremap == <Cmd>call VSCodeCall('editor.action.format')<CR>
 
-nnoremap gy <Cmd>call <SID>vscodeGoToDefinition('revealDeclaration')<CR>
-nnoremap gY <Cmd>call VSCodeNotify('editor.action.peekDeclaration')<CR>
-nnoremap gr <Cmd>call VSCodeNotify('editor.action.referenceSearch.trigger')<CR>
-nnoremap gs <Cmd>call VSCodeNotify('workbench.action.gotoSymbol')<CR>
-nnoremap gS <Cmd>call VSCodeNotify('workbench.action.showAllSymbols')<CR>
+nnoremap gd <Cmd>call VSCodeNotify('editor.action.peekDefinition')<CR>
+nnoremap gD <Cmd>call VSCodeNotify('editor.action.peekDeclaration')<CR>
+nnoremap gy <Cmd>call VSCodeNotify('editor.action.peekTypeDefinition')<CR>
+nnoremap gr <Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>
+nnoremap gI <Cmd>call VSCodeNotify('editor.action.peekImplementation')<CR>
+
+nnoremap <space>fs <Cmd>call VSCodeNotify('workbench.action.gotoSymbol')<CR>
+nnoremap <space>fS <Cmd>call VSCodeNotify('workbench.action.showAllSymbols')<CR>
+
+nnoremap <space>cr <Cmd>call VSCodeNotify('editor.action.rename')<CR>
+nnoremap <space>ca <Cmd>call VSCodeNotify('editor.action.sourceAction')<CR>
