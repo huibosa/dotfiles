@@ -30,6 +30,49 @@ nnoremap N Nzzzv
 set ignorecase
 set smartcase
 
+let g:loaded_python3_provider = 0
+let g:loaded_python_provider = 0
+let g:loaded_pythonx_provider = 0
+let g:loaded_perl_provider = 0
+let g:loaded_ruby_provider = 0
+let g:loaded_node_provider = 0
+let g:did_install_default_menus = 1
+let g:loaded_netrw = 1
+let g:netrw_liststyle = 3
+let g:loaded_sql_completion = 1
+
+let g:loaded_2html_plugin = 1
+let g:loaded_getscript = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_gzip = 1
+let g:loaded_logiPat = 1
+let g:loaded_man = 1
+let g:loaded_matchit = 1
+let g:loaded_matchparen = 1
+let g:loaded_remote_plugins = 1
+let g:loaded_rplugin = 1
+let g:loaded_rrhelper = 1
+let g:loaded_shada_plugin = 1
+let g:loaded_spec = 1
+let g:loaded_spellfile_plugin = 1
+let g:loaded_spellfile_plugin = 1
+let g:loaded_tar = 1
+let g:loaded_tarPlugin = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_vimball = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_zip = 1
+let g:loaded_zipPlugin = 1
+
+let g:load_black = 1
+let g:loaded_fzf = 1
+let g:loaded_gtags = 1
+let g:loaded_gtags_cscope = 1
+
+let g:loaded_netrwFileHandlers = 1
+let g:loaded_netrwPlugin = 1
+let g:loaded_netrwSettings = 1
+
 lua << EOF
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -102,19 +145,10 @@ require("lazy").setup({
                         ["ar"] = { query = "@return.outer", desc = "outer return" },
                         ["ir"] = { query = "@return.outer", desc = "inner return" },
 
-                        ["a/"] = { query = "@comment.outer", desc = "outer comment" },
-                        ["i/"] = { query = "@comment.inner", desc = "inner comment" },
+                        -- ["a/"] = { query = "@comment.outer", desc = "outer comment" },
+                        -- ["i/"] = { query = "@comment.inner", desc = "inner comment" },
                     },
                     include_surrounding_whitespace = true,
-                },
-                swap = {
-                    enable = true,
-                    swap_next = {
-                        ["<leader>a"] = "@parameter.inner", -- swap object under cursor with next
-                    },
-                    swap_previous = {
-                        ["<leader>A"] = "@parameter.inner", -- swap object under cursor with previous
-                    },
                 },
                 move = {
                     enable = true,
