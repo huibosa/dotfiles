@@ -6,7 +6,7 @@ local keymap = function(mode, lhs, rhs, opts)
 	vim.keymap.set(mode, lhs, rhs, opts)
 end
 
-keymap("i", "<C-d>", "<Del>")
+keymap("i", "<C-d>", "<DEL>")
 
 keymap("n", "Y", "y$")
 keymap("x", "Y", '"+y')
@@ -28,11 +28,12 @@ keymap("n", "gy", "<CMD>lua require('vscode').call('editor.action.peekTypeDefini
 keymap("n", "gr", "<CMD>lua require('vscode').call('editor.action.goToReferences')<CR>")
 keymap("n", "gI", "<CMD>lua require('vscode').call('editor.action.peekImplementation')<CR>")
 
-keymap("n", "<space>fs", "<CMD>lua require('vscode').call('workbench.action.gotoSymbol')<CR>")
-keymap("n", "<space>fS", "<CMD>lua require('vscode').call('workbench.action.showAllSymbols')<CR>")
+keymap("n", "<SPACE>fs", "<CMD>lua require('vscode').call('workbench.action.gotoSymbol')<CR>")
+keymap("n", "<SPACE>fS", "<CMD>lua require('vscode').call('workbench.action.showAllSymbols')<CR>")
 
-keymap("n", "<space>cr", "<CMD>lua require('vscode').call('editor.action.rename')<CR>")
-keymap("n", "<space>ca", "<CMD>lua require('vscode').call('editor.action.sourceAction')<CR>")
+keymap("n", "<SPACE>cr", "<CMD>lua require('vscode').call('editor.action.rename')<CR>")
+keymap("n", "<SPACE>ca", "<CMD>lua require('vscode').call('editor.action.sourceAction')<CR>")
+keymap("n", "<SPACE>cf", "<CMD>lua require('vscode').call('editor.action.formatDocument')<CR>")
 
 local opt = vim.opt
 
@@ -93,7 +94,13 @@ local augroup = vim.api.nvim_create_augroup("TextChangedGroup", { clear = true }
 vim.api.nvim_create_autocmd("TextChanged", {
 	group = augroup,
 	callback = function()
-		vim.treesitter.get_parser():parse()
+		local buf = vim.api.nvim_get_current_buf()
+		local has_parser = pcall(vim.treesitter.get_parser, buf)
+
+		if has_parser then
+			local parser = vim.treesitter.get_parser(buf)
+			parser:parse()
+		end
 	end,
 })
 

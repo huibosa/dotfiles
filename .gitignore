@@ -45,7 +45,7 @@
 !.config/lf/*
 
 !.config/nvim-vscode
-!.config/nvim-vscode/init.vim
+!.config/nvim-vscode/init.lua
 
 !.scripts/
 !.scripts/*
