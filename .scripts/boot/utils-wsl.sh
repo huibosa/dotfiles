@@ -8,9 +8,13 @@ open() {
 }
 
 mount-win-disk() {
-    sudo mount -t drvfs "$1": /mnt/"$1"
+    if ![ -d "$1" ]; then
+        mkdir /mnt/"$1"
+    fi
+
+    mount -t drvfs "$1": /mnt/"$1"
 }
 
 umount-win-disk() {
-    sudo umount "/mnt/$1"
+    umount "/mnt/$1"
 }
