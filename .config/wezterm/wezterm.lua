@@ -1,5 +1,8 @@
 local wezterm = require("wezterm")
 
+local WINDOWS = wezterm.target_triple == "x86_64-pc-windows-msvc"
+local MAC = wezterm.target_triple == "x86_64-apple-darwin" or wezterm.target_triple == "aarch64-apple-darwin"
+
 local win_config = function(config)
 	local wsl_domains = wezterm.default_wsl_domains()
 
@@ -123,11 +126,6 @@ local base_config = function()
 	return config
 end
 
-local os_uname = function()
-	local sep = package.config:sub(1, 1)
-	return (sep == "/") and "UNIX" or "WIN"
-end
-
 local function recompute_padding(window)
 	local window_dims = window:get_dimensions()
 	local overrides = window:get_config_overrides() or {}
@@ -178,7 +176,7 @@ end)
 
 local config = base_config()
 
-if os_uname() == "WIN" then
+if WINDOWS then
 	win_config(config)
 else
 	wezterm.on("window-resized", function(window, _)

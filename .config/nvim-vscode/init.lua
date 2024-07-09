@@ -6,8 +6,6 @@ local keymap = function(mode, lhs, rhs, opts)
 	vim.keymap.set(mode, lhs, rhs, opts)
 end
 
-keymap("i", "<C-d>", "<DEL>")
-
 keymap("n", "Y", "y$")
 keymap("x", "Y", '"+y')
 keymap("n", "c*", "*Ncgn")
@@ -28,8 +26,8 @@ keymap("n", "gy", "<CMD>lua require('vscode').call('editor.action.peekTypeDefini
 keymap("n", "gr", "<CMD>lua require('vscode').call('editor.action.goToReferences')<CR>")
 keymap("n", "gI", "<CMD>lua require('vscode').call('editor.action.peekImplementation')<CR>")
 
-keymap("n", "<SPACE>fs", "<CMD>lua require('vscode').call('workbench.action.gotoSymbol')<CR>")
-keymap("n", "<SPACE>fS", "<CMD>lua require('vscode').call('workbench.action.showAllSymbols')<CR>")
+keymap("n", "<SPACE>ss", "<CMD>lua require('vscode').call('workbench.action.gotoSymbol')<CR>")
+keymap("n", "<SPACE>sS", "<CMD>lua require('vscode').call('workbench.action.showAllSymbols')<CR>")
 
 keymap("n", "<SPACE>cr", "<CMD>lua require('vscode').call('editor.action.rename')<CR>")
 keymap("n", "<SPACE>ca", "<CMD>lua require('vscode').call('editor.action.sourceAction')<CR>")
