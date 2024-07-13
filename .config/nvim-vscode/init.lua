@@ -6,7 +6,6 @@ local keymap = function(mode, lhs, rhs, opts)
 	vim.keymap.set(mode, lhs, rhs, opts)
 end
 
-keymap("n", "Y", "y$")
 keymap("x", "Y", '"+y')
 keymap("n", "c*", "*Ncgn")
 

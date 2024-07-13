@@ -53,6 +53,9 @@
 !.scripts/boot/
 !.scripts/boot/*
 
+!.scripts/tmux/
+!.scripts/tmux/*
+
 !.scripts/zsh/
 !.scripts/zsh/*
 !.scripts/zsh/completions/
