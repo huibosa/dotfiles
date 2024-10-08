@@ -8,7 +8,6 @@ local keymap = function(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, opts)
 end
 
-keymap("x", "Y", '"+y')
 keymap("n", "c*", "*Ncgn")
 
 keymap({ "n", "x" }, "H", "^")
