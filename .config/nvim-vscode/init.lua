@@ -21,16 +21,15 @@ keymap("n", "J", "mzJ`z")
 
 keymap("n", "gd", "<CMD>lua require('vscode').call('editor.action.peekDefinition')<CR>")
 keymap("n", "gD", "<CMD>lua require('vscode').call('editor.action.peekDeclaration')<CR>")
-keymap("n", "gy", "<CMD>lua require('vscode').call('editor.action.peekTypeDefinition')<CR>")
-keymap("n", "gr", "<CMD>lua require('vscode').call('editor.action.goToReferences')<CR>")
-keymap("n", "gI", "<CMD>lua require('vscode').call('editor.action.peekImplementation')<CR>")
+keymap("n", "grt", "<CMD>lua require('vscode').call('editor.action.peekTypeDefinition')<CR>")
+keymap("n", "grr", "<CMD>lua require('vscode').call('editor.action.goToReferences')<CR>")
+keymap("n", "gri", "<CMD>lua require('vscode').call('editor.action.peekImplementation')<CR>")
+keymap("n", "grn", "<CMD>lua require('vscode').call('editor.action.rename')<CR>")
+keymap("n", "gra", "<CMD>lua require('vscode').call('editor.action.sourceAction')<CR>")
+keymap("n", "grf", "<CMD>lua require('vscode').call('editor.action.formatDocument')<CR>")
 
 keymap("n", "<SPACE>ss", "<CMD>lua require('vscode').call('workbench.action.gotoSymbol')<CR>")
 keymap("n", "<SPACE>sS", "<CMD>lua require('vscode').call('workbench.action.showAllSymbols')<CR>")
-
-keymap("n", "<SPACE>cr", "<CMD>lua require('vscode').call('editor.action.rename')<CR>")
-keymap("n", "<SPACE>ca", "<CMD>lua require('vscode').call('editor.action.sourceAction')<CR>")
-keymap("n", "<SPACE>cf", "<CMD>lua require('vscode').call('editor.action.formatDocument')<CR>")
 
 local opt = vim.opt
 
@@ -199,7 +198,7 @@ require("lazy").setup({
 						goto_next_start = {
 							["]a"] = { query = "@parameter.outer", desc = "Next argument start" },
 							["]f"] = { query = "@function.outer", desc = "Next function start" },
-							["]r"] = { query = "@return.outer", desc = "Next return start" },
+							["]e"] = { query = "@return.outer", desc = "Next return start" },
 							["]c"] = { query = "@class.outer", desc = "Next class start" },
 							["]j"] = { query = "@conditional.outer", desc = "Next judge start" },
 							["]l"] = { query = "@loop.outer", desc = "Next loop start" },
@@ -207,7 +206,7 @@ require("lazy").setup({
 						goto_next_end = {
 							["]A"] = { query = "@parameter.outer", desc = "Next argument end" },
 							["]F"] = { query = "@function.outer", desc = "Next function end" },
-							["]R"] = { query = "@return.outer", desc = "Next return end" },
+							["]E"] = { query = "@return.outer", desc = "Next return end" },
 							["]C"] = { query = "@class.outer", desc = "Next class end" },
 							["]J"] = { query = "@conditional.outer", desc = "Next judge end" },
 							["]L"] = { query = "@loop.outer", desc = "Next loop end" },
@@ -215,7 +214,7 @@ require("lazy").setup({
 						goto_previous_start = {
 							["[a"] = { query = "@parameter.outer", desc = "Previous argument start" },
 							["[f"] = { query = "@function.outer", desc = "Previous function start" },
-							["[r"] = { query = "@return.outer", desc = "Previous return start" },
+							["[e"] = { query = "@return.outer", desc = "Previous return start" },
 							["[c"] = { query = "@class.outer", desc = "Previous class start" },
 							["[j"] = { query = "@conditional.outer", desc = "Previous judge start" },
 							["[l"] = { query = "@loop.outer", desc = "Previous loop start" },
@@ -223,7 +222,7 @@ require("lazy").setup({
 						goto_previous_end = {
 							["[A"] = { query = "@parameter.outer", desc = "Previous argument end" },
 							["[F"] = { query = "@function.outer", desc = "Previous function end" },
-							["[R"] = { query = "@return.outer", desc = "Previous return end" },
+							["[E"] = { query = "@return.outer", desc = "Previous return end" },
 							["[C"] = { query = "@class.outer", desc = "Previous class end" },
 							["[J"] = { query = "@conditional.outer", desc = "Previous judge end" },
 							["[L"] = { query = "@loop.outer", desc = "Previous loop end" },
