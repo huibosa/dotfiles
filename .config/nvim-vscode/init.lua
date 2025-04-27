@@ -243,6 +243,28 @@ require("lazy").setup({
             vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
             vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
             vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
+
+            -- Make ]h, [h also repeatable with ; and ,
+            local next_hunk = function() vscode.action("workbench.action.editor.nextChange") end
+            local prev_hunk = function() vscode.action("workbench.action.editor.previousChange") end
+            local next_hunk_repeat, prev_hunk_repeat = ts_repeat_move.make_repeatable_move_pair(next_hunk, prev_hunk)
+            keymap("n", "]h", next_hunk_repeat)
+            keymap("n", "[h", prev_hunk_repeat)
+
+            -- Make ]d, [d also repeatable with ; and ,
+            local next_diagnostic = function() vscode.action("editor.action.marker.next") end
+            local prev_diagnostic = function() vscode.action("editor.action.marker.prev") end
+            local next_diagnostic_repeat, prev_diagnostic_repeat =
+                ts_repeat_move.make_repeatable_move_pair(next_diagnostic, prev_diagnostic)
+            keymap("n", "]d", next_diagnostic_repeat)
+            keymap("n", "[d", prev_diagnostic_repeat)
+
+            -- Make ]r, [r also repeatable with ; and ,
+            local next_rf = function() vscode.action("editor.action.wordHighlight.next") end
+            local prev_rf = function() vscode.action("editor.action.wordHighlight.prev") end
+            local next_rf_repeat, prev_rf_repeat = ts_repeat_move.make_repeatable_move_pair(next_rf, prev_rf)
+            keymap("n", "]r", next_rf_repeat)
+            keymap("n", "[r", prev_rf_repeat)
         end,
     },
 })
