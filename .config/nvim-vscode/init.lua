@@ -1,3 +1,5 @@
+local vscode = require("vscode-neovim")
+
 local keymap = function(mode, lhs, rhs, opts)
     opts = vim.tbl_extend("force", {
         noremap = true,
@@ -19,17 +21,17 @@ keymap("v", "J", ":m '>+1<CR>gv=gv")
 -- Join next without moving cursor
 keymap("n", "J", "mzJ`z")
 
-keymap("n", "gd", "<CMD>lua require('vscode').call('editor.action.peekDefinition')<CR>")
-keymap("n", "gD", "<CMD>lua require('vscode').call('editor.action.peekDeclaration')<CR>")
-keymap("n", "grt", "<CMD>lua require('vscode').call('editor.action.peekTypeDefinition')<CR>")
-keymap("n", "grr", "<CMD>lua require('vscode').call('editor.action.goToReferences')<CR>")
-keymap("n", "gri", "<CMD>lua require('vscode').call('editor.action.peekImplementation')<CR>")
-keymap("n", "grn", "<CMD>lua require('vscode').call('editor.action.rename')<CR>")
-keymap("n", "gra", "<CMD>lua require('vscode').call('editor.action.sourceAction')<CR>")
-keymap("n", "grf", "<CMD>lua require('vscode').call('editor.action.formatDocument')<CR>")
+keymap("n", "gd", function() vscode.action("editor.action.peekDefinition") end)
+keymap("n", "gD", function() vscode.action("editor.action.peekDeclaration") end)
+keymap("n", "grt", function() vscode.action("editor.action.peekTypeDefinition") end)
+keymap("n", "grr", function() vscode.action("editor.action.goToReferences") end)
+keymap("n", "gri", function() vscode.action("editor.action.peekImplementation") end)
+keymap("n", "grn", function() vscode.action("editor.action.rename") end)
+keymap("n", "gra", function() vscode.action("editor.action.sourceAction") end)
+keymap("n", "grf", function() vscode.action("editor.action.formatDocument") end)
 
-keymap("n", "<SPACE>ss", "<CMD>lua require('vscode').call('workbench.action.gotoSymbol')<CR>")
-keymap("n", "<SPACE>sS", "<CMD>lua require('vscode').call('workbench.action.showAllSymbols')<CR>")
+keymap("n", "<SPACE>ss", function() vscode.action("workbench.action.gotoSymbol") end)
+keymap("n", "<SPACE>sS", function() vscode.action("workbench.action.showAllSymbols") end)
 
 local opt = vim.opt
 
