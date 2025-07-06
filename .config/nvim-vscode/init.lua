@@ -99,22 +99,22 @@ vim.g.load_black = 1
 vim.g.loaded_gtags = 1
 vim.g.loaded_gtags_cscope = 1
 
--- Create a new augroup to group the autocommands
-local augroup = vim.api.nvim_create_augroup("TextChangedGroup", { clear = true })
-
--- Define the autocommand
-vim.api.nvim_create_autocmd("TextChanged", {
-    group = augroup,
-    callback = function()
-        local buf = vim.api.nvim_get_current_buf()
-        local has_parser = pcall(vim.treesitter.get_parser, buf)
-
-        if has_parser then
-            local parser = vim.treesitter.get_parser(buf)
-            parser:parse()
-        end
-    end,
-})
+-- -- Create a new augroup to group the autocommands
+-- local augroup = vim.api.nvim_create_augroup("TextChangedGroup", { clear = true })
+--
+-- -- Define the autocommand
+-- vim.api.nvim_create_autocmd("TextChanged", {
+--     group = augroup,
+--     callback = function()
+--         local buf = vim.api.nvim_get_current_buf()
+--         local has_parser = pcall(vim.treesitter.get_parser, buf)
+--
+--         if has_parser then
+--             local parser = vim.treesitter.get_parser(buf)
+--             parser:parse()
+--         end
+--     end,
+-- })
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
