@@ -77,3 +77,7 @@ export LS_COLORS='di=34;01:*Makefile=38;5;178:*.ipynb=38;5;208:*.7z=31:*.WARC=31
 
 export UV_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
 export UV_PYTHON_INSTALL_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
+
+# zsh-autosuggestions settings
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
+ZSH_AUTOSUGGEST_USE_ASYNC=1

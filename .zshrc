@@ -34,21 +34,11 @@ autoload -U compinit && compinit -u
 # Enter directory without type "cd"
 setopt autocd
 
-# Use antigen
-source $HOME/.scripts/boot/antigen.zsh
-antigen bundle agkozak/zsh-z
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen apply
-
 
 # Scripts
 source $HOME/.scripts/boot/proxy.sh
 source $HOME/.scripts/boot/utils.sh
 bindkey -s '^o' 'lfcd\n'          # bind lfcd to <c-o>
-
-eval "$(fzf --zsh)"
-
 
 # WSL setting
 # if command -v "wsl.exe" &> /dev/null ; then
@@ -108,5 +98,14 @@ else
   PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
   PROMPT+='%{$reset_color%}'
 fi
+
+# Use antigen
+source $HOME/.scripts/boot/antigen.zsh
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen apply
+
+eval "$(zoxide init zsh)"
+eval "$(fzf --zsh)"
 
 # zprof
