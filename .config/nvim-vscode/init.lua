@@ -20,9 +20,9 @@ keymap("v", "J", ":m '>+1<CR>gv=gv")
 -- Join next without moving cursor
 keymap("n", "J", "mzJ`z")
 
-keymap("n", "gd", function() vscode.action("editor.action.peekDefinition") end)
-keymap("n", "gD", function() vscode.action("editor.action.peekDeclaration") end)
-keymap("n", "grt", function() vscode.action("editor.action.peekTypeDefinition") end)
+keymap("n", "gd", function() vscode.action("editor.action.revealDefinition") end)
+keymap("n", "gD", function() vscode.action("editor.action.revealDeclaration") end)
+keymap("n", "grt", function() vscode.action("editor.action.revealTypeDefinition") end)
 keymap("n", "grr", function() vscode.action("editor.action.goToReferences") end)
 keymap("n", "gri", function() vscode.action("editor.action.peekImplementation") end)
 keymap("n", "grn", function() vscode.action("editor.action.rename") end)
