@@ -53,7 +53,7 @@ _getproxy() {
     if uname -a | grep -qEi '(microsoft|wsl)' &> /dev/null; then
         # proxy_host="$(grep 'nameserver' /etc/resolv.conf | cut -d ' ' -f 2)"
         proxy_host="127.0.0.1"
-        proxy_port="7890"
+        proxy_port="7897"
     elif uname -a | grep -qEi 'arch' &> /dev/null; then
         proxy_host="127.0.0.1"
         proxy_port="20171"
