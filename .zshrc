@@ -81,19 +81,23 @@ precmd() { vcs_info }
 zstyle ':vcs_info:git:*' formats ' (%b)'
 VCS_PROMPT=%{$fg_bold[yellow]%}\$vcs_info_msg_0_%{$reset_color%}
 
+# Show only if there are background jobs
+jobs_indicator='%(1j.[%j] .)'
+PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
+PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
+
 if [[ -n "$SSH_CLIENT" ]]; then
-  PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
-  PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
-  PROMPT='%{$fg_bold[green]%}%n'
+  PROMPT="$jobs_indicator"
+  PROMPT+='%{$fg_bold[green]%}%n'
   PROMPT+='%{$reset_color%}@'
   PROMPT+='%{$fg_bold[yellow]%}%m '
   PROMPT+='%{$fg_bold[green]%}%~'
   PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
   PROMPT+='%{$reset_color%}'
 else
-  PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
-  PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
-  PROMPT='%{$fg_bold[cyan]%}%c%{$reset_color%}%{$fg[green]%}'
+  PROMPT="$jobs_indicator"
+  PROMPT+='%{$fg_bold[cyan]%}%c'
+  PROMPT+='%{$reset_color%}%{$fg[green]%}'
   PROMPT+="$VCS_PROMPT"
   PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
   PROMPT+='%{$reset_color%}'
