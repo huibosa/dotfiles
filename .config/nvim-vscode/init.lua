@@ -1,5 +1,3 @@
-local vscode = require("vscode-neovim")
-
 local keymap = function(mode, lhs, rhs, opts)
     opts = vim.tbl_extend("force", {
         noremap = true,
@@ -8,29 +6,23 @@ local keymap = function(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, opts)
 end
 
+if vim.g.vscode then
+    local vscode = require("vscode-neovim")
+    keymap("n", "gd", function() vscode.action("editor.action.revealDefinition") end)
+    keymap("n", "gD", function() vscode.action("editor.action.revealDeclaration") end)
+    keymap("n", "grt", function() vscode.action("editor.action.revealTypeDefinition") end)
+    keymap("n", "grr", function() vscode.action("editor.action.goToReferences") end)
+    keymap("n", "gri", function() vscode.action("editor.action.peekImplementation") end)
+    keymap("n", "grn", function() vscode.action("editor.action.rename") end)
+    keymap("n", "gra", function() vscode.action("editor.action.sourceAction") end)
+    keymap("n", "grf", function() vscode.action("editor.action.formatDocument") end)
+
+    keymap("n", "<SPACE>ss", function() vscode.action("workbench.action.gotoSymbol") end)
+    keymap("n", "<SPACE>sS", function() vscode.action("workbench.action.showAllSymbols") end)
+end
+
 keymap("n", "c*", "*Ncgn")
-
-keymap({ "n", "x" }, "H", "^")
-keymap({ "n", "x" }, "L", "$")
-
--- Moving highlighted line in visual mode
-keymap("v", "K", ":m '<-2<CR>gv=gv")
-keymap("v", "J", ":m '>+1<CR>gv=gv")
-
--- Join next without moving cursor
-keymap("n", "J", "mzJ`z")
-
-keymap("n", "gd", function() vscode.action("editor.action.revealDefinition") end)
-keymap("n", "gD", function() vscode.action("editor.action.revealDeclaration") end)
-keymap("n", "grt", function() vscode.action("editor.action.revealTypeDefinition") end)
-keymap("n", "grr", function() vscode.action("editor.action.goToReferences") end)
-keymap("n", "gri", function() vscode.action("editor.action.peekImplementation") end)
-keymap("n", "grn", function() vscode.action("editor.action.rename") end)
-keymap("n", "gra", function() vscode.action("editor.action.sourceAction") end)
-keymap("n", "grf", function() vscode.action("editor.action.formatDocument") end)
-
-keymap("n", "<SPACE>ss", function() vscode.action("workbench.action.gotoSymbol") end)
-keymap("n", "<SPACE>sS", function() vscode.action("workbench.action.showAllSymbols") end)
+keymap("n", "J", "mzJ`z") -- Join next without moving cursor
 
 local opt = vim.opt
 
@@ -199,7 +191,7 @@ require("lazy").setup({
                         goto_next_start = {
                             ["]a"] = { query = "@parameter.outer", desc = "Next argument start" },
                             ["]f"] = { query = "@function.outer", desc = "Next function start" },
-                            ["]e"] = { query = "@return.outer", desc = "Next return start" },
+                            ["]r"] = { query = "@return.outer", desc = "Next return start" },
                             ["]c"] = { query = "@class.outer", desc = "Next class start" },
                             ["]j"] = { query = "@conditional.outer", desc = "Next judge start" },
                             ["]l"] = { query = "@loop.outer", desc = "Next loop start" },
@@ -207,7 +199,7 @@ require("lazy").setup({
                         goto_next_end = {
                             ["]A"] = { query = "@parameter.outer", desc = "Next argument end" },
                             ["]F"] = { query = "@function.outer", desc = "Next function end" },
-                            ["]E"] = { query = "@return.outer", desc = "Next return end" },
+                            ["]R"] = { query = "@return.outer", desc = "Next return end" },
                             ["]C"] = { query = "@class.outer", desc = "Next class end" },
                             ["]J"] = { query = "@conditional.outer", desc = "Next judge end" },
                             ["]L"] = { query = "@loop.outer", desc = "Next loop end" },
@@ -215,7 +207,7 @@ require("lazy").setup({
                         goto_previous_start = {
                             ["[a"] = { query = "@parameter.outer", desc = "Previous argument start" },
                             ["[f"] = { query = "@function.outer", desc = "Previous function start" },
-                            ["[e"] = { query = "@return.outer", desc = "Previous return start" },
+                            ["[r"] = { query = "@return.outer", desc = "Previous return start" },
                             ["[c"] = { query = "@class.outer", desc = "Previous class start" },
                             ["[j"] = { query = "@conditional.outer", desc = "Previous judge start" },
                             ["[l"] = { query = "@loop.outer", desc = "Previous loop start" },
@@ -223,7 +215,7 @@ require("lazy").setup({
                         goto_previous_end = {
                             ["[A"] = { query = "@parameter.outer", desc = "Previous argument end" },
                             ["[F"] = { query = "@function.outer", desc = "Previous function end" },
-                            ["[E"] = { query = "@return.outer", desc = "Previous return end" },
+                            ["[R"] = { query = "@return.outer", desc = "Previous return end" },
                             ["[C"] = { query = "@class.outer", desc = "Previous class end" },
                             ["[J"] = { query = "@conditional.outer", desc = "Previous judge end" },
                             ["[L"] = { query = "@loop.outer", desc = "Previous loop end" },
@@ -243,27 +235,29 @@ require("lazy").setup({
             vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
             vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
 
-            -- Make ]h, [h also repeatable with ; and ,
-            local next_hunk = function() vscode.action("workbench.action.editor.nextChange") end
-            local prev_hunk = function() vscode.action("workbench.action.editor.previousChange") end
-            local next_hunk_repeat, prev_hunk_repeat = ts_repeat_move.make_repeatable_move_pair(next_hunk, prev_hunk)
-            keymap("n", "]h", next_hunk_repeat)
-            keymap("n", "[h", prev_hunk_repeat)
+            if vim.g.vscode then
+                -- Make ]h, [h also repeatable with ; and ,
+                local next_hunk = function() vscode.action("workbench.action.editor.nextChange") end
+                local prev_hunk = function() vscode.action("workbench.action.editor.previousChange") end
+                local next_hunk_repeat, prev_hunk_repeat = ts_repeat_move.make_repeatable_move_pair(next_hunk, prev_hunk)
+                keymap("n", "]h", next_hunk_repeat)
+                keymap("n", "[h", prev_hunk_repeat)
 
-            -- Make ]d, [d also repeatable with ; and ,
-            local next_diagnostic = function() vscode.action("editor.action.marker.next") end
-            local prev_diagnostic = function() vscode.action("editor.action.marker.prev") end
-            local next_diagnostic_repeat, prev_diagnostic_repeat =
-                ts_repeat_move.make_repeatable_move_pair(next_diagnostic, prev_diagnostic)
-            keymap("n", "]d", next_diagnostic_repeat)
-            keymap("n", "[d", prev_diagnostic_repeat)
+                -- Make ]d, [d also repeatable with ; and ,
+                local next_diagnostic = function() vscode.action("editor.action.marker.next") end
+                local prev_diagnostic = function() vscode.action("editor.action.marker.prev") end
+                local next_diagnostic_repeat, prev_diagnostic_repeat =
+                    ts_repeat_move.make_repeatable_move_pair(next_diagnostic, prev_diagnostic)
+                keymap("n", "]d", next_diagnostic_repeat)
+                keymap("n", "[d", prev_diagnostic_repeat)
 
-            -- Make ]r, [r also repeatable with ; and ,
-            local next_rf = function() vscode.action("editor.action.wordHighlight.next") end
-            local prev_rf = function() vscode.action("editor.action.wordHighlight.prev") end
-            local next_rf_repeat, prev_rf_repeat = ts_repeat_move.make_repeatable_move_pair(next_rf, prev_rf)
-            keymap("n", "]r", next_rf_repeat)
-            keymap("n", "[r", prev_rf_repeat)
+                -- Make ]r, [r also repeatable with ; and ,
+                local next_rf = function() vscode.action("editor.action.wordHighlight.next") end
+                local prev_rf = function() vscode.action("editor.action.wordHighlight.prev") end
+                local next_rf_repeat, prev_rf_repeat = ts_repeat_move.make_repeatable_move_pair(next_rf, prev_rf)
+                keymap("n", "]]", next_rf_repeat)
+                keymap("n", "[[", prev_rf_repeat)
+            end
         end,
     },
 })
