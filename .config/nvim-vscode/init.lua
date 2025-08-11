@@ -165,11 +165,11 @@ require("lazy").setup({
                             ["aj"] = { query = "@conditional.outer", desc = "outer conditional" },
                             ["ij"] = { query = "@conditional.inner", desc = "inner conditional" },
 
-                            ["al"] = { query = "@loop.outer", desc = "outer loop" },
-                            ["il"] = { query = "@loop.inner", desc = "inner loop" },
+                            ["ao"] = { query = "@loop.outer", desc = "outer loop" },
+                            ["io"] = { query = "@loop.inner", desc = "inner loop" },
 
-                            -- ["ab"] = { query = "@block.outer", desc = "outer block" },
-                            -- ["ib"] = { query = "@block.inner", desc = "inner block" },
+                            ["ab"] = { query = "@block.outer", desc = "outer block" },
+                            ["ib"] = { query = "@block.inner", desc = "inner block" },
 
                             ["af"] = { query = "@function.outer", desc = "outer function" },
                             ["if"] = { query = "@function.inner", desc = "inner function" },
@@ -178,10 +178,10 @@ require("lazy").setup({
                             ["ic"] = { query = "@class.inner", desc = "inner class" },
 
                             ["ar"] = { query = "@return.outer", desc = "outer return" },
-                            ["ir"] = { query = "@return.outer", desc = "inner return" },
+                            ["ir"] = { query = "@return.inner", desc = "inner return" },
 
-                            -- ["a/"] = { query = "@comment.outer", desc = "outer comment" },
-                            -- ["i/"] = { query = "@comment.inner", desc = "inner comment" },
+                            ["a/"] = { query = "@comment.outer", desc = "outer comment" },
+                            ["i/"] = { query = "@comment.inner", desc = "inner comment" },
                         },
                         include_surrounding_whitespace = true,
                     },
@@ -194,7 +194,8 @@ require("lazy").setup({
                             ["]r"] = { query = "@return.outer", desc = "Next return start" },
                             ["]c"] = { query = "@class.outer", desc = "Next class start" },
                             ["]j"] = { query = "@conditional.outer", desc = "Next judge start" },
-                            ["]l"] = { query = "@loop.outer", desc = "Next loop start" },
+                            ["]o"] = { query = "@loop.outer", desc = "Next loop start" },
+                            ["]/"] = { query = "@comment.outer", desc = "Next comment start" },
                         },
                         goto_next_end = {
                             ["]A"] = { query = "@parameter.outer", desc = "Next argument end" },
@@ -202,7 +203,7 @@ require("lazy").setup({
                             ["]R"] = { query = "@return.outer", desc = "Next return end" },
                             ["]C"] = { query = "@class.outer", desc = "Next class end" },
                             ["]J"] = { query = "@conditional.outer", desc = "Next judge end" },
-                            ["]L"] = { query = "@loop.outer", desc = "Next loop end" },
+                            ["]O"] = { query = "@loop.outer", desc = "Next loop end" },
                         },
                         goto_previous_start = {
                             ["[a"] = { query = "@parameter.outer", desc = "Previous argument start" },
@@ -210,7 +211,8 @@ require("lazy").setup({
                             ["[r"] = { query = "@return.outer", desc = "Previous return start" },
                             ["[c"] = { query = "@class.outer", desc = "Previous class start" },
                             ["[j"] = { query = "@conditional.outer", desc = "Previous judge start" },
-                            ["[l"] = { query = "@loop.outer", desc = "Previous loop start" },
+                            ["[o"] = { query = "@loop.outer", desc = "Previous loop start" },
+                            ["[/"] = { query = "@comment.outer", desc = "Next comment start" },
                         },
                         goto_previous_end = {
                             ["[A"] = { query = "@parameter.outer", desc = "Previous argument end" },
@@ -218,7 +220,7 @@ require("lazy").setup({
                             ["[R"] = { query = "@return.outer", desc = "Previous return end" },
                             ["[C"] = { query = "@class.outer", desc = "Previous class end" },
                             ["[J"] = { query = "@conditional.outer", desc = "Previous judge end" },
-                            ["[L"] = { query = "@loop.outer", desc = "Previous loop end" },
+                            ["[O"] = { query = "@loop.outer", desc = "Previous loop end" },
                         },
                     },
                 },
