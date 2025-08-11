@@ -236,6 +236,8 @@ require("lazy").setup({
             vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
 
             if vim.g.vscode then
+                local vscode = require("vscode-neovim")
+
                 -- Make ]h, [h also repeatable with ; and ,
                 local next_hunk = function() vscode.action("workbench.action.editor.nextChange") end
                 local prev_hunk = function() vscode.action("workbench.action.editor.previousChange") end
