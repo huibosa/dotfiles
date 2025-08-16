@@ -21,6 +21,8 @@ if vim.g.vscode then
     keymap("n", "<SPACE>sS", function() vscode.action("workbench.action.showAllSymbols") end)
 end
 
+keymap({ "n", "x" }, "H", "^")
+keymap({ "n", "x" }, "L", "$")
 keymap("n", "c*", "*Ncgn")
 keymap("n", "J", "mzJ`z") -- Join next without moving cursor
 
