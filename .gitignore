@@ -47,6 +47,9 @@
 !.config/nvim-vscode
 !.config/nvim-vscode/init.lua
 
+!.config/windows/
+!.config/windows/*
+
 !.scripts/
 !.scripts/*
 
