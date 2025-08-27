@@ -50,6 +50,9 @@
 !.config/windows/
 !.config/windows/*
 
+!.config/yazi/
+!.config/yazi/*
+
 !.scripts/
 !.scripts/*
 
