@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
+alias powershell="/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe"
+
 open() {
+    exp="/mnt/c/WINDOWS/explorer.exe"
     (
         cd "$1" || exit
-        explorer.exe .
+        $exp .
     )
 }
 

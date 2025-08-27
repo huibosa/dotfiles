@@ -152,6 +152,14 @@ html2md() {
     $converter -f html "$url" -t commonmark-raw_html -o "${md}"
 }
 
+function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd < "$tmp"
+    [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+    rm -f -- "$tmp"
+}
+
 lfcd() {
     local tmp
     tmp="$(mktemp)"
