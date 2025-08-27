@@ -67,7 +67,8 @@ alias cp="cp -iv"
 alias rm="rm -v"
 
 alias python='python3'
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias lazydot='lazygit --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
 # My prompt
 #
