@@ -263,6 +263,15 @@ require("lazy").setup({
                 local next_rf_repeat, prev_rf_repeat = ts_repeat_move.make_repeatable_move_pair(next_rf, prev_rf)
                 keymap("n", "]]", next_rf_repeat)
                 keymap("n", "[[", prev_rf_repeat)
+                vim.api.nvim_create_autocmd("FileType", {
+                    callback = function()
+                        local buffer = vim.api.nvim_get_current_buf()
+                        vim.keymap.set({ "n", "x", "o" }, "]]", next_rf_repeat,
+                            { desc = "Next Reference", buffer = buffer })
+                        vim.keymap.set({ "n", "x", "o" }, "[[", prev_rf_repeat,
+                            { desc = "Prev Reference", buffer = buffer })
+                    end,
+                })
             end
         end,
     },
