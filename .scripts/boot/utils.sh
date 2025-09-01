@@ -16,16 +16,6 @@ ytdlp() {
     yt-dlp -o "%(title)s.%(ext)s" "$1"
 }
 
-# fy() {
-#     cmd="fy"
-#
-#     if [ -x "$(command -v "$cmd")" ]; then
-#         command "$cmd" "$@"
-#     else
-#         ssh arch "$cmd" "$@"
-#     fi
-# }
-
 merge-zsh-history() {
     history1=$1
     history2=$2
