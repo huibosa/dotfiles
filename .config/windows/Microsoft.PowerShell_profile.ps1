@@ -3,8 +3,8 @@ Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 
 $env:UV_INDEX_URL = "https://pypi.tuna.tsinghua.edu.cn/simple"
 $env:UV_PYTHON_INSTALL_MIRROR = "https://pypi.tuna.tsinghua.edu.cn/simple"
-
 $env:EDITOR = "nvim"
+$env:YAZI_FILE_ONE = "C:\Program Files\Git\usr\bin\file.exe"
 
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
 
