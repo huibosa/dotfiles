@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 alias powershell="/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe"
+alias clip="/mnt/c/WINDOWS/System32/clip.exe"
 
 open() {
     exp="/mnt/c/WINDOWS/explorer.exe"
