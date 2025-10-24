@@ -122,6 +122,9 @@ local base_config = function()
 
     -- config.font_size = 14.8
     config.font_size = 16.4
+    config.front_end = 'OpenGL'
+    config.freetype_load_target = 'Light'
+    config.freetype_render_target = 'HorizontalLcd'
 
     return config
 end

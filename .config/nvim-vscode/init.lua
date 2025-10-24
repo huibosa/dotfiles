@@ -135,15 +135,6 @@ require("lazy").setup({
         branch = "main",
         config = function()
             require('nvim-treesitter').install({ 'rust', 'go', 'c', 'cpp', 'python' })
-
-            vim.opt.foldmethod = "expr"
-            vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-
-            -- Enable highlight
-            vim.api.nvim_create_autocmd('FileType', {
-                pattern = { 'python', 'go' },
-                callback = function() vim.treesitter.start() end,
-            })
         end
     },
     {
@@ -194,8 +185,8 @@ require("lazy").setup({
             keymap(modes, "ac", function() select("@class.outer", "textobjects") end, { desc = "outer class" })
             keymap(modes, "ic", function() select("@class.inner", "textobjects") end, { desc = "inner class" })
 
-            keymap(modes, "an", function() select("@return.outer", "textobjects") end, { desc = "outer return" })
-            keymap(modes, "in", function() select("@return.inner", "textobjects") end, { desc = "inner return" })
+            keymap(modes, "ar", function() select("@return.outer", "textobjects") end, { desc = "outer return" })
+            keymap(modes, "ir", function() select("@return.inner", "textobjects") end, { desc = "inner return" })
 
             keymap(modes, "a/", function() select("@comment.outer", "textobjects") end, { desc = "outer comment" })
             keymap(modes, "i/", function() select("@comment.inner", "textobjects") end, { desc = "inner comment" })
@@ -217,7 +208,7 @@ require("lazy").setup({
                 { desc = "Next arg start" })
             keymap(move_modes, "]f", function() move.goto_next_start("@function.outer", "textobjects") end,
                 { desc = "Next func start" })
-            keymap(move_modes, "]n", function() move.goto_next_start("@return.outer", "textobjects") end,
+            keymap(move_modes, "]r", function() move.goto_next_start("@return.outer", "textobjects") end,
                 { desc = "Next return start" })
             keymap(move_modes, "]c", function() move.goto_next_start("@class.outer", "textobjects") end,
                 { desc = "Next class start" })
@@ -231,7 +222,7 @@ require("lazy").setup({
             -- Goto next end
             keymap(move_modes, "]A", function() move.goto_next_end("@parameter.outer", "textobjects") end)
             keymap(move_modes, "]F", function() move.goto_next_end("@function.outer", "textobjects") end)
-            keymap(move_modes, "]N", function() move.goto_next_end("@return.outer", "textobjects") end)
+            keymap(move_modes, "]R", function() move.goto_next_end("@return.outer", "textobjects") end)
             keymap(move_modes, "]C", function() move.goto_next_end("@class.outer", "textobjects") end)
             keymap(move_modes, "]J", function() move.goto_next_end("@conditional.outer", "textobjects") end)
             keymap(move_modes, "]O", function() move.goto_next_end("@loop.outer", "textobjects") end)
@@ -239,7 +230,7 @@ require("lazy").setup({
             -- Goto previous start
             keymap(move_modes, "[a", function() move.goto_previous_start("@parameter.outer", "textobjects") end)
             keymap(move_modes, "[f", function() move.goto_previous_start("@function.outer", "textobjects") end)
-            keymap(move_modes, "[n", function() move.goto_previous_start("@return.outer", "textobjects") end)
+            keymap(move_modes, "[r", function() move.goto_previous_start("@return.outer", "textobjects") end)
             keymap(move_modes, "[c", function() move.goto_previous_start("@class.outer", "textobjects") end)
             keymap(move_modes, "[j", function() move.goto_previous_start("@conditional.outer", "textobjects") end)
             keymap(move_modes, "[o", function() move.goto_previous_start("@loop.outer", "textobjects") end)
@@ -248,7 +239,7 @@ require("lazy").setup({
             -- Goto previous end
             keymap(move_modes, "[A", function() move.goto_previous_end("@parameter.outer", "textobjects") end)
             keymap(move_modes, "[F", function() move.goto_previous_end("@function.outer", "textobjects") end)
-            keymap(move_modes, "[N", function() move.goto_previous_end("@return.outer", "textobjects") end)
+            keymap(move_modes, "[R", function() move.goto_previous_end("@return.outer", "textobjects") end)
             keymap(move_modes, "[C", function() move.goto_previous_end("@class.outer", "textobjects") end)
             keymap(move_modes, "[J", function() move.goto_previous_end("@conditional.outer", "textobjects") end)
             keymap(move_modes, "[O", function() move.goto_previous_end("@loop.outer", "textobjects") end)
@@ -308,8 +299,16 @@ require("lazy").setup({
                 local next_rf = function() vscode.action("editor.action.wordHighlight.next") end
                 local prev_rf = function() vscode.action("editor.action.wordHighlight.prev") end
                 local next_rf_repeat, prev_rf_repeat = make_repeatable_move_pair(next_rf, prev_rf)
-                keymap(move_modes, "]r", next_rf_repeat, { desc = "Next Reference" })
-                keymap(move_modes, "[r", prev_rf_repeat, { desc = "Prev Reference" })
+                keymap(move_modes, "]]", next_rf_repeat, { desc = "Next Reference" })
+                keymap(move_modes, "[[", prev_rf_repeat, { desc = "Prev Reference" })
+
+                vim.api.nvim_create_autocmd("FileType", {
+                    callback = function()
+                        local buffer = vim.api.nvim_get_current_buf()
+                        keymap(move_modes, "]]", next_rf_repeat, { desc = "Next Reference", buffer = buffer })
+                        keymap(move_modes, "[[", prev_rf_repeat, { desc = "Prev Reference", buffer = buffer })
+                    end,
+                })
             end
         end,
     },
