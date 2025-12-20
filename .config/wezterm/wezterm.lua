@@ -42,7 +42,7 @@ local win_config = function(config)
     config.wsl_domains = wsl_domains
     config.default_domain = "WSL:Arch"
     config.window_padding = window_padding
-    config.font_size = 12.0
+    config.font_size = 12.4
 
     return config
 end

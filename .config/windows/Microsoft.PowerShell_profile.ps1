@@ -1,6 +1,11 @@
 Set-PSReadLineOption -EditMode Emacs
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 
+# Fzf
+Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
+
+Set-Alias vi nvim
+
 $env:UV_INDEX_URL = "https://pypi.tuna.tsinghua.edu.cn/simple"
 $env:UV_PYTHON_INSTALL_MIRROR = "https://pypi.tuna.tsinghua.edu.cn/simple"
 $env:EDITOR = "nvim"
