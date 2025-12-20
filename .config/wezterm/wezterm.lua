@@ -26,6 +26,10 @@ local win_config = function(config)
             key.key = string.upper(k)
             key.mods = "CTRL|SHIFT"
         end
+
+        if k == "Enter" then
+            key.mods = "ALT"
+        end
     end
 
     for _, binding in ipairs(config.mouse_bindings) do
@@ -61,30 +65,30 @@ local base_config = function()
     }
 
     local keys = {
-        { key = "=",     mods = "CTRL|SHIFT", action = wezterm.action.IncreaseFontSize },
-        { key = "-",     mods = "CTRL|SHIFT", action = wezterm.action.DecreaseFontSize },
-        { key = "0",     mods = "CTRL|SHIFT", action = wezterm.action.ResetFontSize },
+        { key = "=",     mods = "SUPER|SHIFT", action = wezterm.action.IncreaseFontSize },
+        { key = "-",     mods = "SUPER|SHIFT", action = wezterm.action.DecreaseFontSize },
+        { key = "0",     mods = "SUPER|SHIFT", action = wezterm.action.ResetFontSize },
 
-        { key = "X",     mods = "CTRL|SHIFT", action = wezterm.action.ActivateCopyMode },
-        { key = " ",     mods = "CTRL|SHIFT", action = wezterm.action.QuickSelect },
+        { key = "X",     mods = "SUPER|SHIFT", action = wezterm.action.ActivateCopyMode },
+        { key = " ",     mods = "SUPER|SHIFT", action = wezterm.action.QuickSelect },
 
-        { key = "Enter", mods = "ALT",        action = wezterm.action.ToggleFullScreen },
+        { key = "Enter", mods = "SUPER",       action = wezterm.action.ToggleFullScreen },
 
-        { key = "n",     mods = "SUPER",      action = wezterm.action.SpawnWindow },
-        { key = "q",     mods = "SUPER",      action = wezterm.action.QuitApplication },
-        { key = "h",     mods = "SUPER",      action = wezterm.action.Hide },
+        { key = "n",     mods = "SUPER",       action = wezterm.action.SpawnWindow },
+        { key = "q",     mods = "SUPER",       action = wezterm.action.QuitApplication },
+        { key = "h",     mods = "SUPER",       action = wezterm.action.Hide },
 
-        { key = "w",     mods = "SUPER",      action = wezterm.action.CloseCurrentTab({ confirm = true }) },
-        { key = "t",     mods = "SUPER",      action = wezterm.action.SpawnTab("CurrentPaneDomain") },
-        { key = "Tab",   mods = "CTRL",       action = wezterm.action.ActivateTabRelative(1) },
-        { key = "Tab",   mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
+        { key = "w",     mods = "SUPER",       action = wezterm.action.CloseCurrentTab({ confirm = true }) },
+        { key = "t",     mods = "SUPER",       action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+        { key = "Tab",   mods = "SUPER",       action = wezterm.action.ActivateTabRelative(1) },
+        { key = "Tab",   mods = "SUPER|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
 
         -- { key = "F", mods = "SUPER|SHIFT", action = wezterm.action({ Search = { CaseSensitiveString = "" } }) },
 
-        { key = "c",     mods = "SUPER",      action = wezterm.action.CopyTo("Clipboard") },
-        { key = "v",     mods = "SUPER",      action = wezterm.action.PasteFrom("Clipboard") },
+        { key = "c",     mods = "SUPER",       action = wezterm.action.CopyTo("Clipboard") },
+        { key = "v",     mods = "SUPER",       action = wezterm.action.PasteFrom("Clipboard") },
 
-        { key = "E",     mods = "CTRL|SHIFT", action = wezterm.action.EmitEvent("toggle-ligature") },
+        { key = "E",     mods = "SUPER|SHIFT", action = wezterm.action.EmitEvent("toggle-ligature") },
     }
 
     local window_padding = {
