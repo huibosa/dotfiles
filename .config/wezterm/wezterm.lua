@@ -19,22 +19,41 @@ local win_config = function(config)
         bottom = "0.5px",
     }
 
-    for _, key in ipairs(config.keys) do
-        local k = key.key
+    config.keys = {
+        { key = "=",     mods = "ALT",        action = wezterm.action.IncreaseFontSize },
+        { key = "-",     mods = "ALT",        action = wezterm.action.DecreaseFontSize },
+        { key = "0",     mods = "ALT",        action = wezterm.action.ResetFontSize },
+        { key = "=",     mods = "CTRL",       action = wezterm.action.IncreaseFontSize },
+        { key = "-",     mods = "CTRL",       action = wezterm.action.DecreaseFontSize },
+        { key = "0",     mods = "CTRL",       action = wezterm.action.ResetFontSize },
 
-        if k == "n" or k == "q" or k == "h" or k == "w" or k == "t" or k == "c" or k == "v" then
-            key.key = string.upper(k)
-            key.mods = "CTRL|SHIFT"
-        end
+        { key = "X",     mods = "CTRL|SHIFT", action = wezterm.action.ActivateCopyMode },
+        { key = " ",     mods = "CTRL|SHIFT", action = wezterm.action.QuickSelect },
 
-        if k == "Enter" then
-            key.mods = "ALT"
-        end
-    end
+        { key = "Enter", mods = "ALT",        action = wezterm.action.ToggleFullScreen },
+
+        { key = "n",     mods = "ALT",        action = wezterm.action.SpawnWindow },
+        { key = "q",     mods = "ALT",        action = wezterm.action.QuitApplication },
+        { key = "h",     mods = "ALT",        action = wezterm.action.Hide },
+
+        { key = "w",     mods = "ALT",        action = wezterm.action.CloseCurrentTab({ confirm = true }) },
+        { key = "t",     mods = "ALT",        action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+        { key = "Tab",   mods = "CTRL",       action = wezterm.action.ActivateTabRelative(1) },
+        { key = "Tab",   mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
+
+        { key = "f",     mods = "ALT",        action = wezterm.action({ Search = { CaseSensitiveString = "" } }) },
+
+        { key = "c",     mods = "ALT",        action = wezterm.action.CopyTo("Clipboard") },
+        { key = "v",     mods = "ALT",        action = wezterm.action.PasteFrom("Clipboard") },
+        { key = "C",     mods = "CTRL|SHIFT", action = wezterm.action.CopyTo("Clipboard") },
+        { key = "V",     mods = "CTRL|SHIFT", action = wezterm.action.PasteFrom("Clipboard") },
+
+        { key = "E",     mods = "CTRL|SHIFT", action = wezterm.action.EmitEvent("toggle-ligature") },
+    }
 
     for _, binding in ipairs(config.mouse_bindings) do
         if binding.mods == "SUPER" then
-            binding.mods = "CTRL"
+            binding.mods = "ALT"
         end
     end
 
@@ -65,30 +84,35 @@ local base_config = function()
     }
 
     local keys = {
-        { key = "=",     mods = "SUPER|SHIFT", action = wezterm.action.IncreaseFontSize },
-        { key = "-",     mods = "SUPER|SHIFT", action = wezterm.action.DecreaseFontSize },
-        { key = "0",     mods = "SUPER|SHIFT", action = wezterm.action.ResetFontSize },
+        { key = "=",     mods = "SUPER",      action = wezterm.action.IncreaseFontSize },
+        { key = "-",     mods = "SUPER",      action = wezterm.action.DecreaseFontSize },
+        { key = "0",     mods = "SUPER",      action = wezterm.action.ResetFontSize },
+        { key = "=",     mods = "CTRL",       action = wezterm.action.IncreaseFontSize },
+        { key = "-",     mods = "CTRL",       action = wezterm.action.DecreaseFontSize },
+        { key = "0",     mods = "CTRL",       action = wezterm.action.ResetFontSize },
 
-        { key = "X",     mods = "SUPER|SHIFT", action = wezterm.action.ActivateCopyMode },
-        { key = " ",     mods = "SUPER|SHIFT", action = wezterm.action.QuickSelect },
+        { key = "X",     mods = "CTRL|SHIFT", action = wezterm.action.ActivateCopyMode },
+        { key = " ",     mods = "CTRL|SHIFT", action = wezterm.action.QuickSelect },
 
-        { key = "Enter", mods = "SUPER",       action = wezterm.action.ToggleFullScreen },
+        { key = "Enter", mods = "SUPER",      action = wezterm.action.ToggleFullScreen },
 
-        { key = "n",     mods = "SUPER",       action = wezterm.action.SpawnWindow },
-        { key = "q",     mods = "SUPER",       action = wezterm.action.QuitApplication },
-        { key = "h",     mods = "SUPER",       action = wezterm.action.Hide },
+        { key = "n",     mods = "SUPER",      action = wezterm.action.SpawnWindow },
+        { key = "q",     mods = "SUPER",      action = wezterm.action.QuitApplication },
+        { key = "h",     mods = "SUPER",      action = wezterm.action.Hide },
 
-        { key = "w",     mods = "SUPER",       action = wezterm.action.CloseCurrentTab({ confirm = true }) },
-        { key = "t",     mods = "SUPER",       action = wezterm.action.SpawnTab("CurrentPaneDomain") },
-        { key = "Tab",   mods = "SUPER",       action = wezterm.action.ActivateTabRelative(1) },
-        { key = "Tab",   mods = "SUPER|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
+        { key = "w",     mods = "SUPER",      action = wezterm.action.CloseCurrentTab({ confirm = true }) },
+        { key = "t",     mods = "SUPER",      action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+        { key = "Tab",   mods = "CTRL",       action = wezterm.action.ActivateTabRelative(1) },
+        { key = "Tab",   mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
 
-        -- { key = "F", mods = "SUPER|SHIFT", action = wezterm.action({ Search = { CaseSensitiveString = "" } }) },
+        { key = "f",     mods = "SUPER",      action = wezterm.action({ Search = { CaseSensitiveString = "" } }) },
 
-        { key = "c",     mods = "SUPER",       action = wezterm.action.CopyTo("Clipboard") },
-        { key = "v",     mods = "SUPER",       action = wezterm.action.PasteFrom("Clipboard") },
+        { key = "c",     mods = "SUPER",      action = wezterm.action.CopyTo("Clipboard") },
+        { key = "v",     mods = "SUPER",      action = wezterm.action.PasteFrom("Clipboard") },
+        { key = "C",     mods = "CTRL|SHIFT", action = wezterm.action.CopyTo("Clipboard") },
+        { key = "V",     mods = "CTRL|SHIFT", action = wezterm.action.PasteFrom("Clipboard") },
 
-        { key = "E",     mods = "SUPER|SHIFT", action = wezterm.action.EmitEvent("toggle-ligature") },
+        { key = "E",     mods = "CTRL|SHIFT", action = wezterm.action.EmitEvent("toggle-ligature") },
     }
 
     local window_padding = {
