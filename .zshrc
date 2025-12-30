@@ -110,7 +110,8 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen apply
 
-eval "$(zoxide init zsh)"
-eval "$(fzf --zsh)"
+source <(zoxide init zsh)
+source <(fzf --zsh)
+source <(direnv hook zsh)
 
 # zprof
