@@ -15,7 +15,8 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 
-# export GOPROXY=https://goproxy.cn,direct
+export GOPROXY=https://goproxy.cn,direct
+export GO111MODULE=on
 export GOPATH="$HOME/.go"
 
 export ERL_AFLAGS="-kernel shell_history enabled"
