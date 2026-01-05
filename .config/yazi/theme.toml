@@ -1,6 +1,9 @@
 [flavor]
-dark  = "everforest-medium"
+dark  = "catppuccin-macchiato"
 light = ""
+
+[indicator]
+padding = { open = "█", close = "█" }
 
 [status]
 sep_left = { open = "", close = "" }
