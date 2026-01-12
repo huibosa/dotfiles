@@ -59,7 +59,7 @@ local win_config = function(config)
 
     config.window_decorations = "TITLE | RESIZE"
     config.wsl_domains = wsl_domains
-    config.default_domain = "WSL:Arch"
+    config.default_domain = "WSL:archlinux"
     config.window_padding = window_padding
     config.font_size = 12.4
 
@@ -136,7 +136,8 @@ local base_config = function()
 
     config.disable_default_key_bindings = true
     config.force_reverse_video_cursor = true
-    config.enable_tab_bar = false
+    config.enable_tab_bar = true
+    config.hide_tab_bar_if_only_one_tab = true
     config.use_ime = false
 
     config.window_padding = window_padding
