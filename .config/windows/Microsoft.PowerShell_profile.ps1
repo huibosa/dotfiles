@@ -1,3 +1,7 @@
+Clear-Host
+
+# New-NetFirewallRule -Name sshd-wsl -DisplayName 'OpenSSH Server (sshd) for WSL' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 2222
+
 Set-PSReadLineOption -EditMode Emacs
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 

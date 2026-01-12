@@ -1,9 +1,9 @@
 [wsl2]
-memory = 8GB
+memory = 16GB
 swap = 4GB
+networkingMode = mirrored
 
 [experimental]
-networkingMode = mirrored
 dnsTunneling = true
 firewall = true
 autoProxy = true
