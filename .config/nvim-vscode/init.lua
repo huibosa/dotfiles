@@ -14,7 +14,7 @@ if vim.g.vscode then
     keymap("n", "grr", function() vscode.action("editor.action.goToReferences") end)
     keymap("n", "gri", function() vscode.action("editor.action.goToImplementation") end)
     keymap("n", "grn", function() vscode.action("editor.action.rename") end)
-    keymap("n", "gra", function() vscode.action("editor.action.sourceAction") end)
+    keymap("n", "gra", function() vscode.action("editor.action.quickFix") end)
     keymap("n", "grf", function() vscode.action("editor.action.formatDocument") end)
 
     keymap("n", "<SPACE>ss", function() vscode.action("workbench.action.gotoSymbol") end)
