@@ -77,7 +77,7 @@ export LESS_TERMCAP_so=$'\E[1m\E[33m\E[44m'
 export LS_COLORS='di=34;01:*Makefile=38;5;178:*.ipynb=38;5;208:*.7z=31:*.WARC=31:*.a=31:*.arj=31:*.bz2=31:*.cpio=31:*.gz=31:*.lrz=31:*.lz=31:*.lzma=31:*.lzo=31:*.rar=31:*.s7z=31:*.sz=31:*.tar=31:*.tbz=31:*.tgz=31:*.warc=31:*.xz=31:*.z=31:*.zip=31:*.zipx=31:*.zoo=31:*.zpaq=31:*.zst=31:*.zstd=31:*.zz=31:*.gz=31:'
 
 export UV_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
-export UV_PYTHON_INSTALL_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
+# export UV_PYTHON_INSTALL_MIRROR="https://mirrors.tuna.tsinghua.edu.cn/python-build-standalone/"
 
 # zsh-autosuggestions settings
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
