@@ -20,7 +20,7 @@
 
 !.clang-format
 
-# To exclude folder but include specific subfolder, you have to “unignore”every parent directory
+# To exclude folder but include specific subfolder, you have to "unignore" every parent directory
 # of anything that you want to “unignore”.
 # https://stackoverflow.com/questions/5533050/gitignore-exclude-folder-but-include-specific-subfolder
 
@@ -74,3 +74,7 @@
 !.docker/
 .docker/*
 !.docker/config.json
+
+!.config/opencode/
+.config/opencode/*
+!.config/opencode/opencode.json
