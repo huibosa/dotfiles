@@ -49,7 +49,7 @@ local win_config = function(config)
         { key = "V",     mods = "CTRL|SHIFT", action = wezterm.action.PasteFrom("Clipboard") },
 
         { key = "E",     mods = "CTRL|SHIFT", action = wezterm.action.EmitEvent("toggle-ligature") },
-    }
+        { key = 'Enter', mods = 'SHIFT',      action = wezterm.action.SendString '\x1b\r' } }
 
     for _, binding in ipairs(config.mouse_bindings) do
         if binding.mods == "SUPER" then
