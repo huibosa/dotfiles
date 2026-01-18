@@ -15,8 +15,19 @@
         "deepseek-v3.2": {
           "name": "deepseek-v3.2",
           "cost": {
-            "input": 2000,
-            "output": 3000
+            "input": 2.0,
+            "output": 3.0
+          },
+          "limit": {
+            "context": 128000,
+            "input": 96000,
+            "output": 32000,
+          },
+          "options": {
+            "enable_search": false,
+            "thinking": {
+              "type": "disabled"
+            }
           }
         }
       }
