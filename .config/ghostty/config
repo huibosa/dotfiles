@@ -1,0 +1,17 @@
+font-size = 16.4
+font-thicken = true
+font-thicken-strength = 32
+
+theme = Gruvbox Material Dark
+
+shell-integration-features = no-cursor
+cursor-style = block
+cursor-style-blink = false
+cursor-color = cell-foreground
+cursor-opacity = 0.9
+
+mouse-hide-while-typing = true
+
+copy-on-select = clipboard
+
+keybind = shift+enter=text:\x1b\r
