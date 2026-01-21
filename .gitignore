@@ -78,3 +78,8 @@
 !.config/opencode/
 .config/opencode/*
 !.config/opencode/opencode.json
+
+
+!.config/ghostty/
+.config/ghostty/*
+!.config/ghostty/config
