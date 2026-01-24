@@ -150,20 +150,6 @@ function y() {
     rm -f -- "$tmp"
 }
 
-lfcd() {
-    local tmp
-    tmp="$(mktemp)"
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        rm -f "$tmp" &> /dev/null
-        if [ -d "$dir" ]; then
-            if [ "$dir" != "$(pwd)" ]; then
-                cd "$dir" || exit
-            fi
-        fi
-    fi
-}
 # Runs the specified command (provided by the first argument) in all tmux panes
 # in every window.  If an application is currently running in a given pane
 # (e.g., vim), it is suspended and then resumed so the command can be run.
