@@ -5,6 +5,12 @@
   "watcher": {
     "ignore": ["node_modules/**", "dist/**", ".git/**"]
   },
+  "tui": {
+    "scroll_speed": 3,
+    "scroll_acceleration": {
+      "enabled": true
+    }
+  },
   "provider": {
     "Tencent-Deepseek": {
       "npm": "@ai-sdk/openai-compatible",
@@ -13,8 +19,8 @@
         "baseURL": "https://api.lkeap.cloud.tencent.com/v1"
       },
       "models": {
-        "Deepseek-Reasoner": {
-          "name": "deepseek-v3.2",
+        "deepseek-v3.2": {
+          "name": "Deepseek-Reasoner",
           "cost": {
             "input": 2.0,
             "output": 3.0

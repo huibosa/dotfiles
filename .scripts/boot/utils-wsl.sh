@@ -3,6 +3,7 @@
 alias powershell="/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe"
 alias clip="/mnt/c/WINDOWS/System32/clip.exe"
 alias code='/mnt/c/Users/huibo/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe'
+alias wezterm="/mnt/c/Users/huibo/scoop/apps/wezterm-nightly/current/wezterm.exe"
 
 open() {
     exp="/mnt/c/WINDOWS/explorer.exe"
