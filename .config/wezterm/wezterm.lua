@@ -113,6 +113,7 @@ local function make_keys(mod)
 
         -- Misc
         { key = "E",     mods = "CTRL|SHIFT", action = wezterm.action.EmitEvent("toggle-ligature") },
+        { key = "Enter", mods = "SHIFT",      action = wezterm.action.SendString("\x1b\r") },
     }
 end
 
@@ -200,7 +201,7 @@ local config = wezterm.config_builder()
 
 -- Window
 config.window_close_confirmation = "NeverPrompt"
-config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+config.window_decorations = "RESIZE"
 config.native_macos_fullscreen_mode = true
 config.adjust_window_size_when_changing_font_size = false
 config.window_background_opacity = 1.0
