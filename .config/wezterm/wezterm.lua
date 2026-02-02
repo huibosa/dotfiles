@@ -23,7 +23,7 @@ local PADDING = {
     default = {
         left = "0.8cell",
         right = "0.1cell",
-        top = "1.4cell",
+        top = "0.1cell",
         bottom = "0cell",
     },
     fullscreen = {
@@ -202,7 +202,7 @@ local config = wezterm.config_builder()
 -- Window
 config.window_close_confirmation = "NeverPrompt"
 config.window_decorations = "RESIZE"
-config.native_macos_fullscreen_mode = true
+config.native_macos_fullscreen_mode = false
 config.adjust_window_size_when_changing_font_size = false
 config.window_background_opacity = 1.0
 config.window_padding = PADDING.default

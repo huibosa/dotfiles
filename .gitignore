@@ -32,15 +32,6 @@
 !.config/wezterm/
 !.config/wezterm/*
 
-!.config/fanyi/
-!.config/fanyi/.fanyirc
-
-!.config/picom/
-!.config/picom/picom.conf
-
-!.config/zathura/
-!.config/zathura/zathurarc
-
 .config/lf/
 !.config/lf/*
 
@@ -78,7 +69,6 @@
 !.config/opencode/
 .config/opencode/*
 !.config/opencode/opencode.json
-
 
 !.config/ghostty/
 .config/ghostty/*

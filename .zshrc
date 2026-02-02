@@ -114,6 +114,3 @@ source <(fzf --zsh)
 source <(direnv hook zsh)
 
 # zprof
-
-# opencode
-export PATH=/home/huibo/.opencode/bin:$PATH
