@@ -23,6 +23,69 @@ end
 
 keymap("n", "J", "mzJ`z") -- Join next without moving cursor
 
+vim.keymap.set({ "i", "x", "o" }, "<C-a>", "", {
+    callback = function()
+        local current_line = vim.fn.line(".")
+        local current_col = vim.fn.col(".")
+        local current_line_text = vim.fn.getline(".")
+
+        local first_non_blank = string.find(current_line_text, "%S")
+
+        if first_non_blank == nil then
+            if current_line > 1 then
+                local prev_line = vim.fn.getline(current_line - 1)
+                vim.fn.cursor(current_line - 1, #prev_line + 1)
+            end
+            return
+        end
+
+        if current_col ~= first_non_blank then
+            vim.fn.cursor(current_line, first_non_blank)
+        else
+            if current_line > 1 then
+                local prev_line = vim.fn.getline(current_line - 1)
+                vim.fn.cursor(current_line - 1, #prev_line + 1)
+            end
+        end
+    end,
+    noremap = true,
+    silent = true,
+})
+
+vim.keymap.set({ "i", "x", "o" }, "<C-e>", "", {
+    callback = function()
+        local current_line = vim.fn.line(".")
+        local current_col = vim.fn.col(".")
+        local current_line_text = vim.fn.getline(".")
+        local line_length = #current_line_text
+
+        local first_non_blank = string.find(current_line_text, "%S")
+
+        if first_non_blank == nil then
+            local total_lines = vim.fn.line("$")
+            if current_line < total_lines then
+                local next_line = vim.fn.getline(current_line + 1)
+                local next_first_non_blank = string.find(next_line, "%S") or 1
+                vim.fn.cursor(current_line + 1, next_first_non_blank)
+            end
+            return
+        end
+
+        if current_col < line_length then
+            vim.fn.cursor(current_line, line_length + 1)
+        else
+            local total_lines = vim.fn.line("$")
+            if current_line < total_lines then
+                local next_line = vim.fn.getline(current_line + 1)
+                local next_first_non_blank = string.find(next_line, "%S") or 1
+                vim.fn.cursor(current_line + 1, next_first_non_blank)
+            end
+        end
+    end,
+    noremap = true,
+    silent = true,
+})
+
 local opt = vim.opt
 
 -- Set up cursor color and shape in various modes
@@ -210,7 +273,7 @@ require("lazy").setup({
                 { desc = "Next func start" })
             keymap(move_modes, "]r", function() move.goto_next_start("@return.outer", "textobjects") end,
                 { desc = "Next return start" })
-            keymap(move_modes, "]c", function() move.goto_next_start("@class.outer", "textobjects") end,
+            keymap(move_modes, "]s", function() move.goto_next_start("@class.outer", "textobjects") end,
                 { desc = "Next class start" })
             keymap(move_modes, "]j", function() move.goto_next_start("@conditional.outer", "textobjects") end,
                 { desc = "Next cond start" })
@@ -223,7 +286,7 @@ require("lazy").setup({
             keymap(move_modes, "]A", function() move.goto_next_end("@parameter.outer", "textobjects") end)
             keymap(move_modes, "]F", function() move.goto_next_end("@function.outer", "textobjects") end)
             keymap(move_modes, "]R", function() move.goto_next_end("@return.outer", "textobjects") end)
-            keymap(move_modes, "]C", function() move.goto_next_end("@class.outer", "textobjects") end)
+            keymap(move_modes, "]S", function() move.goto_next_end("@class.outer", "textobjects") end)
             keymap(move_modes, "]J", function() move.goto_next_end("@conditional.outer", "textobjects") end)
             keymap(move_modes, "]O", function() move.goto_next_end("@loop.outer", "textobjects") end)
 
@@ -231,7 +294,7 @@ require("lazy").setup({
             keymap(move_modes, "[a", function() move.goto_previous_start("@parameter.outer", "textobjects") end)
             keymap(move_modes, "[f", function() move.goto_previous_start("@function.outer", "textobjects") end)
             keymap(move_modes, "[r", function() move.goto_previous_start("@return.outer", "textobjects") end)
-            keymap(move_modes, "[c", function() move.goto_previous_start("@class.outer", "textobjects") end)
+            keymap(move_modes, "[s", function() move.goto_previous_start("@class.outer", "textobjects") end)
             keymap(move_modes, "[j", function() move.goto_previous_start("@conditional.outer", "textobjects") end)
             keymap(move_modes, "[o", function() move.goto_previous_start("@loop.outer", "textobjects") end)
             keymap(move_modes, "[/", function() move.goto_previous_start("@comment.outer", "textobjects") end)
@@ -240,7 +303,7 @@ require("lazy").setup({
             keymap(move_modes, "[A", function() move.goto_previous_end("@parameter.outer", "textobjects") end)
             keymap(move_modes, "[F", function() move.goto_previous_end("@function.outer", "textobjects") end)
             keymap(move_modes, "[R", function() move.goto_previous_end("@return.outer", "textobjects") end)
-            keymap(move_modes, "[C", function() move.goto_previous_end("@class.outer", "textobjects") end)
+            keymap(move_modes, "[S", function() move.goto_previous_end("@class.outer", "textobjects") end)
             keymap(move_modes, "[J", function() move.goto_previous_end("@conditional.outer", "textobjects") end)
             keymap(move_modes, "[O", function() move.goto_previous_end("@loop.outer", "textobjects") end)
 
