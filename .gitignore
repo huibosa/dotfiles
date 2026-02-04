@@ -37,6 +37,7 @@
 
 !.config/nvim-vscode
 !.config/nvim-vscode/init.lua
+!.config/nvim-vscode/keybindings.json
 
 !.config/windows/
 !.config/windows/*
