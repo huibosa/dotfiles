@@ -71,6 +71,18 @@
 .config/opencode/*
 !.config/opencode/opencode.json
 
+!.config/opencode/skills/
+!.config/opencode/skills/pdf/
+!.config/opencode/skills/pdf/*
+!.config/opencode/skills/docx/
+!.config/opencode/skills/docx/*
+!.config/opencode/skills/xlsx/
+!.config/opencode/skills/xlsx/*
+!.config/opencode/skills/pptx/
+!.config/opencode/skills/pptx/*
+!.config/opencode/skills/skill-creator/
+!.config/opencode/skills/skill-creator/*
+
 !.config/ghostty/
 .config/ghostty/*
 !.config/ghostty/config

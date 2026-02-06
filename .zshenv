@@ -12,6 +12,7 @@ export PATH="$HOME/.scripts:$PATH"
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
+export PATH="$HOME/.bun/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH=/home/huibo/.opencode/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
@@ -77,9 +78,29 @@ export LESS_TERMCAP_so=$'\E[1m\E[33m\E[44m'
 
 export LS_COLORS='di=34;01:*Makefile=38;5;178:*.ipynb=38;5;208:*.7z=31:*.WARC=31:*.a=31:*.arj=31:*.bz2=31:*.cpio=31:*.gz=31:*.lrz=31:*.lz=31:*.lzma=31:*.lzo=31:*.rar=31:*.s7z=31:*.sz=31:*.tar=31:*.tbz=31:*.tgz=31:*.warc=31:*.xz=31:*.z=31:*.zip=31:*.zipx=31:*.zoo=31:*.zpaq=31:*.zst=31:*.zstd=31:*.zz=31:*.gz=31:'
 
-export UV_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
+export UV_INDEX_URL="https://mirrors.aliyun.com/pypi/simple"
 # export UV_PYTHON_INSTALL_MIRROR="https://mirrors.tuna.tsinghua.edu.cn/python-build-standalone/"
 
 # zsh-autosuggestions settings
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
 ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+# fzf configuration (faster with fd)
+export FZF_DEFAULT_COMMAND="fd --type f --hidden \
+  --exclude .git/ --exclude .venv/ --exclude venv/ \
+  --exclude node_modules/ --exclude .cache/ \
+  --exclude __pycache__/ --exclude .pytest_cache/ \
+  --exclude .mypy_cache/ --exclude .tox/ --exclude .bun/ \
+  --exclude dist/ --exclude build/ \
+  --exclude .idea/ --exclude '.egg-info/'"
+
+export FZF_DEFAULT_COMMAND="fd --type f --hidden"
+
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+export FZF_ALT_C_COMMAND="fd --type d --hidden \
+  --exclude .git/ --exclude .venv/ --exclude venv/ \
+  --exclude node_modules/ --exclude .cache/"
+
+export FZF_DEFAULT_OPTS="--height 40% --layout reverse --border --info inline"
+
