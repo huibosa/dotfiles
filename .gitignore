@@ -84,6 +84,12 @@
 !.claude/skills/pptx/*
 !.claude/skills/skill-creator/
 !.claude/skills/skill-creator/*
+!.claude/skills/dotfiles-manager/
+!.claude/skills/dotfiles-manager/*
+!.claude/skills/dotfiles-manager/scripts/
+!.claude/skills/dotfiles-manager/scripts/*
+!.claude/skills/dotfiles-manager/references/
+!.claude/skills/dotfiles-manager/references/*
 
 !.config/ghostty/
 .config/ghostty/*
