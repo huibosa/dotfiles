@@ -86,7 +86,7 @@ jobs_indicator='%(1j.[%j] .)'
 PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
 PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
 
-if [[ -n "$SSH_CLIENT" ]]; then
+# if [[ -n "$SSH_CLIENT" ]]; then
   PROMPT="$jobs_indicator"
   PROMPT+='%{$fg_bold[green]%}%n'
   PROMPT+='%{$reset_color%}@'
@@ -94,14 +94,14 @@ if [[ -n "$SSH_CLIENT" ]]; then
   PROMPT+='%{$fg_bold[green]%}%~'
   PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
   PROMPT+='%{$reset_color%}'
-else
-  PROMPT="$jobs_indicator"
-  PROMPT+='%{$fg_bold[cyan]%}%c'
-  PROMPT+='%{$reset_color%}%{$fg[green]%}'
-  PROMPT+="$VCS_PROMPT"
-  PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
-  PROMPT+='%{$reset_color%}'
-fi
+# else
+#   PROMPT="$jobs_indicator"
+#   PROMPT+='%{$fg_bold[cyan]%}%c'
+#   PROMPT+='%{$reset_color%}%{$fg[green]%}'
+#   PROMPT+="$VCS_PROMPT"
+#   PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
+#   PROMPT+='%{$reset_color%}'
+# fi
 
 # Use antigen
 source $HOME/.scripts/boot/antigen.zsh
