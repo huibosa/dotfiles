@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 
+MAC_WIFI_NAME="${PROXY_WIFI_NAME:-Wi-Fi}"
+MAC_PROXY_HOST="${PROXY_HOST:-192.168.0.100}"
+MAC_PROXY_PORT="${PROXY_PORT:-20172}"
+WSL_PROXY_HOST="${WSL_PROXY_HOST:-127.0.0.1}"
+WSL_PROXY_PORT="${WSL_PROXY_PORT:-7897}"
+SHADOWROCKET_SERVICE="${SHADOWROCKET_SERVICE:-Shadowrocket}"
+QUANTUMULT_SERVICE="${QUANTUMULT_SERVICE:-Quantumult X 2}"
+
 _mac_proxy_on() {
-    proxy_host="192.168.0.100"
-    proxy_port="20172"
-    wifi_name="Wi-Fi"
+    local proxy_host="${MAC_PROXY_HOST}"
+    local proxy_port="${MAC_PROXY_PORT}"
+    local wifi_name="${MAC_WIFI_NAME}"
 
     networksetup -setwebproxy "${wifi_name}" "${proxy_host}" "${proxy_port}"
     networksetup -setsecurewebproxy "${wifi_name}" "${proxy_host}" "${proxy_port}"
@@ -11,18 +19,50 @@ _mac_proxy_on() {
 }
 
 _mac_proxy_off() {
-    # wifi_name="$(networksetup -listallhardwareports | grep Wi-Fi)"
-    wifi_name="Wi-Fi"
+    local wifi_name="${MAC_WIFI_NAME}"
 
     networksetup -setwebproxystate "${wifi_name}" off
     networksetup -setsecurewebproxystate "${wifi_name}" off
     networksetup -setsocksfirewallproxystate "${wifi_name}" off
 }
 
+_mac_get_proxy_endpoint() {
+    local service_output
+    local enabled
+    local proxy_host
+    local proxy_port
+
+    service_output="$(networksetup -getwebproxy "${MAC_WIFI_NAME}" 2> /dev/null)"
+    enabled="$(echo "${service_output}" | awk -F': ' '/Enabled/ { print $2 }')"
+
+    if [ "${enabled}" != "Yes" ]; then
+        service_output="$(networksetup -getsocksfirewallproxy "${MAC_WIFI_NAME}" 2> /dev/null)"
+        enabled="$(echo "${service_output}" | awk -F': ' '/Enabled/ { print $2 }')"
+    fi
+
+    if [ "${enabled}" != "Yes" ]; then
+        return 1
+    fi
+
+    proxy_host="$(echo "${service_output}" | awk -F': ' '/Server/ { print $2 }')"
+    proxy_port="$(echo "${service_output}" | awk -F': ' '/Port/ { print $2 }')"
+
+    if [ -n "${proxy_host}" ] && [ -n "${proxy_port}" ]; then
+        echo "${proxy_host}:${proxy_port}"
+        return 0
+    fi
+
+    return 1
+}
+
 _mac_proxy_check() {
-    proxy_on="$(networksetup -getwebproxy 'Wi-Fi' | grep 'Enabled: Yes')"
-    shadow_on="$(scutil --nc list | grep "Connect.*Shadowrocket")"
-    quant_on="$(scutil --nc list | grep "Connect.*Quantumult")"
+    local proxy_on
+    local shadow_on
+    local quant_on
+
+    proxy_on="$(networksetup -getwebproxy "${MAC_WIFI_NAME}" | grep 'Enabled: Yes')"
+    shadow_on="$(scutil --nc list | grep "Connect.*${SHADOWROCKET_SERVICE}")"
+    quant_on="$(scutil --nc list | grep 'Connect.*Quantumult')"
 
     if [ -n "${quant_on}" ]; then
         echo "Quantumult X"
@@ -43,61 +83,35 @@ _mac_proxy_check() {
 
 # Get proxy variable
 _getproxy() {
-    local host_pattern
-    local network_output
+    local endpoint
     local proxy_host
     local proxy_port
-    local proxy
 
     # Get host and port
     if uname -a | grep -qEi '(microsoft|wsl)' &> /dev/null; then
-        # proxy_host="$(grep 'nameserver' /etc/resolv.conf | cut -d ' ' -f 2)"
-        proxy_host="127.0.0.1"
-        proxy_port="7897"
-    elif uname -a | grep -qEi 'arch' &> /dev/null; then
-        proxy_host="127.0.0.1"
-        proxy_port="20171"
+        proxy_host="${WSL_PROXY_HOST}"
+        proxy_port="${WSL_PROXY_PORT}"
     elif uname -a | grep -qEi 'Darwin' &> /dev/null; then
-        if _mac_proxy_check | grep "Proxy" &> /dev/null; then
-            network_output="$(networksetup -getwebproxy 'Wi-Fi')"
-            host_pattern='[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
-
-            proxy_host="$(echo "${network_output}" | grep -oE "${host_pattern}")"
-            proxy_port="$(echo "${network_output}" | grep "Port" | grep -oE '[0-9]+')"
-        elif _mac_proxy_check | grep "Shadowrocket" &> /dev/null; then
-            proxy_host="127.0.0.1"
-            proxy_port="1082"
+        if endpoint="$(_mac_get_proxy_endpoint)"; then
+            proxy_host="${endpoint%:*}"
+            proxy_port="${endpoint##*:}"
         fi
     fi
 
     if [ -z "${proxy_host}" ] || [ -z "${proxy_port}" ]; then
-        proxy=
+        echo ""
     else
-        proxy="${proxy_host}:${proxy_port}"
+        echo "${proxy_host}:${proxy_port}"
     fi
-
-    echo $proxy
 }
 
 _set_git_proxy() {
-    local proxy
-    local proxy_pattern
-    local git_config_file="$HOME/.gitconfig"
-
-    proxy_pattern='[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}:[0-9]\{4,5\}'
-    proxy="$1"
-
-    if [ "$(uname -s)" = "Linux" ]; then
-        sed -i "/${proxy_pattern}/d" "${git_config_file}"
-        sed -i "/http/d" "${git_config_file}"
-    elif [ "$(uname -s)" = "Darwin" ]; then
-        sed -i "" "/${proxy_pattern}/d" "${git_config_file}"
-        sed -i "" "/http/d" "${git_config_file}"
-    fi
+    local proxy="$1"
 
     if [ -n "${proxy}" ]; then
-        echo "[http]" >> "${git_config_file}"
-        echo "  proxy = http://${proxy}" >> "${git_config_file}"
+        git config --global http.proxy "http://${proxy}"
+    else
+        git config --global --unset http.proxy > /dev/null 2>&1 || true
     fi
 }
 
@@ -119,6 +133,13 @@ _set_git_proxy() {
 
 # set global proxy
 _shell_proxy_on() {
+    local proxy="$1"
+
+    if [ -z "${proxy}" ]; then
+        echo "No active proxy endpoint detected"
+        return 1
+    fi
+
     export http_proxy="${proxy}" \
         https_proxy="${proxy}" \
         ftp_proxy="${proxy}" \
@@ -143,14 +164,17 @@ _shell_proxy_off() {
 }
 
 shellproxy() {
-    if [ "$1" = "--on" ]; then
-        _shell_proxy_on
-    elif [ "$1" = "--off" ]; then
+    local proxy
+
+    if [ "$1" = "on" ]; then
+        proxy="$(_getproxy)"
+        _shell_proxy_on "${proxy}"
+    elif [ "$1" = "off" ]; then
         _shell_proxy_off
     # elif [ "$1" = "--check" ]; then
     #     _shell_proxy_check
     else
-        echo "Usage: shellproxy [--on|--off|--check]"
+        echo "Usage: shellproxy [on|off]"
         return 1
     fi
 }
@@ -158,9 +182,11 @@ shellproxy() {
 macproxy() {
     case "$1" in
     "--vpn=shadow")
-        scutil --nc stop 'Quantumult X 2'
+        local proxy
+
+        scutil --nc stop "${QUANTUMULT_SERVICE}"
         _mac_proxy_off
-        scutil --nc start Shadowrocket
+        scutil --nc start "${SHADOWROCKET_SERVICE}"
 
         proxy="$(_getproxy)"
         _set_git_proxy "${proxy}"
@@ -168,9 +194,11 @@ macproxy() {
         echo "Shadowrocket"
         ;;
     "--vpn=quant")
-        scutil --nc stop Shadowrocket
+        local proxy
+
+        scutil --nc stop "${SHADOWROCKET_SERVICE}"
         _mac_proxy_off
-        scutil --nc start 'Quantumult X 2'
+        scutil --nc start "${QUANTUMULT_SERVICE}"
 
         proxy="$(_getproxy)"
         _set_git_proxy "${proxy}"
@@ -178,8 +206,10 @@ macproxy() {
         echo "Quantumult X"
         ;;
     "-p" | "--proxy")
-        scutil --nc stop Shadowrocket
-        scutil --nc stop 'Quantumult X 2'
+        local proxy
+
+        scutil --nc stop "${SHADOWROCKET_SERVICE}"
+        scutil --nc stop "${QUANTUMULT_SERVICE}"
         _mac_proxy_on
 
         proxy="$(_getproxy)"
@@ -187,8 +217,10 @@ macproxy() {
         echo "Proxy"
         ;;
     "-n" | "--noproxy")
-        scutil --nc stop Shadowrocket
-        scutil --nc stop 'Quantumult X 2'
+        local proxy
+
+        scutil --nc stop "${SHADOWROCKET_SERVICE}"
+        scutil --nc stop "${QUANTUMULT_SERVICE}"
         _mac_proxy_off
 
         proxy="$(_getproxy)"
@@ -200,11 +232,8 @@ macproxy() {
         _mac_proxy_check
         ;;
     *)
-        echo "Usage: macproxy [-p|-q|-s|-c-n]"
+        echo "Usage: macproxy [--vpn=shadow|--vpn=quant|--proxy|--noproxy|--check]"
         return 1
         ;;
     esac
 }
-
-proxy="$(_getproxy)"
-_set_git_proxy "${proxy}"
