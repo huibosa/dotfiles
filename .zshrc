@@ -84,7 +84,7 @@ VCS_PROMPT=%{$fg_bold[yellow]%}\$vcs_info_msg_0_%{$reset_color%}
 PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
 PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
 
-PROMPT='%{$fg_bold[green]%}%~'
+PROMPT='%{$fg_bold[blue]%}%~'
 PROMPT+='%(1j. %{$fg_bold[yellow]%}[%j]%{$reset_color%}.)'
 PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
 PROMPT+='%{$reset_color%}'
