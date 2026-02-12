@@ -19,6 +19,7 @@
 !.zshrc
 
 !.clang-format
+!.bunfig.toml
 
 # To exclude folder but include specific subfolder, you have to "unignore" every parent directory
 # of anything that you want to “unignore”.
