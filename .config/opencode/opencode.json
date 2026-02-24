@@ -2,7 +2,7 @@
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": "notify",
   "plugin": [
-    "oh-my-opencode@3.7.2"
+    "oh-my-opencode@latest"
   ],
   "watcher": {
     "ignore": [
@@ -44,6 +44,47 @@
           }
         }
       }
+    },
+    "bailian-coding-plan": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Bailian Coding Plan",
+      "options": {
+        "baseURL": "https://coding.dashscope.aliyuncs.com/v1",
+        "apiKey": "sk-sp-105b78e7f3844d09bf99a97fef4dae01"
+      },
+      "models": {
+        "kimi-k2.5": {
+          "name": "Kimi K2.5",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+            }
+          }
+        },
+        "glm-4.7": {
+          "name": "GLM-4.7",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+            }
+          }
+        },
+        "qwen3-coder-plus": {
+          "name": "Qwen3 Coder Plus"
+        },
+      }
+    }
+  },
+  "mcp": {
+    "jupyter": {
+      "type": "local",
+      "command": ["uvx", "jupyter-mcp-server@latest"],
+      "environment": {
+        "JUPYTER_URL": "http://192.168.2.160:8888",
+        "JUPYTER_TOKEN": "{env:JUPYTER_TOKEN}",
+        "ALLOW_IMG_OUTPUT": "true"
+      },
+      "enabled": false
     }
   }
 }

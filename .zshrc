@@ -73,19 +73,16 @@ alias lazydot='lazygit --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 #
 # Load version control information
 autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' formats ' (%b)'
 precmd() { vcs_info }
 
-# Format the vcs_info_msg_0_ variable
-# zstyle ':vcs_info:git:*' formats '(on %b)'
-# RPROMPT=%{$fg_bold[yellow]%}\$vcs_info_msg_0_
-zstyle ':vcs_info:git:*' formats ' (%b)'
-VCS_PROMPT=%{$fg_bold[yellow]%}\$vcs_info_msg_0_%{$reset_color%}
-
+# VCS prompt for git branches (no longer needed, using vcs_info_msg_0_ directly)
 PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
 PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
 
-PROMPT='%{$fg_bold[blue]%}%~'
-PROMPT+='%(1j. %{$fg_bold[yellow]%}[%j]%{$reset_color%}.)'
+PROMPT='%{$fg_bold[blue]%}%~%{$fg_bold[yellow]%}${vcs_info_msg_0_}%{$reset_color%}'
+PROMPT+='%(1j.%{$fg_bold[yellow]%}[%j]%{$reset_color%}.)'
 PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
 PROMPT+='%{$reset_color%}'
 
