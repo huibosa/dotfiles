@@ -93,8 +93,7 @@ precmd() { vcs_info }
 PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
 PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
 
-PROMPT='%{$fg_bold[blue]%}%~%{$fg_bold[yellow]%}${vcs_info_msg_0_}%{$reset_color%}'
-PROMPT+='%(1j.%{$fg_bold[yellow]%}[%j]%{$reset_color%}.)'
+PROMPT='%{$fg_bold[blue]%}%~%(1j.%{$fg_bold[yellow]%}[%j]%{$reset_color%}.)%{$fg_bold[yellow]%}${vcs_info_msg_0_}%{$reset_color%}'
 PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
 PROMPT+='%{$reset_color%}'
 
