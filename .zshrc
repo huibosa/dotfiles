@@ -97,13 +97,21 @@ precmd() {
     for i in ${(k)jobstates}; do
         BG_PROMPT+=">"
     done
+    # Split path: parent path (blue) + last dir (yellow)
+    LAST_DIR=${(%):-%1~}
+    FULL_PATH=${(%):-%~}
+    if [[ $FULL_PATH == $LAST_DIR ]]; then
+        PARENT_PATH=""
+    else
+        PARENT_PATH="${FULL_PATH%/*}/"
+    fi
 }
 
 # VCS prompt for git branches (no longer needed, using vcs_info_msg_0_ directly)
 PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
 PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
 
-PROMPT='%{$fg_bold[blue]%}%~%{$fg_bold[yellow]%}${vcs_info_msg_0_}%{$reset_color%}%{%(?.%{$fg_bold[white]%}.%{$fg_bold[red]%})%}${BG_PROMPT}>%{$reset_color%} '
+PROMPT='%{$fg_bold[blue]%}${PARENT_PATH}%{$fg_bold[yellow]%}${LAST_DIR}${vcs_info_msg_0_}%{$reset_color%}%{%(?.%{$fg_bold[white]%}.%{$fg_bold[red]%})%}${BG_PROMPT}>%{$reset_color%} '
 
 # Use antigen
 source $HOME/.scripts/boot/antigen.zsh
