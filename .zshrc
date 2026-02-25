@@ -74,9 +74,7 @@ alias lazydot='lazygit --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 # Load version control information
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:*' formats ' %b'
-zstyle ':vcs_info:*' actionformats ' %b*'
-zstyle ':vcs_info:+vcs_info_hookset:' +gen-unapplied-string hooks
+zstyle ':vcs_info:*' formats '%b'
 
 # Add dirty indicator
 zstyle ':vcs_info:git+set-message:*' hooks git-dirty
@@ -87,15 +85,25 @@ function +vi-git-dirty() {
         hook_com[branch]+='*'
     fi
 }
-precmd() { vcs_info }
+
+precmd() {
+    vcs_info
+    if [[ -n $vcs_info_msg_0_ ]]; then
+        vcs_info_msg_0_=":$vcs_info_msg_0_"
+    fi
+    # Build background job indicator (one ">" per job)
+    BG_PROMPT=""
+    local i
+    for i in ${(k)jobstates}; do
+        BG_PROMPT+=">"
+    done
+}
 
 # VCS prompt for git branches (no longer needed, using vcs_info_msg_0_ directly)
 PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
 PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
 
-PROMPT='%{$fg_bold[blue]%}%~%(1j.%{$fg_bold[yellow]%}[%j]%{$reset_color%}.)%{$fg_bold[yellow]%}${vcs_info_msg_0_}%{$reset_color%}'
-PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
-PROMPT+='%{$reset_color%}'
+PROMPT='%{$fg_bold[blue]%}%~%{$fg_bold[yellow]%}${vcs_info_msg_0_}%{$reset_color%}%{%(?.%{$fg_bold[white]%}.%{$fg_bold[red]%})%}${BG_PROMPT}>%{$reset_color%} '
 
 # Use antigen
 source $HOME/.scripts/boot/antigen.zsh
