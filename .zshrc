@@ -80,7 +80,7 @@ zstyle ':vcs_info:*' formats '%b'
 zstyle ':vcs_info:git+set-message:*' hooks git-dirty
 
 function +vi-git-dirty() {
-    local gitstatus=$(command git status --porcelain 2>/dev/null)
+    local gitstatus=$(command git status --porcelain -uno 2>/dev/null)
     if [[ -n "$gitstatus" ]]; then
         hook_com[branch]+='*'
     fi
