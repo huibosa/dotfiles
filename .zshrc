@@ -77,14 +77,14 @@ zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' formats '%b'
 
 # Add dirty indicator
-zstyle ':vcs_info:git+set-message:*' hooks git-dirty
+# zstyle ':vcs_info:git+set-message:*' hooks git-dirty
 
-function +vi-git-dirty() {
-    local gitstatus=$(command git status --porcelain -uno 2>/dev/null)
-    if [[ -n "$gitstatus" ]]; then
-        hook_com[branch]+='*'
-    fi
-}
+# function +vi-git-dirty() {
+    #     local gitstatus=$(command git status --porcelain -uno 2>/dev/null)
+    #     if [[ -n "$gitstatus" ]]; then
+        #         hook_com[branch]+='*'
+    #     fi
+# }
 
 precmd() {
     vcs_info
