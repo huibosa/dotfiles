@@ -81,6 +81,9 @@
 !.opencode/
 !.opencode/*
 .opencode/.envrc
+.opencode/oh-my-opencode.jsonc
+.opencode/oh-my-opencode.jsonc.openai
+.opencode/opencode.jsonc
 
 # Track Claude skills
 !.claude/
