@@ -18,6 +18,9 @@
 !.zshenv
 !.zshrc
 
+# direnv - contains local environment variables/secrets
+.envrc
+
 !.clang-format
 !.bunfig.toml
 
@@ -70,8 +73,13 @@
 .docker/*
 !.docker/config.json
 
-!.config/opencode/
-.config/opencode/*
+# Old opencode location (deprecated, moved to ~/.opencode)
+# !.config/opencode/
+# .config/opencode/*
+
+# New opencode location
+!.opencode/
+!.opencode/*
 
 # Track Claude skills
 !.claude/
