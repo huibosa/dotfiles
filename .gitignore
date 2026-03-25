@@ -80,6 +80,7 @@
 # New opencode location
 !.opencode/
 !.opencode/*
+.opencode/.envrc
 
 # Track Claude skills
 !.claude/
