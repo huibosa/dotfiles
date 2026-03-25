@@ -73,35 +73,11 @@
 !.config/opencode/
 .config/opencode/*
 
-!.claude/
-.claude/*
-!.claude/skills/
-!.claude/skills/pdf/
-!.claude/skills/pdf/*
-!.claude/skills/docx/
-!.claude/skills/docx/*
-!.claude/skills/xlsx/
-!.claude/skills/xlsx/*
-!.claude/skills/pptx/
-!.claude/skills/pptx/*
-!.claude/skills/skill-creator/
-!.claude/skills/skill-creator/*
-!.claude/skills/dotfiles-manager/
-!.claude/skills/dotfiles-manager/*
-!.claude/skills/dotfiles-manager/scripts/
-!.claude/skills/dotfiles-manager/scripts/*
-!.claude/skills/dotfiles-manager/references/
-!.claude/skills/dotfiles-manager/references/*
-
-!.config/ghostty/
-.config/ghostty/*
-!.config/ghostty/config
-
 # Track Claude skills
 !.claude/
 .claude/*
 !.claude/skills/
-!.claude/skills/*/
+!.claude/skills/**
 
 !.config/ghostty/
 .config/ghostty/*
