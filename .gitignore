@@ -96,3 +96,13 @@
 !.config/ghostty/
 .config/ghostty/*
 !.config/ghostty/config
+
+# Track Claude skills
+!.claude/
+.claude/*
+!.claude/skills/
+!.claude/skills/*/
+
+!.config/ghostty/
+.config/ghostty/*
+!.config/ghostty/config
