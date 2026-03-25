@@ -35,3 +35,7 @@
 - Create virtual environments with `uv venv` before running Python code
 - Prefer `uv run` for executing Python scripts in isolated environments
 - **For one-time scripts**: Use `uv run --with <package>` to run scripts without creating a persistent virtual environment
+
+### 8. Git Worktree Management
+- **Default location**: Unless specifically specified, store all worktrees in `.worktrees/` directory at the project root
+- **Gitignore**: Always add `.worktrees/` to `.gitignore` to avoid tracking worktree directories
