@@ -15,3 +15,5 @@ mouse-hide-while-typing = true
 copy-on-select = clipboard
 
 keybind = shift+enter=text:\x1b\r
+
+macos-titlebar-style = tabs
