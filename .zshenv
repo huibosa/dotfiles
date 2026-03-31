@@ -14,7 +14,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.bun/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
-export PATH=/home/huibo/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 export GOPROXY=https://goproxy.cn,direct
