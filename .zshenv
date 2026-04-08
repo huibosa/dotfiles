@@ -16,6 +16,7 @@ export PATH="$HOME/.bun/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/.opencode/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="/var/DassaultSystemes/SIMULIA/Commands:$PATH"
 
 export GOPROXY=https://goproxy.cn,direct
 export GO111MODULE=on
@@ -27,7 +28,7 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 export LC_ALL=en_US.UTF-8
 
 # Set runtime library path
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.local/lib"
 
 # ZSH
 export HISTFILE="$HOME/.zsh_history"
