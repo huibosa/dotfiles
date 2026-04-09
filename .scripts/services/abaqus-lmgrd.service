@@ -1,0 +1,15 @@
+[Unit]
+Description=Abaqus License Server (FlexNet)
+After=network.target
+
+[Service]
+Type=simple
+ExecStartPre=/bin/mkdir -p /usr/tmp
+ExecStart=/usr/SIMULIA/License/2024/linux_a64/code/bin/lmgrd -z -c /usr/SIMULIA/License/2024/linux_a64/code/bin/ABAQUSLM_SSQ.lic -l /var/log/abaqus-lmgrd.log
+ExecStop=/usr/SIMULIA/License/2024/linux_a64/code/bin/lmdown -q -c /usr/SIMULIA/License/2024/linux_a64/code/bin/ABAQUSLM_SSQ.lic
+ExecReload=/usr/SIMULIA/License/2024/linux_a64/code/bin/lmreread -c /usr/SIMULIA/License/2024/linux_a64/code/bin/ABAQUSLM_SSQ.lic
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

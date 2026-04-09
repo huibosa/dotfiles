@@ -65,6 +65,9 @@
 !.scripts/zsh/completions/
 !.scripts/zsh/completions/*
 
+!.scripts/services/
+!.scripts/services/*
+
 !.pip/
 .pip/*
 !.pip/pip.conf
