@@ -1,8 +1,5 @@
 node_modules
 package.json
+package-lock.json
 bun.lock
 .gitignore
-antigravity-accounts.json
-antigravity-signature-cache.json
-antigravity-logs/
-antigravity-accounts.json.*.tmp
