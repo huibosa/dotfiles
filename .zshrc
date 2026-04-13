@@ -68,8 +68,8 @@ alias rm="rm -v"
 alias python='python3'
 alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias lazydot='lazygit --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-alias oc='opencode'
-alias ocp='OPENCODE_CONFIG_DIR=~/.config/opencode-profiles/vanilla opencode --pure'
+alias omo='opencode'
+alias oc='OPENCODE_CONFIG_DIR=~/.config/opencode-profiles/vanilla opencode --pure'
 
 # My prompt
 #
