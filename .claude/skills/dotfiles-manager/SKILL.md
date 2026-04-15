@@ -1,6 +1,6 @@
 ---
 name: dotfiles-manager
-description: Add, remove, and manage dotfiles in your bare git repository at ~/.dotfiles/. Use when: (1) User wants to track a new config file or directory, (2) User needs to untrack an existing file or directory, (3) User needs help with .gitignore patterns for selective tracking
+description: "Add, remove, and manage dotfiles in your bare git repository at ~/.dotfiles/. Use when: (1) User wants to track a new config file or directory, (2) User needs to untrack an existing file or directory, (3) User needs help with .gitignore patterns for selective tracking"
 ---
 
 # Dotfiles Manager
