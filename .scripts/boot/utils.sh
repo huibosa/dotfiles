@@ -83,3 +83,7 @@ _tmux-all-panes-bg() {
     tmux select-window -t "$ORIG_WINDOW_INDEX"
     tmux select-pane -t "$ORIG_PANE_INDEX"
 }
+
+clip() {
+    tmux load-buffer -w "${1:--}"
+}
