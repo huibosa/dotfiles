@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+# Add a file or directory to dotfiles tracking with automatic .gitignore pattern generation
+
+set -euo pipefail
+
+usage() {
+	echo "Usage: $(basename "$0") [OPTIONS] <path>"
+	echo ""
+	echo "Options:"
+	echo "  --no-gitignore   Skip auto-appending .gitignore patterns"
+	echo "  --dry-run        Show what would happen without making changes"
+	echo ""
+	echo "This script:"
+	echo "  1. Validates the path exists and bare repo is set up"
+	echo "  2. Generates and appends correct .gitignore patterns"
+	echo "  3. Stages the file for tracking"
+	echo "  4. Outputs the commit command"
+	exit 1
+}
+
+die() {
+	echo "Error: $1" >&2
+	exit 1
+}
+
+GIT_DIR="$HOME/.dotfiles"
+GIT_OPTS="--git-dir=$GIT_DIR --work-tree=$HOME"
+
+WRITE_GITIGNORE=1
+DRY_RUN=0
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	--no-gitignore)
+		WRITE_GITIGNORE=0
+		shift
+		;;
+	--dry-run)
+		DRY_RUN=1
+		shift
+		;;
+	-*)
+		die "Unknown option: $1"
+		;;
+	*)
+		break
+		;;
+	esac
+done
+
+[[ $# -lt 1 ]] && usage
+TARGET="$1"
+shift
+
+# Precondition: bare repo must exist
+if [[ ! -d "$GIT_DIR" ]]; then
+	die "Bare repo not found at $GIT_DIR. Initialize with: git init --bare $GIT_DIR && alias dot='git --git-dir=$GIT_DIR --work-tree=$HOME'"
+fi
+
+# Resolve to absolute path
+ABS_PATH=$(realpath "$TARGET" 2>/dev/null) || ABS_PATH="$TARGET"
+
+# Check if path exists
+[[ ! -e "$ABS_PATH" ]] && die "Path does not exist: $TARGET"
+
+# Get relative path from $HOME
+REL_PATH="${ABS_PATH#"$HOME"/}"
+
+# Determine if file or directory
+if [[ -d "$ABS_PATH" ]]; then
+	TYPE="directory"
+else
+	TYPE="file"
+fi
+
+echo "=== Adding to Dotfiles ==="
+echo "Path: $ABS_PATH"
+echo "Type: $TYPE"
+echo "Relative: $REL_PATH"
+[[ $DRY_RUN -eq 1 ]] && echo "Mode: DRY RUN"
+echo ""
+
+# Check if already tracked
+if git $GIT_OPTS ls-files --error-unmatch "$REL_PATH" &>/dev/null; then
+	echo "Already tracked in dotfiles."
+	exit 0
+fi
+
+# Generate .gitignore patterns
+echo "=== .gitignore Patterns ==="
+PATTERNS=()
+if [[ "$TYPE" == "file" ]]; then
+	PATTERNS+=("!$REL_PATH")
+else
+	# For directories, we need to un-exclude each parent that's excluded
+	# Walk up from $HOME and emit patterns for excluded ancestors
+	IFS='/' read -ra PARTS <<< "$REL_PATH"
+	CURRENT=""
+	for part in "${PARTS[@]}"; do
+		CURRENT="${CURRENT:+$CURRENT/}$part"
+		# Check if this path segment is excluded by .gitignore
+		if [[ -f "$HOME/.gitignore" ]] && git $GIT_OPTS check-ignore -q "$CURRENT" 2>/dev/null; then
+			PATTERNS+=("!${CURRENT}/")
+			PATTERNS+=("!${CURRENT}/*")
+		fi
+	done
+	# Always add the target itself
+	PATTERNS+=("!$REL_PATH")
+	PATTERNS+=("!$REL_PATH/*")
+fi
+
+for p in "${PATTERNS[@]}"; do
+	echo "  $p"
+done
+echo ""
+
+# Write patterns to .gitignore
+if [[ $WRITE_GITIGNORE -eq 1 && ${#PATTERNS[@]} -gt 0 ]]; then
+	GITIGNORE="$HOME/.gitignore"
+	if [[ $DRY_RUN -eq 1 ]]; then
+		echo "=== Would append to $GITIGNORE ==="
+		for p in "${PATTERNS[@]}"; do
+			echo "  $p"
+		done
+		echo ""
+	else
+		# Avoid duplicate lines
+		for p in "${PATTERNS[@]}"; do
+			if ! grep -qFx "$p" "$GITIGNORE" 2>/dev/null; then
+				echo "$p" >> "$GITIGNORE"
+			fi
+		done
+		echo "=== Updated $GITIGNORE ==="
+		git $GIT_OPTS add .gitignore
+		echo ""
+	fi
+fi
+
+# Stage the target
+if [[ $DRY_RUN -eq 1 ]]; then
+	echo "=== Would stage ==="
+	echo "  git $GIT_OPTS add $REL_PATH"
+else
+	echo "=== Staging ==="
+	git $GIT_OPTS add "$REL_PATH"
+fi
+
+echo ""
+echo "File staged. Run:"
+echo "  dot commit -m \"add $REL_PATH\""

@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+# Remove or untrack a file/directory from dotfiles tracking
+
+set -euo pipefail
+
+usage() {
+	echo "Usage: $(basename "$0") [OPTIONS] <path>"
+	echo ""
+	echo "Options:"
+	echo "  --soft      Untrack from git index (keeps file locally, default)"
+	echo "  --hard      Remove from both git index and filesystem (with confirm)"
+	echo "  --dry-run   Show what would happen without making changes"
+	echo ""
+	echo "Examples:"
+	echo "  $(basename "$0") --soft ~/.config/unused/"
+	echo "  $(basename "$0") --hard ~/.config/temp/"
+	echo "  $(basename "$0") --dry-run --hard ~/.config/junk"
+	exit 1
+}
+
+die() {
+	echo "Error: $1" >&2
+	exit 1
+}
+
+GIT_DIR="$HOME/.dotfiles"
+GIT_OPTS="--git-dir=$GIT_DIR --work-tree=$HOME"
+
+MODE="soft"
+DRY_RUN=0
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	--soft | --hard)
+		MODE="${1#--}"
+		shift
+		;;
+	--dry-run)
+		DRY_RUN=1
+		shift
+		;;
+	-*)
+		die "Unknown option: $1"
+		;;
+	*)
+		break
+		;;
+	esac
+done
+
+[[ $# -lt 1 ]] && usage
+TARGET="$1"
+shift
+
+# Precondition: bare repo must exist
+if [[ ! -d "$GIT_DIR" ]]; then
+	die "Bare repo not found at $GIT_DIR. Initialize with: git init --bare $GIT_DIR && alias dot='git --git-dir=$GIT_DIR --work-tree=$HOME'"
+fi
+
+# Resolve to absolute path
+ABS_PATH=$(realpath "$TARGET" 2>/dev/null) || ABS_PATH="$TARGET"
+
+# Get relative path from $HOME
+REL_PATH="${ABS_PATH#"$HOME"/}"
+
+echo "=== Dotfiles Remove ==="
+echo "Path: $ABS_PATH"
+echo "Relative: $REL_PATH"
+echo "Mode: $MODE"
+[[ $DRY_RUN -eq 1 ]] && echo "Mode: DRY RUN"
+echo ""
+
+# Check if tracked
+if ! git $GIT_OPTS ls-files --error-unmatch "$REL_PATH" &>/dev/null; then
+	echo "Not tracked in dotfiles."
+	exit 0
+fi
+
+case "$MODE" in
+soft)
+	echo "=== Untracking (soft remove) ==="
+	echo "File will remain on disk but stop being tracked."
+	if [[ $DRY_RUN -eq 1 ]]; then
+		echo "=== Would run ==="
+		echo "  git $GIT_OPTS rm -r --cached $REL_PATH"
+		echo ""
+		echo "Would append to ~/.gitignore:"
+		echo "  $REL_PATH"
+	else
+		git $GIT_OPTS rm -r --cached "$REL_PATH"
+		# Auto-append to .gitignore to prevent re-adding
+		GITIGNORE="$HOME/.gitignore"
+		if ! grep -qFx "$REL_PATH" "$GITIGNORE" 2>/dev/null; then
+			echo "$REL_PATH" >> "$GITIGNORE"
+			git $GIT_OPTS add .gitignore
+			echo ""
+			echo "Added '$REL_PATH' to $GITIGNORE"
+		fi
+		echo ""
+		echo "Run:"
+		echo "  dot commit -m \"untrack $REL_PATH\""
+	fi
+	;;
+hard)
+	echo "=== Removing (hard remove) ==="
+	echo "File will be removed from both git index AND filesystem."
+	if [[ $DRY_RUN -eq 1 ]]; then
+		echo "=== Would run ==="
+		echo "  git $GIT_OPTS rm -r $REL_PATH"
+		echo "  rm -rf $ABS_PATH"
+	else
+		read -p "Type DELETE to confirm: " -r
+		echo
+		if [[ "$REPLY" == "DELETE" ]]; then
+			git $GIT_OPTS rm -r "$REL_PATH"
+			echo ""
+			echo "Run:"
+			echo "  dot commit -m \"remove $REL_PATH\""
+		else
+			echo "Cancelled."
+		fi
+	fi
+	;;
+esac
