@@ -97,4 +97,8 @@
 !.config/ghostty/
 .config/ghostty/*
 !.config/ghostty/config
+
+!.config/ccstatusline/
+.config/ccstatusline/*
+!.config/ccstatusline/settings.json
 !.scripts/tmux/status-right-prompt.sh

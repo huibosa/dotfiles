@@ -1,0 +1,109 @@
+{
+  "version": 3,
+  "lines": [
+    [
+      {
+        "id": "36d9457d-c1aa-44a2-acc6-993b9e49d5a3",
+        "type": "tokens-input",
+        "color": "cyan"
+      },
+      {
+        "id": "e20c3142-55b2-4b9b-9b03-474f9397ac4c",
+        "type": "separator",
+        "color": "brightBlack"
+      },
+      {
+        "id": "e436e6a5-c74b-42f4-b245-80e69f14a09b",
+        "type": "tokens-output",
+        "color": "cyan"
+      },
+      {
+        "id": "537c793f-9cd9-4456-b0da-9031e824a8fc",
+        "type": "separator",
+        "color": "brightBlack"
+      },
+      {
+        "id": "a52cd32a-5564-45ff-870f-f0c50ac406ea",
+        "type": "tokens-cached",
+        "color": "yellow"
+      },
+      {
+        "id": "937468ee-95c7-410e-af06-bb6a86fe67ae",
+        "type": "separator",
+        "color": "brightBlack"
+      },
+      {
+        "id": "11ea1cba-cfa5-4b15-8916-bee335ebf7e3",
+        "type": "tokens-total",
+        "color": "cyan"
+      },
+      {
+        "id": "64d91afc-ef5a-49c7-957c-1e16a78464fc",
+        "type": "separator",
+        "color": "brightBlack"
+      },
+      {
+        "id": "1a7ee12a-dc92-4eea-ab4a-6dcfabbf8055",
+        "type": "context-length",
+        "color": "yellow"
+      }
+    ],
+    [
+      {
+        "id": "aa5ed663-d227-4351-adcd-a7abdf541389",
+        "type": "model",
+        "color": "yellow"
+      },
+      {
+        "id": "79f75b37-67d2-4221-8c42-0840badab9d4",
+        "type": "separator",
+        "color": "brightBlack"
+      },
+      {
+        "id": "57c39142-5c07-47c4-93ce-b157312bb32e",
+        "type": "thinking-effort",
+        "color": "cyan"
+      },
+      {
+        "id": "44a1aa8a-b5bc-46f9-8a25-d73a1c07f71c",
+        "type": "separator",
+        "color": "brightBlack"
+      },
+      {
+        "id": "0e9b06f5-4760-4890-aac8-dad4e959265a",
+        "type": "input-speed",
+        "color": "brightBlack"
+      },
+      {
+        "id": "be1c2413-f408-484f-aa5f-3acf09dee8ef",
+        "type": "separator",
+        "color": "brightBlack"
+      },
+      {
+        "id": "ae078c5d-4d10-4b11-845b-863211082c34",
+        "type": "output-speed",
+        "color": "brightBlack"
+      }
+    ],
+    []
+  ],
+  "flexMode": "full-minus-40",
+  "compactThreshold": 60,
+  "colorLevel": 2,
+  "inheritSeparatorColors": false,
+  "globalBold": false,
+  "minimalistMode": false,
+  "powerline": {
+    "enabled": false,
+    "separators": [
+      ""
+    ],
+    "separatorInvertBackground": [
+      false
+    ],
+    "startCaps": [],
+    "endCaps": [],
+    "autoAlign": false,
+    "continueThemeAcrossLines": false
+  }
+}
