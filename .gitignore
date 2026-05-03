@@ -88,11 +88,14 @@
 .opencode/oh-my-opencode.jsonc.openai
 .opencode/opencode.jsonc
 
-# Track Claude skills
+# Track Claude skills, settings, and themes
 !.claude/
 .claude/*
 !.claude/skills/
 !.claude/skills/**
+!.claude/settings.json
+!.claude/themes/
+!.claude/themes/*
 
 !.config/ghostty/
 .config/ghostty/*
