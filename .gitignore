@@ -97,3 +97,4 @@
 !.config/ghostty/
 .config/ghostty/*
 !.config/ghostty/config
+!.scripts/tmux/status-right-prompt.sh
