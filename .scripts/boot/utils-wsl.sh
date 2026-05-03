@@ -6,11 +6,17 @@ alias code='/mnt/c/Users/huibo/AppData/Local/Programs/Microsoft\ VS\ Code/Code.e
 alias wezterm="/mnt/c/Users/huibo/scoop/apps/wezterm-nightly/current/wezterm.exe"
 
 open() {
-    exp="/mnt/c/WINDOWS/explorer.exe"
-    (
-        cd "$1" || exit
-        $exp .
-    )
+    local exp="/mnt/c/WINDOWS/explorer.exe"
+    local target="$1"
+
+    if [ -d "$target" ]; then
+        (cd "$target" || return; $exp .)
+    elif [ -f "$target" ]; then
+        $exp /select,"$(wslpath -w "$target")"
+    else
+        echo "open: cannot access '$target': No such file or directory" >&2
+        return 1
+    fi
 }
 
 function mountusb() {
