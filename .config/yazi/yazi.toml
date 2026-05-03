@@ -16,3 +16,6 @@ edit = [
 	{ run = "nvim %s",    block = true, desc = "nvim",           for = "windows" },
 	{ run = "nvim -w %s", block = true,  desc = "nvim (block)",   for = "windows" },
 ]
+reveal = [
+	{ run = 'source "$HOME/.scripts/boot/utils-wsl.sh" && open "%s1"', desc = "Reveal", orphan = true },
+]
