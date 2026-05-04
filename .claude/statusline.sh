@@ -28,6 +28,8 @@ fmt_tok() {
 case "$model_id" in
   custom-model-a1*) display="Opus" ;;
   custom-model-a2*) display="Sonnet" ;;
+  glm-5.1*)         display="GLM-5.1" ;;
+  deepseek-v4-pro*) display="DeepSeek-v4-pro" ;;
   *) display="$model_id" ;;
 esac
 
@@ -129,6 +131,6 @@ else
   cost_fmt="${currency}$(awk -v c="$cumulative_cost" 'BEGIN{printf "%.4f", c}')"
 fi
 
-metrics="(${in_fmt}, ${out_fmt}, ${cached_fmt}, ${cost_fmt})"
+metrics="(${in_fmt}, ${out_fmt}, ${cached_fmt})"
 
-printf "%s | %s | %s" "$model_seg" "$ctx_seg" "$metrics"
+printf "%s | %s | %s | %s" "$model_seg" "$ctx_seg" "$metrics" "$cost_fmt"
