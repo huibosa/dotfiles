@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-alias pwsh="/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe"
-alias clip="/mnt/c/WINDOWS/System32/clip.exe"
-alias code='/mnt/c/Users/huibo/AppData/Local/Programs/Microsoft\ VS\ Code/Code.exe'
-alias wezterm="/mnt/c/Users/huibo/scoop/apps/wezterm-nightly/current/wezterm.exe"
+alias pwsh='/mnt/c/Program\ Files/PowerShell/7/pwsh.exe'
+alias pandoc='/mnt/c/Users/huibo/AppData/Local/Pandoc/pandoc.exe'
 
 open() {
     local exp="/mnt/c/WINDOWS/explorer.exe"

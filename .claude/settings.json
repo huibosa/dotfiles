@@ -32,6 +32,7 @@
       "Read(./secrets/**)"
     ]
   },
+  "model": "sonnet",
   "enableAllProjectMcpServers": false,
   "disableAllHooks": false,
   "defaultShell": "bash",
@@ -41,10 +42,12 @@
     "refreshInterval": 10
   },
   "enabledPlugins": {
-    "pyright-lsp@claude-plugins-official": true
+    "pyright-lsp@claude-plugins-official": true,
+    "exa@claude-plugins-official": true
   },
   "feedbackSurveyRate": 0,
   "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
   "awaySummaryEnabled": true,
   "autoUpdatesChannel": "latest",
   "showThinkingSummaries": true,
