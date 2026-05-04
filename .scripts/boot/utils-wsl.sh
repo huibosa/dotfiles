@@ -5,7 +5,7 @@ alias pandoc='/mnt/c/Users/huibo/AppData/Local/Pandoc/pandoc.exe'
 
 open() {
     local exp="/mnt/c/WINDOWS/explorer.exe"
-    local target="$1"
+    local target="${1:-.}"
 
     if [ -d "$target" ]; then
         (cd "$target" || return; $exp .)
