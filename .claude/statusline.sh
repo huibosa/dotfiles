@@ -135,5 +135,5 @@ fi
 io_seg="in:${in_fmt} out:${out_fmt}"
 cache_seg="cache:${cache_cum_fmt} (+${cache_last_fmt})"
 
-sep=$'\033[90m•\033[0m'
+sep=$'\033[30m•\033[0m'
 printf "%s %s %s %s %s %s %s %s %s" "$model_seg" "$sep" "$ctx_seg" "$sep" "$io_seg" "$sep" "$cache_seg" "$sep" "$cost_fmt"
