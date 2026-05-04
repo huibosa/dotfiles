@@ -3,6 +3,43 @@
   "lines": [
     [
       {
+        "id": "aa5ed663-d227-4351-adcd-a7abdf541389",
+        "type": "model",
+        "color": "yellow"
+      },
+      {
+        "id": "79f75b37-67d2-4221-8c42-0840badab9d4",
+        "type": "separator",
+        "color": "brightBlack"
+      },
+      {
+        "id": "57c39142-5c07-47c4-93ce-b157312bb32e",
+        "type": "thinking-effort",
+        "color": "cyan"
+      },
+      {
+        "id": "44a1aa8a-b5bc-46f9-8a25-d73a1c07f71c",
+        "type": "separator",
+        "color": "brightBlack"
+      },
+      {
+        "id": "0e9b06f5-4760-4890-aac8-dad4e959265a",
+        "type": "input-speed",
+        "color": "brightBlack"
+      },
+      {
+        "id": "be1c2413-f408-484f-aa5f-3acf09dee8ef",
+        "type": "separator",
+        "color": "brightBlack"
+      },
+      {
+        "id": "ae078c5d-4d10-4b11-845b-863211082c34",
+        "type": "output-speed",
+        "color": "brightBlack"
+      }
+    ],
+    [
+      {
         "id": "36d9457d-c1aa-44a2-acc6-993b9e49d5a3",
         "type": "tokens-input",
         "color": "cyan"
@@ -46,43 +83,6 @@
         "id": "1a7ee12a-dc92-4eea-ab4a-6dcfabbf8055",
         "type": "context-length",
         "color": "yellow"
-      }
-    ],
-    [
-      {
-        "id": "aa5ed663-d227-4351-adcd-a7abdf541389",
-        "type": "model",
-        "color": "yellow"
-      },
-      {
-        "id": "79f75b37-67d2-4221-8c42-0840badab9d4",
-        "type": "separator",
-        "color": "brightBlack"
-      },
-      {
-        "id": "57c39142-5c07-47c4-93ce-b157312bb32e",
-        "type": "thinking-effort",
-        "color": "cyan"
-      },
-      {
-        "id": "44a1aa8a-b5bc-46f9-8a25-d73a1c07f71c",
-        "type": "separator",
-        "color": "brightBlack"
-      },
-      {
-        "id": "0e9b06f5-4760-4890-aac8-dad4e959265a",
-        "type": "input-speed",
-        "color": "brightBlack"
-      },
-      {
-        "id": "be1c2413-f408-484f-aa5f-3acf09dee8ef",
-        "type": "separator",
-        "color": "brightBlack"
-      },
-      {
-        "id": "ae078c5d-4d10-4b11-845b-863211082c34",
-        "type": "output-speed",
-        "color": "brightBlack"
       }
     ],
     []
