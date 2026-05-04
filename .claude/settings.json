@@ -37,7 +37,7 @@
   "defaultShell": "bash",
   "statusLine": {
     "type": "command",
-    "command": "bash /home/huibosa/.claude/statusline.sh",
+    "command": "bash ~/.claude/statusline.sh",
     "refreshInterval": 10
   },
   "enabledPlugins": {
@@ -54,5 +54,6 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "custom:gruvbox-material",
   "editorMode": "normal",
-  "autoScrollEnabled": true
+  "autoScrollEnabled": true,
+  "model": "opus"
 }
