@@ -120,17 +120,19 @@ else
   ctx_seg="${ctx_fmt}"
 fi
 
-# ---- Metrics tuple: (<input>, <output>, <cached_cum/last>, <cost>) ----
+# ---- Metrics segments ----
 in_fmt=$(fmt_tok "$cumulative_in")
 out_fmt=$(fmt_tok "$cumulative_out")
-cached_fmt="$(fmt_tok "$cumulative_cache")/$(fmt_tok "$cache_read")"
+cache_cum_fmt=$(fmt_tok "$cumulative_cache")
+cache_last_fmt=$(fmt_tok "$cache_read")
 
 if [[ $warn -eq 1 ]]; then
   cost_fmt="[! unknown: ${model_id}]"
 else
-  cost_fmt="${currency}$(awk -v c="$cumulative_cost" 'BEGIN{printf "%.4f", c}')"
+  cost_fmt="${currency}$(awk -v c="$cumulative_cost" 'BEGIN{printf "%.2f", c}')"
 fi
 
-metrics="(${in_fmt}, ${out_fmt}, ${cached_fmt})"
+io_seg="in:${in_fmt} out:${out_fmt}"
+cache_seg="cache:${cache_cum_fmt} (+${cache_last_fmt})"
 
-printf "%s | %s | %s | %s" "$model_seg" "$ctx_seg" "$metrics" "$cost_fmt"
+printf "%s • %s • %s • %s • %s" "$model_seg" "$ctx_seg" "$io_seg" "$cache_seg" "$cost_fmt"
