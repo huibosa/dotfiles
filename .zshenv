@@ -103,4 +103,4 @@ export FZF_ALT_C_COMMAND="fd --type d --hidden \
 
 export FZF_DEFAULT_OPTS="--height 40% --layout reverse --border --info inline"
 
-source $HOME/.config/opencode/.envrc
+source $HOME/.claude/.envrc
