@@ -20,6 +20,7 @@ fmt_tok() {
   awk -v n="$1" 'BEGIN{
     if (n >= 1000000) printf "%.1fM", n/1000000
     else if (n >= 1000) printf "%.1fk", n/1000
+    else if (n == 0) printf "0k"
     else printf "%d", n
   }'
 }
@@ -113,12 +114,8 @@ ctx_tokens=$(echo "$input" | jq -r '
   else 0 end')
 
 ctx_fmt=$(fmt_tok "$ctx_tokens")
-if awk -v p="$used_pct" 'BEGIN{exit !(p+0 > 0)}'; then
-  ctx_pct=$(awk -v p="$used_pct" 'BEGIN{printf "%.1f%%", p}')
-  ctx_seg="${ctx_fmt} (${ctx_pct})"
-else
-  ctx_seg="${ctx_fmt}"
-fi
+ctx_pct=$(awk -v p="$used_pct" 'BEGIN{printf "%.1f%%", p}')
+ctx_seg="${ctx_fmt} (${ctx_pct})"
 
 # ---- Metrics segments ----
 in_fmt=$(fmt_tok "$cumulative_in")

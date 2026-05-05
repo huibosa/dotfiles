@@ -32,6 +32,7 @@
       "Read(./secrets/**)"
     ]
   },
+  "model": "sonnet",
   "enableAllProjectMcpServers": false,
   "disableAllHooks": false,
   "defaultShell": "bash",
@@ -54,6 +55,5 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "custom:gruvbox-material",
   "editorMode": "normal",
-  "autoScrollEnabled": true,
-  "model": "opus"
+  "autoScrollEnabled": true
 }
