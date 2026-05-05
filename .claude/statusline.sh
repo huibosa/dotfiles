@@ -47,8 +47,9 @@ case "$model_id" in
     currency='$'; p_in=3;  p_out=15;  p_cr=0.30; p_cw=3.75 ;;
   glm-5.1*)
     currency='¥'
-    # Tiered by input tokens: <=32k uses lower rates
-    if [[ $curr_input -le 32000 ]]; then
+    # Tiered by total input length (input + cache_read + cache_write)
+    total_input=$((curr_input + cache_read + cache_write))
+    if [[ $total_input -le 32000 ]]; then
       p_in=6;  p_out=24; p_cr=1.3; p_cw=0
     else
       p_in=8;  p_out=28; p_cr=2;   p_cw=0
