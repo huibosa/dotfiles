@@ -107,3 +107,6 @@
 !.scripts/tmux/status-right-prompt.sh
 !.claude/statusline.sh
 .config/ccstatusline/settings.json
+__pycache__
+.claude/skills/playwright-cli/.playwright-cli/
+.claude/skills/playwright-cli/.playwright/
