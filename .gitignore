@@ -110,3 +110,5 @@
 __pycache__
 .claude/skills/playwright-cli/.playwright-cli/
 .claude/skills/playwright-cli/.playwright/
+!.agents/
+!.agents/.skill-lock.json
