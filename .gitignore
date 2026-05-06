@@ -108,3 +108,5 @@
 .config/ccstatusline/settings.json
 __pycache__
 # .agents managed by bunx skills
+.agent/
+.agents
