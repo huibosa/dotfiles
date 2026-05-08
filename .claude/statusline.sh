@@ -71,36 +71,57 @@ else
 fi
 
 # ---- Cumulative tracking (state file per session) ----
-# State layout: <prev_total_out> <cum_in> <cum_out> <cum_cache> <cum_cost>
+# State layout: <prev_total_out> <cum_in> <cum_out> <cum_cache> <cum_cost> <cached_ctx> <cached_pct_x100> <cached_cache_read> <cached_curr_in> <cached_curr_out>
 state_file="/tmp/claude-sl-${session_id}"
 prev_total_out=0
 cumulative_in=0
 cumulative_out=0
 cumulative_cache=0
 cumulative_cost="0.000000"
+cached_ctx=0
+cached_pct_x100=0
+cached_cache_read=0
+cached_curr_in=0
+cached_curr_out=0
 
 if [[ -f "$state_file" ]]; then
-  # Reject state files that don't match the 5-field layout (e.g. older 3-field format)
   read -ra fields < "$state_file" 2>/dev/null
-  if [[ ${#fields[@]} -eq 5 ]]; then
+  if [[ ${#fields[@]} -ge 5 ]]; then
     prev_total_out=${fields[0]}
     cumulative_in=${fields[1]}
     cumulative_out=${fields[2]}
     cumulative_cache=${fields[3]}
     cumulative_cost=${fields[4]}
   fi
+  if [[ ${#fields[@]} -ge 8 ]]; then
+    cached_ctx=${fields[5]}
+    cached_pct_x100=${fields[6]}
+    cached_cache_read=${fields[7]}
+  fi
+  if [[ ${#fields[@]} -ge 10 ]]; then
+    cached_curr_in=${fields[8]}
+    cached_curr_out=${fields[9]}
+  fi
 fi
 
-if [[ $total_out -gt $prev_total_out ]]; then
+if [[ $total_out -gt $prev_total_out ]] && [[ $curr_input -gt 0 || $curr_output -gt 0 || $cache_read -gt 0 || $cache_write -gt 0 ]]; then
   cumulative_in=$((cumulative_in + curr_input))
   cumulative_out=$((cumulative_out + curr_output))
   cumulative_cache=$((cumulative_cache + cache_read))
   cumulative_cost=$(awk -v a="$cumulative_cost" -v b="$last_cost" \
     'BEGIN{printf "%.6f", a+b}')
 
-  printf '%s %s %s %s %s\n' \
+  cached_ctx=$ctx_tokens
+  cached_pct_x100=$(awk -v p="$used_pct" 'BEGIN{printf "%d", p * 100 + 0.5}')
+  cached_cache_read=$cache_read
+  cached_curr_in=$curr_input
+  cached_curr_out=$curr_output
+
+  printf '%s %s %s %s %s %s %s %s %s %s\n' \
     "$total_out" "$cumulative_in" "$cumulative_out" \
-    "$cumulative_cache" "$cumulative_cost" > "$state_file"
+    "$cumulative_cache" "$cumulative_cost" \
+    "$cached_ctx" "$cached_pct_x100" "$cached_cache_read" \
+    "$cached_curr_in" "$cached_curr_out" > "$state_file"
 fi
 
 # ---- Model:effort segment ----
@@ -116,13 +137,33 @@ ctx_tokens=$(echo "$input" | jq -r '
 
 ctx_fmt=$(fmt_tok "$ctx_tokens")
 ctx_pct=$(awk -v p="$used_pct" 'BEGIN{printf "%.1f%%", p}')
+
+if [[ $ctx_tokens -eq 0 ]] && [[ $cached_ctx -gt 0 ]]; then
+  ctx_fmt=$(fmt_tok "$cached_ctx")
+  ctx_pct=$(awk -v p="$cached_pct_x100" 'BEGIN{printf "%.1f%%", p/100}')
+fi
+
 ctx_seg="${ctx_fmt} (${ctx_pct})"
 
 # ---- Metrics segments ----
 in_fmt=$(fmt_tok "$cumulative_in")
 out_fmt=$(fmt_tok "$cumulative_out")
+in_last_fmt=$(fmt_tok "$curr_input")
+out_last_fmt=$(fmt_tok "$curr_output")
+
+if [[ $curr_input -eq 0 ]] && [[ $cached_curr_in -gt 0 ]]; then
+  in_last_fmt=$(fmt_tok "$cached_curr_in")
+fi
+if [[ $curr_output -eq 0 ]] && [[ $cached_curr_out -gt 0 ]]; then
+  out_last_fmt=$(fmt_tok "$cached_curr_out")
+fi
+
 cache_cum_fmt=$(fmt_tok "$cumulative_cache")
 cache_last_fmt=$(fmt_tok "$cache_read")
+
+if [[ $cache_read -eq 0 ]] && [[ $cached_cache_read -gt 0 ]]; then
+  cache_last_fmt=$(fmt_tok "$cached_cache_read")
+fi
 
 if [[ $warn -eq 1 ]]; then
   cost_fmt="[! unknown: ${model_id}]"
@@ -130,8 +171,9 @@ else
   cost_fmt="${currency}$(awk -v c="$cumulative_cost" 'BEGIN{printf "%.2f", c}')"
 fi
 
-io_seg="in:${in_fmt} out:${out_fmt}"
+sep=$'\033[30m•\033[0m'
+
+io_seg="in:${in_fmt} (+${in_last_fmt}) ${sep} out:${out_fmt} (+${out_last_fmt})"
 cache_seg="cache:${cache_cum_fmt} (+${cache_last_fmt})"
 
-sep=$'\033[30m•\033[0m'
 printf "%s %s %s %s %s %s %s %s %s" "$model_seg" "$sep" "$ctx_seg" "$sep" "$io_seg" "$sep" "$cache_seg" "$sep" "$cost_fmt"
