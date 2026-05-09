@@ -110,3 +110,4 @@ __pycache__
 # .agents managed by bunx skills
 .agent/
 .agents
+!.claude/subagent_statusline.sh
