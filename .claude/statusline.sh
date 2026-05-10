@@ -130,14 +130,7 @@ write_state() {
   printf '%s\n' "$content" > "$file"
 }
 
-case "$model_id" in
-  custom-model-a1*) display="Opus" ;;
-  custom-model-a2*) display="Sonnet" ;;
-  glm-5.1*)         display="GLM-5.1" ;;
-  deepseek-v4-pro*) display="DeepSeek-v4-pro" ;;
-  deepseek-v4-flash*) display="deepseek-v4-flash" ;;
-  *) display="$model_id" ;;
-esac
+display="$model_id"
 
 warn=0
 currency=""

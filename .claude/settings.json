@@ -41,18 +41,13 @@
     "command": "bash ~/.claude/statusline.sh",
     "refreshInterval": 10
   },
-  "subagentStatusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/subagent_statusline.sh"
-  },
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
-    "exa@claude-plugins-official": true,
     "context7@claude-plugins-official": true
   },
   "feedbackSurveyRate": 0,
   "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
+  "effortLevel": "max",
   "awaySummaryEnabled": true,
   "autoUpdatesChannel": "latest",
   "showThinkingSummaries": true,
