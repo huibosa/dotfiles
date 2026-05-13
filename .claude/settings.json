@@ -32,7 +32,6 @@
       "Read(./secrets/**)"
     ]
   },
-  "model": "sonnet",
   "enableAllProjectMcpServers": false,
   "disableAllHooks": false,
   "defaultShell": "bash",
@@ -47,12 +46,11 @@
   },
   "feedbackSurveyRate": 0,
   "alwaysThinkingEnabled": true,
-  "effortLevel": "max",
   "awaySummaryEnabled": true,
   "autoUpdatesChannel": "latest",
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
-  "theme": "custom:gruvbox-material",
+  "theme": "auto",
   "editorMode": "normal",
   "autoScrollEnabled": true
 }
