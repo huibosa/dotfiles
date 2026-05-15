@@ -282,13 +282,14 @@ if [[ $ctx_tokens -eq 0 ]] && [[ $state_last_ctx -gt 0 ]]; then
   ctx_fmt=$(fmt_tok "$state_last_ctx")
   ctx_pct=$(awk -v p="$state_last_pct" 'BEGIN{printf "%.1f%%", p}')
 fi
-ctx_seg="${ctx_fmt} (${ctx_pct})"
+ctx_seg="${ctx_fmt}(${ctx_pct})"
 
 in_fmt=$(fmt_tok "$cumulative_in")
 out_fmt=$(fmt_tok "$cumulative_out")
 in_last_value=$curr_input
 out_last_value=$curr_output
-cache_last_value=$cache_read
+cache_read_last_value=$cache_read
+cache_write_last_value=$cache_write
 
 if [[ $in_last_value -eq 0 ]] && [[ $state_last_input -gt 0 ]]; then
   in_last_value=$state_last_input
@@ -296,14 +297,19 @@ fi
 if [[ $out_last_value -eq 0 ]] && [[ $state_last_output -gt 0 ]]; then
   out_last_value=$state_last_output
 fi
-if [[ $cache_last_value -eq 0 ]] && [[ $state_last_cache_read -gt 0 ]]; then
-  cache_last_value=$state_last_cache_read
+if [[ $cache_read_last_value -eq 0 ]] && [[ $state_last_cache_read -gt 0 ]]; then
+  cache_read_last_value=$state_last_cache_read
+fi
+if [[ $cache_write_last_value -eq 0 ]] && [[ $state_last_cache_write -gt 0 ]]; then
+  cache_write_last_value=$state_last_cache_write
 fi
 
 in_last_fmt=$(fmt_tok "$in_last_value")
 out_last_fmt=$(fmt_tok "$out_last_value")
-cache_cum_fmt=$(fmt_tok "$cumulative_cache")
-cache_last_fmt=$(fmt_tok "$cache_last_value")
+cache_read_cum_fmt=$(fmt_tok "$cumulative_cache")
+cache_read_last_fmt=$(fmt_tok "$cache_read_last_value")
+cache_write_cum_fmt=$(fmt_tok "$cumulative_cache_write")
+cache_write_last_fmt=$(fmt_tok "$cache_write_last_value")
 
 if [[ $warn -eq 1 ]]; then
   cost_fmt="[! unknown: ${model_id}]"
@@ -312,7 +318,6 @@ else
 fi
 
 sep=$'\033[30m•\033[0m'
-io_seg="in:${in_fmt} (+${in_last_fmt}) ${sep} out:${out_fmt} (+${out_last_fmt})"
-cache_seg="cache:${cache_cum_fmt} (+${cache_last_fmt})"
+tokens_seg="↑${in_fmt}(+${in_last_fmt}) ↓${out_fmt}(+${out_last_fmt}) R${cache_read_cum_fmt}(+${cache_read_last_fmt}) W${cache_write_cum_fmt}(+${cache_write_last_fmt})"
 
-printf "%s %s %s %s %s %s %s %s %s" "$model_seg" "$sep" "$ctx_seg" "$sep" "$io_seg" "$sep" "$cache_seg" "$sep" "$cost_fmt"
+printf "%s %s %s %s %s %s %s" "$model_seg" "$sep" "$ctx_seg" "$sep" "$tokens_seg" "$sep" "$cost_fmt"
