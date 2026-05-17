@@ -77,17 +77,17 @@ case "$model_id" in
   custom-model-a2*)
     currency='$'; p_in=3;  p_out=15;  p_cr=0.30; p_cw=3.75 ;;
   glm-5.1*)
-    currency='¥'
+    currency='$'
     total_current_input=$((curr_input + cache_read + cache_write))
     if [[ $total_current_input -le 32000 ]]; then
-      p_in=6;  p_out=24; p_cr=1.3; p_cw=0
+      p_in=0.83; p_out=3.31; p_cr=0.18; p_cw=0
     else
-      p_in=8;  p_out=28; p_cr=2;   p_cw=0
+      p_in=1.10; p_out=3.86; p_cr=0.28; p_cw=0
     fi ;;
   deepseek-v4-pro*)
-    currency='¥'; p_in=12; p_out=24; p_cr=1;    p_cw=0 ;;
+    currency='$'; p_in=1.66; p_out=3.31; p_cr=0.14; p_cw=0 ;;
   deepseek-v4-flash*)
-    currency='¥'; p_in=1; p_out=4; p_cr=0; p_cw=0 ;;
+    currency='$'; p_in=0.14; p_out=0.55; p_cr=0; p_cw=0 ;;
   *)
     warn=1 ;;
 esac
