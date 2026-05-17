@@ -26,6 +26,11 @@ cache_read="${_f[6]}"
 cache_write="${_f[7]}"
 ctx_tokens=$((curr_input + cache_read + cache_write))
 
+# Hook input puts the routed/aliased name in .model.id (e.g.
+# "custom-model-a1[1m]"); the JSONL transcript records the bare base name
+# (e.g. "custom-model-a1"). Strip the trailing [...] for JSONL matching.
+model_base="${model_id%%\[*}"
+
 state_file="/tmp/claude-sl-${session_id}.json"
 legacy_state_file="/tmp/claude-sl-${session_id}"
 claude_projects_dir="${HOME}/.claude/projects"
@@ -98,14 +103,22 @@ if ! read_state "$state_file"; then
   rm -f "$legacy_state_file"
 fi
 
-# Cumulative usage from JSONL (single Python invocation)
-usage_json=$(python3 - "$session_id" "$claude_projects_dir" <<'PY'
+# Cumulative usage from JSONL (single Python invocation).
+# Each turn writes one JSONL line per content block (thinking, tool_use, text)
+# and every line carries the *same* message.usage object from one API
+# response. Deduplicate by message.id so each API call is counted once;
+# without this the summer over-counts by ~2-3x. Also filter by current model
+# (multi-model sessions otherwise get foreign-model tokens re-priced at the
+# current model's rates) and skip isSidechain as defence.
+usage_json=$(python3 - "$session_id" "$claude_projects_dir" "$model_base" <<'PY'
 import json, sys
 from pathlib import Path
 
 session_id = sys.argv[1]
 projects_dir = Path(sys.argv[2])
+model_base = sys.argv[3] if len(sys.argv) > 3 else ""
 result = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0, "messages": 0, "found": False}
+seen_ids = set()
 
 if projects_dir.exists():
     matches = sorted(projects_dir.glob(f"**/{session_id}.jsonl"), key=lambda p: len(p.parts))
@@ -123,7 +136,19 @@ if projects_dir.exists():
                     continue
                 if obj.get("type") != "assistant":
                     continue
-                usage = obj.get("message", {}).get("usage")
+                if obj.get("isSidechain") or obj.get("sidechain"):
+                    continue
+                msg = obj.get("message")
+                if not isinstance(msg, dict):
+                    continue
+                if model_base and msg.get("model") != model_base:
+                    continue
+                msg_id = msg.get("id")
+                if msg_id is not None:
+                    if msg_id in seen_ids:
+                        continue
+                    seen_ids.add(msg_id)
+                usage = msg.get("usage")
                 if not isinstance(usage, dict):
                     continue
                 result["messages"] += 1
@@ -144,25 +169,14 @@ cumulative_out="${_u[2]}"
 cumulative_cache="${_u[3]}"
 cumulative_cache_write="${_u[4]}"
 
-# Stats panel — one call to extract, one to parse all fields (was 5 separate calls)
-stats_cost=""
-stats_panel_json=$(printf '%s' "$input" | jq -c '.cost.usage_by_model[]? | select(.model_id == $model_id)' --arg model_id "$model_id" 2>/dev/null || true)
-if [[ -n "$stats_panel_json" ]]; then
-  mapfile -t _sp < <(printf '%s' "$stats_panel_json" | jq -r '
-    .input_tokens // 0,
-    .output_tokens // 0,
-    .cache_read_input_tokens // 0,
-    .cache_creation_input_tokens // 0,
-    (.total_cost_usd // .cost_usd // "")
-  ')
-  cumulative_in="${_sp[0]}"
-  cumulative_out="${_sp[1]}"
-  cumulative_cache="${_sp[2]}"
-  cumulative_cache_write="${_sp[3]}"
-  stats_cost="${_sp[4]}"
-fi
+# Authoritative cumulative cost from hook input — same number /status shows.
+# (Earlier versions of this script tried .cost.usage_by_model, but that field
+# does not exist in Claude Code 2.1.x; .cost.total_cost_usd is what's there.)
+# When this is set, the awk block below uses it verbatim instead of computing
+# cost from per-token math.
+stats_cost=$(printf '%s' "$input" | jq -r '.cost.total_cost_usd // ""' 2>/dev/null || true)
 
-if [[ "$usage_found" != "true" && -z "$stats_panel_json" ]]; then
+if [[ "$usage_found" != "true" ]]; then
   cumulative_in=0; cumulative_out=0; cumulative_cache=0; cumulative_cache_write=0
 fi
 
@@ -192,15 +206,20 @@ BEGIN {
     out_l = (co+0 == 0 && st_out+0 > 0) ? st_out+0 : co+0
     cr_l  = (cr+0 == 0 && st_cr+0  > 0) ? st_cr+0  : cr+0
     cw_l  = (cw+0 == 0 && st_cw+0  > 0) ? st_cw+0  : cw+0
+    # Cumulative cost (cc) prefers hook-input authoritative value (sc); falls
+    # back to per-token math only when sc is absent and pricing is known.
+    # Last-turn cost (lc) is per-token math when pricing is known; zero for
+    # unknown models since the hook input has no per-turn cost.
     if (warn+0) {
-        lc = "0.000000"; cc = "0.000000"; cc2 = "0.00"
+        lc = "0.000000"
+        cc = (sc != "" && sc != "null") ? sprintf("%.6f", sc+0) : "0.000000"
     } else {
         lc = sprintf("%.6f", (ci*pi + co*po + cr*pcr + cw*pcw) / 1000000)
         cc = (sc != "" && sc != "null") \
             ? sprintf("%.6f", sc+0) \
             : sprintf("%.6f", (cum_in*pi + cum_out*po + cum_cr*pcr + cum_cw*pcw) / 1000000)
-        cc2 = sprintf("%.2f", cc+0)
     }
+    cc2 = sprintf("%.2f", cc+0)
     printf "%s\n%.1f%%\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
         fmt(ctx_v), pct_v, lc, cc,
         fmt(cum_in+0), fmt(cum_out+0),
@@ -231,7 +250,11 @@ printf '{"last_cost":"%s","last_ctx_tokens":%s,"last_used_pct":%s,"last_input":%
 ctx_seg="${ctx_fmt}(${ctx_pct})"
 
 if [[ $warn -eq 1 ]]; then
-  cost_fmt="[! unknown: ${model_id}]"
+  if [[ -n "$stats_cost" && "$stats_cost" != "null" ]]; then
+    cost_fmt="[! unknown: ${model_id}] \$${cost_display}"
+  else
+    cost_fmt="[! unknown: ${model_id}]"
+  fi
 else
   cost_fmt="${currency}${cost_display}"
 fi
