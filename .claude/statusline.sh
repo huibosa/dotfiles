@@ -88,6 +88,8 @@ case "$model_id" in
     currency='$'; p_in=1.66; p_out=3.31; p_cr=0.14; p_cw=0 ;;
   deepseek-v4-flash*)
     currency='$'; p_in=0.14; p_out=0.55; p_cr=0; p_cw=0 ;;
+  kimi-k2.6*)
+    currency='$'; p_in=0.90; p_out=3.72; p_cr=0.15; p_cw=0 ;;
   *)
     warn=1 ;;
 esac
