@@ -85,5 +85,5 @@ _tmux-all-panes-bg() {
 }
 
 clip() {
-    tmux load-buffer -w "${1:--}" && tmux save-buffer -
+    tmux load-buffer -w "${1:--}"
 }
