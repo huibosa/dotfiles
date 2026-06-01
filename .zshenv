@@ -87,7 +87,7 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 # fzf configuration (faster with fd)
-export FZF_DEFAULT_COMMAND="fd --type f --hidden \
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --no-ignore-vcs \
   --exclude .git/ --exclude .venv/ --exclude venv/ \
   --exclude node_modules/ --exclude .cache/ \
   --exclude __pycache__/ --exclude .pytest_cache/ \
@@ -97,7 +97,7 @@ export FZF_DEFAULT_COMMAND="fd --type f --hidden \
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-export FZF_ALT_C_COMMAND="fd --type d --hidden \
+export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --no-ignore-vcs \
   --exclude .git/ --exclude .venv/ --exclude venv/ \
   --exclude node_modules/ --exclude .cache/"
 
