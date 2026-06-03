@@ -255,7 +255,7 @@ cost_display="${_fmt[12]}"
 printf '{"last_cost":"%s","last_ctx_tokens":%s,"last_used_pct":%s,"last_input":%s,"last_output":%s,"last_cache_read":%s,"last_cache_write":%s,"last_cwd":"%s"}\n' \
     "$last_cost" "$ctx_tokens" "$used_pct" "$curr_input" "$curr_output" "$cache_read" "$cache_write" "$cwd" > "$state_file"
 
-[[ -n "$effort" ]] && model_seg="${display}:${effort}" || model_seg="${display}"
+[[ -n "$effort" ]] && model_seg="${display}"$'\033[30m:\033[0m'"${effort}" || model_seg="${display}"
 ctx_seg="${ctx_fmt}(${ctx_pct})"
 
 if [[ $warn -eq 1 ]]; then
