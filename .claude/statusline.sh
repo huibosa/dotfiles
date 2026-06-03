@@ -14,7 +14,8 @@ mapfile -t _f < <(printf '%s' "$input" | jq -r '
   (.context_window.current_usage.input_tokens // 0),
   (.context_window.current_usage.output_tokens // 0),
   (.context_window.current_usage.cache_read_input_tokens // 0),
-  (.context_window.current_usage.cache_creation_input_tokens // 0)
+  (.context_window.current_usage.cache_creation_input_tokens // 0),
+  (.cwd // "")
 ')
 model_id="${_f[0]}"
 session_id="${_f[1]}"
@@ -24,6 +25,7 @@ curr_input="${_f[4]}"
 curr_output="${_f[5]}"
 cache_read="${_f[6]}"
 cache_write="${_f[7]}"
+cwd="${_f[8]}"
 ctx_tokens=$((curr_input + cache_read + cache_write))
 
 # Hook input puts the routed/aliased name in .model.id (e.g.
@@ -46,10 +48,11 @@ read_state() {
     (.last_input // 0),
     (.last_output // 0),
     (.last_cache_read // 0),
-    (.last_cache_write // 0)
+    (.last_cache_write // 0),
+    (.last_cwd // "")
   ' "$file" 2>/dev/null) || return 1
   mapfile -t _s <<< "$raw"
-  [[ ${#_s[@]} -eq 7 ]] || return 1
+  [[ ${#_s[@]} -eq 8 ]] || return 1
   state_last_cost="${_s[0]}"
   state_last_ctx="${_s[1]}"
   state_last_pct="${_s[2]}"
@@ -57,6 +60,7 @@ read_state() {
   state_last_output="${_s[4]}"
   state_last_cache_read="${_s[5]}"
   state_last_cache_write="${_s[6]}"
+  state_last_cwd="${_s[7]}"
 }
 
 write_state() {
@@ -101,9 +105,12 @@ state_last_input=0
 state_last_output=0
 state_last_cache_read=0
 state_last_cache_write=0
+state_last_cwd=""
 if ! read_state "$state_file"; then
   rm -f "$legacy_state_file"
 fi
+# cwd is only populated during active tool calls; fall back to last known value.
+[[ -z "$cwd" ]] && cwd="$state_last_cwd"
 
 # Cumulative usage from JSONL (single Python invocation).
 # Each turn writes one JSONL line per content block (thinking, tool_use, text)
@@ -245,8 +252,8 @@ cache_write_last_fmt="${_fmt[11]}"
 cost_display="${_fmt[12]}"
 
 # Write state — pure printf, no jq spawn (was jq -n)
-printf '{"last_cost":"%s","last_ctx_tokens":%s,"last_used_pct":%s,"last_input":%s,"last_output":%s,"last_cache_read":%s,"last_cache_write":%s}\n' \
-    "$last_cost" "$ctx_tokens" "$used_pct" "$curr_input" "$curr_output" "$cache_read" "$cache_write" > "$state_file"
+printf '{"last_cost":"%s","last_ctx_tokens":%s,"last_used_pct":%s,"last_input":%s,"last_output":%s,"last_cache_read":%s,"last_cache_write":%s,"last_cwd":"%s"}\n' \
+    "$last_cost" "$ctx_tokens" "$used_pct" "$curr_input" "$curr_output" "$cache_read" "$cache_write" "$cwd" > "$state_file"
 
 [[ -n "$effort" ]] && model_seg="${display}:${effort}" || model_seg="${display}"
 ctx_seg="${ctx_fmt}(${ctx_pct})"
@@ -262,6 +269,19 @@ else
 fi
 
 sep=$'\033[30m•\033[0m'
-tokens_seg="↑${in_fmt}(+${in_last_fmt}) ↓${out_fmt}(+${out_last_fmt}) R${cache_read_cum_fmt}(+${cache_read_last_fmt}) W${cache_write_cum_fmt}(+${cache_write_last_fmt})"
+sl=$'\033[30m/\033[0m'
+io_seg="↑${in_fmt}(+${in_last_fmt})${sl}↓${out_fmt}(+${out_last_fmt})"
+cache_seg="R${cache_read_cum_fmt}(+${cache_read_last_fmt})${sl}W${cache_write_cum_fmt}(+${cache_write_last_fmt})"
 
-printf "%s %s %s %s %s %s %s" "$model_seg" "$sep" "$ctx_seg" "$sep" "$tokens_seg" "$sep" "$cost_fmt"
+# Git line-change stats: lines added/removed vs HEAD in the session's cwd.
+diff_seg=""
+if [[ -n "$cwd" ]] && git -C "$cwd" rev-parse --git-dir &>/dev/null; then
+  diff_stats=$(git -C "$cwd" diff HEAD --numstat 2>/dev/null \
+    | awk '$1 ~ /^[0-9]+$/ {a+=$1; d+=$2} END {if(a+d>0) printf "+%d\033[30m/\033[0m-%d", a, d}')
+  [[ -n "$diff_stats" ]] && diff_seg="$diff_stats"
+fi
+
+out_line="$model_seg $sep $ctx_seg $sep $io_seg $sep $cache_seg"
+[[ -n "$diff_seg" ]] && out_line="$out_line $sep $diff_seg"
+out_line="$out_line $sep $cost_fmt"
+printf "%s" "$out_line"
