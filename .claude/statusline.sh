@@ -78,6 +78,10 @@ p_in=0; p_out=0; p_cr=0; p_cw=0
 case "$model_id" in
   custom-model-a1*)
     currency='$'; p_in=5;  p_out=25;  p_cr=0.50; p_cw=6.25 ;;
+  custom-model-a4*)
+    currency='$'; p_in=5;  p_out=25;  p_cr=0.50; p_cw=6.25 ;;
+  custom-model-a3*)
+    currency='$'; p_in=5;  p_out=25;  p_cr=0.50; p_cw=6.25 ;;
   custom-model-a2*)
     currency='$'; p_in=3;  p_out=15;  p_cr=0.30; p_cw=3.75 ;;
   glm-5.1*)
