@@ -70,6 +70,12 @@ write_state() {
 }
 
 display="$model_id"
+# Map custom model IDs to canonical Anthropic names (display only)
+case "$model_base" in
+  custom-model-a2) display="claude-sonnet-4-6" ;;
+  custom-model-a4) display="claude-opus-4-8"   ;;
+  custom-model-a6) display="claude-fable-5"    ;;
+esac
 
 warn=0
 currency=""
@@ -84,6 +90,8 @@ case "$model_id" in
     currency='$'; p_in=5;  p_out=25;  p_cr=0.50; p_cw=6.25 ;;
   custom-model-a2*)
     currency='$'; p_in=3;  p_out=15;  p_cr=0.30; p_cw=3.75 ;;
+  custom-model-a6*)
+    currency='$'; p_in=10; p_out=50;  p_cr=1.00; p_cw=12.50 ;;
   glm-5.1*)
     currency='$'
     total_current_input=$((curr_input + cache_read + cache_write))
