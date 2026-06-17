@@ -100,6 +100,8 @@ case "$model_id" in
     else
       p_in=1.10; p_out=3.86; p_cr=0.28; p_cw=0
     fi ;;
+  glm-5.2*)
+    currency='$'; p_in=1.18; p_out=4.14; p_cr=0.30; p_cw=0 ;;
   deepseek-v4-pro*)
     currency='$'; p_in=1.66; p_out=3.31; p_cr=0.14; p_cw=0 ;;
   deepseek-v4-flash*)
