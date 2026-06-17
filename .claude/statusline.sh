@@ -291,7 +291,7 @@ cache_seg="R${cache_read_cum_fmt}(+${cache_read_last_fmt})${sl}W${cache_write_cu
 diff_seg=""
 if [[ -n "$cwd" ]] && git -C "$cwd" rev-parse --git-dir &>/dev/null; then
   diff_stats=$(git -C "$cwd" diff HEAD --numstat 2>/dev/null \
-    | awk '$1 ~ /^[0-9]+$/ {a+=$1; d+=$2} END {if(a+d>0) printf "+%d\033[30m/\033[0m-%d", a, d}')
+    | awk '$1 ~ /^[0-9]+$/ {a+=$1; d+=$2} END {if(a+d>0) printf "\033[32m+%d\033[30m/\033[31m-%d\033[0m", a, d}')
   [[ -n "$diff_stats" ]] && diff_seg="$diff_stats"
 fi
 
