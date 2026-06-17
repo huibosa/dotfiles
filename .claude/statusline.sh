@@ -270,7 +270,7 @@ printf '{"last_cost":"%s","last_ctx_tokens":%s,"last_used_pct":%s,"last_input":%
     "$last_cost" "$ctx_tokens" "$used_pct" "$curr_input" "$curr_output" "$cache_read" "$cache_write" "$cwd" > "$state_file"
 
 [[ -n "$effort" ]] && model_seg="${display}"$'\033[30m:\033[0m'"${effort}" || model_seg="${display}"
-ctx_seg="${ctx_fmt}(${ctx_pct})"
+ctx_seg=$'\033[33m'"${ctx_fmt}(${ctx_pct})"$'\033[0m'
 
 if [[ $warn -eq 1 ]]; then
   if [[ -n "$stats_cost" && "$stats_cost" != "null" ]]; then
