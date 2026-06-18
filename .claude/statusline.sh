@@ -272,6 +272,11 @@ printf '{"last_cost":"%s","last_ctx_tokens":%s,"last_used_pct":%s,"last_input":%
 [[ -n "$effort" ]] && model_seg="${display}"$'\033[30m:\033[0m'"${effort}" || model_seg="${display}"
 ctx_seg="${ctx_fmt}(${ctx_pct})"
 
+sep=$'\033[30m•\033[0m'
+sl=$'\033[30m/\033[0m'
+lbl=$'\033[33m'
+lblr=$'\033[0m'
+
 if [[ $warn -eq 1 ]]; then
   if [[ -n "$stats_cost" && "$stats_cost" != "null" ]]; then
     cost_fmt="[! unknown: ${model_id}] \$${cost_display}"
@@ -279,13 +284,8 @@ if [[ $warn -eq 1 ]]; then
     cost_fmt="[! unknown: ${model_id}]"
   fi
 else
-  cost_fmt="${currency}${cost_display}"
+  cost_fmt="${lbl}${currency}${lblr}${cost_display}"
 fi
-
-sep=$'\033[30m•\033[0m'
-sl=$'\033[30m/\033[0m'
-lbl=$'\033[33m'
-lblr=$'\033[0m'
 io_seg="${lbl}↑${lblr}${in_fmt}(+${in_last_fmt})${sl}${lbl}↓${lblr}${out_fmt}(+${out_last_fmt})"
 cache_seg="${lbl}R${lblr}${cache_read_cum_fmt}(+${cache_read_last_fmt})${sl}${lbl}W${lblr}${cache_write_cum_fmt}(+${cache_write_last_fmt})"
 
