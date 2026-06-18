@@ -274,7 +274,7 @@ ctx_seg="${ctx_fmt}(${ctx_pct})"
 
 sep=$'\033[30m•\033[0m'
 sl=$'\033[30m/\033[0m'
-lbl=$'\033[33m'
+lbl=$'\033[34m'
 lblr=$'\033[0m'
 
 if [[ $warn -eq 1 ]]; then
