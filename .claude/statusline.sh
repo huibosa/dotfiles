@@ -284,8 +284,10 @@ fi
 
 sep=$'\033[30m•\033[0m'
 sl=$'\033[30m/\033[0m'
-io_seg="↑${in_fmt}(+${in_last_fmt})${sl}↓${out_fmt}(+${out_last_fmt})"
-cache_seg="R${cache_read_cum_fmt}(+${cache_read_last_fmt})${sl}W${cache_write_cum_fmt}(+${cache_write_last_fmt})"
+lbl=$'\033[2;34m'
+lblr=$'\033[0m'
+io_seg="${lbl}↑${lblr}${in_fmt}(+${in_last_fmt})${sl}${lbl}↓${lblr}${out_fmt}(+${out_last_fmt})"
+cache_seg="${lbl}R${lblr}${cache_read_cum_fmt}(+${cache_read_last_fmt})${sl}${lbl}W${lblr}${cache_write_cum_fmt}(+${cache_write_last_fmt})"
 
 # Git line-change stats: lines added/removed vs HEAD in the session's cwd.
 diff_seg=""
