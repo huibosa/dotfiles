@@ -289,12 +289,43 @@ fi
 io_seg="${lbl}↑${lblr}${in_fmt}(+${in_last_fmt})${sl}${lbl}↓${lblr}${out_fmt}(+${out_last_fmt})"
 cache_seg="${lbl}R${lblr}${cache_read_cum_fmt}(+${cache_read_last_fmt})${sl}${lbl}W${lblr}${cache_write_cum_fmt}(+${cache_write_last_fmt})"
 
-# Git line-change stats: lines added/removed vs HEAD in the session's cwd.
+# Git branch-changes stats: committed lines changed between HEAD and the merge-base
+# with the repository's default remote branch — mimics Codex's branch-changes item.
+# Uncommitted working-tree edits are intentionally excluded (only moved HEAD counts).
 diff_seg=""
 if [[ -n "$cwd" ]] && git -C "$cwd" rev-parse --git-dir &>/dev/null; then
-  diff_stats=$(git -C "$cwd" diff HEAD --numstat 2>/dev/null \
-    | awk '$1 ~ /^[0-9]+$/ {a+=$1; d+=$2} END {if(a+d>0) printf "\033[32m+%d\033[30m/\033[31m-%d\033[0m", a, d}')
-  [[ -n "$diff_stats" ]] && diff_seg="$diff_stats"
+  # 1. Find the remote default branch ref (origin preferred, then other remotes).
+  #    Prefer the remote-tracking symbolic ref so stale local branches don't skew it.
+  remote_head=""
+  while IFS= read -r remote; do
+    ref=$(git -C "$cwd" symbolic-ref --quiet "refs/remotes/${remote}/HEAD" 2>/dev/null) && {
+      remote_head="$ref"; break
+    }
+    # Fallback: ask the remote directly (slower, but handles missing symbolic-ref)
+    branch=$(git -C "$cwd" remote show "$remote" 2>/dev/null \
+               | awk '/HEAD branch:/ {print $NF}') && [[ -n "$branch" ]] && {
+      remote_head="refs/remotes/${remote}/${branch}"; break
+    }
+  done < <({ echo origin; git -C "$cwd" remote 2>/dev/null | grep -v '^origin$'; })
+
+  # 2. Local fallback: first of main / master that exists
+  if [[ -z "$remote_head" ]]; then
+    for branch in main master; do
+      git -C "$cwd" rev-parse --verify "refs/heads/$branch" &>/dev/null && {
+        remote_head="refs/heads/$branch"; break
+      }
+    done
+  fi
+
+  # 3. Compute merge-base and diff committed range HEAD..merge-base
+  if [[ -n "$remote_head" ]]; then
+    merge_base=$(git -C "$cwd" merge-base HEAD "$remote_head" 2>/dev/null)
+    if [[ -n "$merge_base" ]]; then
+      diff_stats=$(git -C "$cwd" diff --numstat "${merge_base}..HEAD" 2>/dev/null \
+        | awk '$1 ~ /^[0-9]+$/ {a+=$1; d+=$2} END {if(a+d>0) printf "\033[32m+%d\033[30m/\033[31m-%d\033[0m", a, d}')
+      [[ -n "$diff_stats" ]] && diff_seg="$diff_stats"
+    fi
+  fi
 fi
 
 out_line="$model_seg $sep $ctx_seg $sep $io_seg $sep $cache_seg"
