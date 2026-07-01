@@ -72,9 +72,9 @@ write_state() {
 display="$model_id"
 # Map custom model IDs to canonical Anthropic names (display only)
 case "$model_base" in
-  custom-model-a2) display="claude-sonnet-4-6" ;;
-  custom-model-a4) display="claude-opus-4-8"   ;;
-  custom-model-a6) display="claude-fable-5"    ;;
+  custom-model-a2) display="Sonnet-4-6" ;;
+  custom-model-a4) display="Opus-4-8"   ;;
+  custom-model-a6) display="Fable-5"    ;;
 esac
 
 warn=0
