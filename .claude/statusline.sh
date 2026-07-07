@@ -75,6 +75,7 @@ case "$model_base" in
   custom-model-a2) display="Sonnet-4-6" ;;
   custom-model-a4) display="Opus-4-8"   ;;
   custom-model-a6) display="Fable-5"    ;;
+  glm-*)           display="GLM-${model_base#glm-}" ;;
 esac
 
 warn=0
