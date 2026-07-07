@@ -295,9 +295,12 @@ cache_seg="${lbl}R${lblr}${cache_read_cum_fmt}(+${cache_read_last_fmt})${sl}${lb
 # Uncommitted working-tree edits are intentionally excluded (only moved HEAD counts).
 diff_seg=""
 if [[ -n "$cwd" ]] && git -C "$cwd" rev-parse --git-dir &>/dev/null; then
-  # 1. Find the remote default branch ref (origin preferred, then other remotes).
+  # 1. Find the remote default branch ref.
+  #    Priority: (a) tracking remote of current branch, (b) origin, (c) other remotes.
   #    Prefer the remote-tracking symbolic ref so stale local branches don't skew it.
   remote_head=""
+  _cur_branch=$(git -C "$cwd" symbolic-ref --short HEAD 2>/dev/null)
+  _tracking_remote=$(git -C "$cwd" config "branch.${_cur_branch}.remote" 2>/dev/null)
   while IFS= read -r remote; do
     ref=$(git -C "$cwd" symbolic-ref --quiet "refs/remotes/${remote}/HEAD" 2>/dev/null) && {
       remote_head="$ref"; break
@@ -307,7 +310,11 @@ if [[ -n "$cwd" ]] && git -C "$cwd" rev-parse --git-dir &>/dev/null; then
                | awk '/HEAD branch:/ {print $NF}') && [[ -n "$branch" ]] && {
       remote_head="refs/remotes/${remote}/${branch}"; break
     }
-  done < <({ echo origin; git -C "$cwd" remote 2>/dev/null | grep -v '^origin$'; })
+  done < <({
+    [[ -n "$_tracking_remote" ]] && echo "$_tracking_remote"
+    echo origin
+    git -C "$cwd" remote 2>/dev/null | grep -vxF "${_tracking_remote:-}" | grep -v '^origin$'
+  })
 
   # 2. Local fallback: first of main / master that exists
   if [[ -z "$remote_head" ]]; then
