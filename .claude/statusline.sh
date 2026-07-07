@@ -299,8 +299,8 @@ if [[ -n "$cwd" ]] && git -C "$cwd" rev-parse --git-dir &>/dev/null; then
   #    Priority: (a) tracking remote of current branch, (b) origin, (c) other remotes.
   #    Prefer the remote-tracking symbolic ref so stale local branches don't skew it.
   remote_head=""
-  _cur_branch=$(git -C "$cwd" symbolic-ref --short HEAD 2>/dev/null)
-  _tracking_remote=$(git -C "$cwd" config "branch.${_cur_branch}.remote" 2>/dev/null)
+  _cur_branch=$(git -C "$cwd" symbolic-ref --short HEAD 2>/dev/null || true)
+  _tracking_remote=$(git -C "$cwd" config "branch.${_cur_branch}.remote" 2>/dev/null || true)
   while IFS= read -r remote; do
     ref=$(git -C "$cwd" symbolic-ref --quiet "refs/remotes/${remote}/HEAD" 2>/dev/null) && {
       remote_head="$ref"; break
@@ -327,7 +327,7 @@ if [[ -n "$cwd" ]] && git -C "$cwd" rev-parse --git-dir &>/dev/null; then
 
   # 3. Compute merge-base and diff committed range HEAD..merge-base
   if [[ -n "$remote_head" ]]; then
-    merge_base=$(git -C "$cwd" merge-base HEAD "$remote_head" 2>/dev/null)
+    merge_base=$(git -C "$cwd" merge-base HEAD "$remote_head" 2>/dev/null || true)
     if [[ -n "$merge_base" ]]; then
       diff_stats=$(git -C "$cwd" diff --numstat "${merge_base}..HEAD" 2>/dev/null \
         | awk '$1 ~ /^[0-9]+$/ {a+=$1; d+=$2} END {if(a+d>0) printf "\033[32m+%d\033[30m/\033[31m-%d\033[0m", a, d}')
