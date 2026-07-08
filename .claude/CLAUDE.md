@@ -15,6 +15,9 @@
 ### Parallel work
 - Use forks (Agent without `subagent_type`) for research that would bloat your context
 - When background tasks or subagents are running, wait for all to complete before delivering the final answer; never speculate on in-flight results
+- **Never sleep-poll** (`sleep` / `Bash(sleep …)`) to wait for a background agent or task — it blocks harness notifications and causes infinite loops
+- If you need an agent's result to continue: use `run_in_background: false` (synchronous); the result is returned directly as the tool value
+- If background is needed: stop after spawning and wait passively — the harness sends a `<task-notification>` automatically when done
 
 ### Search
 - Use the `smart-search-cli` skill only for **web / external research** (finding libraries, looking up docs, researching approaches online) — invoke it via Skill before any other web search
