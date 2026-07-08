@@ -91,7 +91,6 @@
 # Track Claude settings and themes (skills managed by bunx skills)
 !.claude/
 .claude/*
-!.claude/settings.json
 !.claude/themes/
 !.claude/themes/*
 
