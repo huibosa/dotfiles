@@ -48,11 +48,14 @@
 
 ### Skills
 - Always use `bunx skills` to manage skills (install, update, remove) unless explicitly told otherwise
+- `bunx skills update` installs NEW skills from the package, not just updates — never use `-y`; review `ls ~/.agents/skills/` after
+- `bunx skills remove -a '*'` is broken — remove the dir in `~/.agents/skills/` and its symlinks manually
 
 ### Servers
 - Start in tmux via `Bash`: `tmux new-session -d -s <name>`, then `tmux send-keys` to run the server
 - Check existing sessions first: `tmux list-sessions`
 - Name descriptively: `dev-server`, `api-server`
+- Before creating a tmux session, carefully choose the session name; never overwrite existing sessions
 
 ### Codex CLI (`codex exec`)
 - Always use `--yolo` (alias for `--dangerously-bypass-approvals-and-sandbox`): skips approval prompts and bypasses the bubblewrap sandbox — required for non-interactive use; safe because Claude Code is already externally sandboxed
