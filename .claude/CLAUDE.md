@@ -57,6 +57,12 @@
 - Name descriptively: `dev-server`, `api-server`
 - Before creating a tmux session, carefully choose the session name; never overwrite existing sessions
 
+### Background tasks & TaskOutput
+
+- `TaskOutput` fails → check session history for the launch tool result, then `Read` its output file path directly (skip for local_agent tasks — JSONL overflow; use the agent's return value instead)
+- Need result immediately → use `run_in_background: false`
+- Background tasks → wait passively for `<task-notification>`; never `sleep`-poll
+
 ### Codex CLI (`codex exec`)
 - Always use `--yolo` (alias for `--dangerously-bypass-approvals-and-sandbox`): skips approval prompts and bypasses the bubblewrap sandbox — required for non-interactive use; safe because Claude Code is already externally sandboxed
 - Always pipe input via stdin: `codex exec --yolo "<prompt>" < /path/to/file` — avoids bubblewrap sandbox filesystem restrictions and closes stdin naturally at EOF
