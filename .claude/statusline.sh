@@ -75,6 +75,7 @@ case "$model_base" in
   custom-model-a2) display="Sonnet-4-6" ;;
   custom-model-a4) display="Opus-4-8"   ;;
   custom-model-a6) display="Fable-5"    ;;
+  custom-model-a7) display="Sonnet-5"   ;;
   glm-*)           display="GLM-${model_base#glm-}" ;;
 esac
 
@@ -93,6 +94,8 @@ case "$model_id" in
     currency='$'; p_in=3;  p_out=15;  p_cr=0.30; p_cw=3.75 ;;
   custom-model-a6*)
     currency='$'; p_in=10; p_out=50;  p_cr=1.00; p_cw=12.50 ;;
+  custom-model-a7*)
+    currency='$'; p_in=3;  p_out=15;  p_cr=0.30; p_cw=3.75 ;;
   glm-5.1*)
     currency='$'
     total_current_input=$((curr_input + cache_read + cache_write))
