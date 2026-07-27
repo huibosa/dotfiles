@@ -266,8 +266,6 @@ last_cost="${_fmt[2]}"
 cumulative_cost="${_fmt[3]}"
 in_fmt="${_fmt[4]}"
 out_fmt="${_fmt[5]}"
-in_last_fmt="${_fmt[6]}"
-out_last_fmt="${_fmt[7]}"
 cache_read_cum_fmt="${_fmt[8]}"
 cost_display="${_fmt[12]}"
 cache_hit_pct="${_fmt[13]}"
@@ -293,7 +291,7 @@ if [[ $warn -eq 1 ]]; then
 else
   cost_fmt="${lbl}${currency}${lblr}${cost_display}"
 fi
-io_seg="${lbl}↑${lblr}${in_fmt}(+${in_last_fmt})${sl}${lbl}↓${lblr}${out_fmt}(+${out_last_fmt})"
+io_seg="${lbl}↑${lblr}${in_fmt}${sl}${lbl}↓${lblr}${out_fmt}"
 cache_seg="${lbl}R${lblr}${cache_read_cum_fmt}${sl}${lbl}CH${lblr}${cache_hit_pct}%"
 
 # Git branch-changes stats: committed lines changed between HEAD and the merge-base
