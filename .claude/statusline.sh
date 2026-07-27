@@ -250,13 +250,15 @@ BEGIN {
             : sprintf("%.6f", (cum_in*pi + cum_out*po + cum_cr*pcr + cum_cw*pcw) / 1000000)
     }
     cc2 = sprintf("%.2f", cc+0)
-    printf "%s\n%.1f%%\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
+    cache_total = cum_in + cum_cr + cum_cw
+    ch_pct = (cache_total > 0) ? (cum_cr / cache_total * 100) : 0
+    printf "%s\n%.1f%%\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%.1f\n",
         fmt(ctx_v), pct_v, lc, cc,
         fmt(cum_in+0), fmt(cum_out+0),
         fmt(in_l), fmt(out_l),
         fmt(cum_cr+0), fmt(cr_l),
         fmt(cum_cw+0), fmt(cw_l),
-        cc2
+        cc2, ch_pct
 }')
 ctx_fmt="${_fmt[0]}"
 ctx_pct="${_fmt[1]}"
@@ -267,10 +269,8 @@ out_fmt="${_fmt[5]}"
 in_last_fmt="${_fmt[6]}"
 out_last_fmt="${_fmt[7]}"
 cache_read_cum_fmt="${_fmt[8]}"
-cache_read_last_fmt="${_fmt[9]}"
-cache_write_cum_fmt="${_fmt[10]}"
-cache_write_last_fmt="${_fmt[11]}"
 cost_display="${_fmt[12]}"
+cache_hit_pct="${_fmt[13]}"
 
 # Write state — pure printf, no jq spawn (was jq -n)
 printf '{"last_cost":"%s","last_ctx_tokens":%s,"last_used_pct":%s,"last_input":%s,"last_output":%s,"last_cache_read":%s,"last_cache_write":%s,"last_cwd":"%s"}\n' \
@@ -294,7 +294,7 @@ else
   cost_fmt="${lbl}${currency}${lblr}${cost_display}"
 fi
 io_seg="${lbl}↑${lblr}${in_fmt}(+${in_last_fmt})${sl}${lbl}↓${lblr}${out_fmt}(+${out_last_fmt})"
-cache_seg="${lbl}R${lblr}${cache_read_cum_fmt}(+${cache_read_last_fmt})${sl}${lbl}W${lblr}${cache_write_cum_fmt}(+${cache_write_last_fmt})"
+cache_seg="${lbl}R${lblr}${cache_read_cum_fmt}${sl}${lbl}CH${lblr}${cache_hit_pct}%"
 
 # Git branch-changes stats: committed lines changed between HEAD and the merge-base
 # with the repository's default remote branch — mimics Codex's branch-changes item.
