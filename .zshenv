@@ -9,13 +9,10 @@ export BACKUP="/backup"
 export -U PATH
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/.scripts:$PATH"
-export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.bun/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
-export PATH="$HOME/.opencode/bin:$PATH"
-export PATH="/var/DassaultSystemes/SIMULIA/Commands:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 export GOPROXY=https://goproxy.cn,direct
