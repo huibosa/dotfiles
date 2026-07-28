@@ -62,7 +62,7 @@ _mac_proxy_check() {
 
     proxy_on="$(networksetup -getwebproxy "${MAC_WIFI_NAME}" | grep 'Enabled: Yes')"
     shadow_on="$(scutil --nc list | grep "Connect.*${SHADOWROCKET_SERVICE}")"
-    quant_on="$(scutil --nc list | grep 'Connect.*Quantumult')"
+    quant_on="$(scutil --nc list | grep "Connect.*${QUANTUMULT_SERVICE}")"
 
     if [ -n "${quant_on}" ]; then
         echo "Quantumult X"
@@ -140,16 +140,16 @@ _shell_proxy_on() {
         return 1
     fi
 
-    export http_proxy="${proxy}" \
-        https_proxy="${proxy}" \
-        ftp_proxy="${proxy}" \
-        rsync_proxy="${proxy}" \
-        HTTP_PROXY="${proxy}" \
-        HTTPS_PROXY="${proxy}" \
-        FTP_PROXY="${proxy}" \
-        RSYNC_PROXY="${proxy}" \
-        all_proxy="${proxy}" \
-        ALL_PROXY="${proxy}"
+    export http_proxy="http://${proxy}" \
+        https_proxy="http://${proxy}" \
+        ftp_proxy="http://${proxy}" \
+        rsync_proxy="http://${proxy}" \
+        HTTP_PROXY="http://${proxy}" \
+        HTTPS_PROXY="http://${proxy}" \
+        FTP_PROXY="http://${proxy}" \
+        RSYNC_PROXY="http://${proxy}" \
+        all_proxy="http://${proxy}" \
+        ALL_PROXY="http://${proxy}"
     echo -e "Proxy environment variable set."
     return 0
 }

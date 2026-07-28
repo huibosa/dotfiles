@@ -1,7 +1,8 @@
-# zmodload zsh/zprof
-
 # Forbid <c-s> to freeze terminal
 unsetopt flow_control
+
+# Allow comments on the interactive command line
+setopt interactive_comments
 
 # History (interactive shells only)
 setopt APPEND_HISTORY
@@ -40,13 +41,17 @@ setopt prompt_subst
 fpath+="$HOME/.scripts/zsh/completions/"
 zstyle ':completion:*' menu select=1 # menu block selection
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' use-cache on # cache expensive completions
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 autoload -Uz compinit
-if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
-    compinit          # full security check at most once per day
-else
-    compinit -C       # skip the check, use the cached dump
-fi
+() {
+    local -a stale_dump=( $HOME/.zcompdump(N.mh+24) )
+    if [[ ! -e $HOME/.zcompdump ]] || (( ${#stale_dump} )); then
+        compinit      # full security check at most once per day
+    else
+        compinit -C   # skip the check, use the cached dump
+    fi
+}
 
 # Enter directory without type "cd"
 setopt autocd
@@ -95,16 +100,6 @@ autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' formats '%b'
 
-# Add dirty indicator
-# zstyle ':vcs_info:git+set-message:*' hooks git-dirty
-
-# function +vi-git-dirty() {
-    #     local gitstatus=$(command git status --porcelain -uno 2>/dev/null)
-    #     if [[ -n "$gitstatus" ]]; then
-        #         hook_com[branch]+='*'
-    #     fi
-# }
-
 precmd() {
     vcs_info
     if [[ -n $vcs_info_msg_0_ ]]; then
@@ -132,10 +127,6 @@ precmd() {
     fi
 }
 
-# VCS prompt for git branches (no longer needed, using vcs_info_msg_0_ directly)
-PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
-PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
-
 PROMPT='${PATH_PROMPT}${vcs_info_msg_0_}%{$reset_color%}%{%(?.%{$fg_bold[white]%}.%{$fg_bold[red]%})%}${BG_PROMPT}>%{$reset_color%} '
 
 # Tools that register ZLE widgets — load before syntax-highlighting so it wraps them
@@ -148,5 +139,3 @@ source $HOME/.scripts/boot/antigen.zsh
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen apply
-
-# zprof

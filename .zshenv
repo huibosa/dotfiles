@@ -2,12 +2,12 @@
 export EDITOR="nvim"
 # export READER="zathura"
 # export BROWSER="chromium"
-export PAPER="less"
+export PAGER="less"
 export BACKUP="/backup"
 
 # Path
 typeset -U path PATH
-export PATH="/opt/homebrew/bin:$PATH"
+[[ -d /opt/homebrew/bin ]] && export PATH="/opt/homebrew/bin:$PATH" # macOS only
 export PATH="$HOME/.scripts:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
@@ -32,6 +32,9 @@ export HISTFILE="$HOME/.zsh_history"
 export HISTSIZE=10000000
 export SAVEHIST=$HISTSIZE
 
+# Skip the duplicate compinit in /etc/zsh/zshrc — .zshrc runs its own
+skip_global_compinit=1
+
 # brew mirror
 export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
@@ -54,12 +57,6 @@ export LESS_TERMCAP_se=$'\E[27m\E(B\E[m'
 export LESS_TERMCAP_ZV=""
 export LESS_TERMCAP_so=$'\E[1m\E[33m\E[44m'
 
-# PROMPT_SUCCESS_COLOR='%{$fg_bold[white]%}'
-# PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
-# PROMPT='%{$fg_bold[cyan]%}%c%{$reset_color%}%{$fg[green]%}'
-# PROMPT+="%{%(?.$PROMPT_SUCCESS_COLOR.$PROMPT_FAILURE_COLOR)%}> "
-# PROMPT+='%{$reset_color%}'
-
 export LS_COLORS='di=34;01:*Makefile=38;5;178:*.ipynb=38;5;208:*.7z=31:*.WARC=31:*.a=31:*.arj=31:*.bz2=31:*.cpio=31:*.gz=31:*.lrz=31:*.lz=31:*.lzma=31:*.lzo=31:*.rar=31:*.s7z=31:*.sz=31:*.tar=31:*.tbz=31:*.tgz=31:*.warc=31:*.xz=31:*.z=31:*.zip=31:*.zipx=31:*.zoo=31:*.zpaq=31:*.zst=31:*.zstd=31:*.zz=31:*.gz=31:'
 
 export UV_INDEX_URL="https://mirrors.aliyun.com/pypi/simple"
@@ -76,7 +73,7 @@ export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --no-ignore-vcs \
   --exclude __pycache__/ --exclude .pytest_cache/ \
   --exclude .mypy_cache/ --exclude .tox/ --exclude .bun/ \
   --exclude dist/ --exclude build/ \
-  --exclude .idea/ --exclude '.egg-info/'"
+  --exclude .idea/ --exclude '*.egg-info/'"
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 

@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
 make-mpl-font() {
-    font_file="$1"
+    local font_file="$1"
+    local mplrc mpldata mplcache
 
-    # mplrcPath=$(echo 'import matplotlib; print(matplotlib.matplotlib_fname())' | python)
     mplrc=$(python -c 'import matplotlib; print(matplotlib.matplotlib_fname())')
     mpldata="${mplrc%/*}"
     mplcache=$(python -c 'import matplotlib; print(matplotlib.get_cachedir())')
 
-    echo $mpldata
-    echo $mplcache
+    echo "$mpldata"
+    echo "$mplcache"
 
     cp "$font_file" "${mpldata}/fonts/ttf/"
-    rm -rf ~/.cache/matplotlib
+    rm -rf "$mplcache"
 }
 
 function y() {
@@ -85,5 +85,9 @@ _tmux-all-panes-bg() {
 }
 
 clip() {
+    if [[ -z $TMUX ]]; then
+        echo "clip: not inside tmux" >&2
+        return 1
+    fi
     tmux load-buffer -w "${1:--}"
 }
