@@ -3,9 +3,21 @@
 # Forbid <c-s> to freeze terminal
 unsetopt flow_control
 
-# Append history immediatly
-setopt incappendhistory
-setopt sharehistory
+# History (interactive shells only)
+setopt APPEND_HISTORY
+setopt BANG_HIST                 # Treat the '!' character specially during expansion.
+setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
+setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
+setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
 # Commandline editting
 bindkey -e                       # Emacs keybindings
@@ -29,7 +41,12 @@ fpath+="$HOME/.scripts/zsh/completions/"
 zstyle ':completion:*' menu select=1 # menu block selection
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-autoload -U compinit && compinit -u
+autoload -Uz compinit
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+    compinit          # full security check at most once per day
+else
+    compinit -C       # skip the check, use the cached dump
+fi
 
 # Enter directory without type "cd"
 setopt autocd
@@ -121,14 +138,15 @@ PROMPT_FAILURE_COLOR='%{$fg_bold[red]%}'
 
 PROMPT='${PATH_PROMPT}${vcs_info_msg_0_}%{$reset_color%}%{%(?.%{$fg_bold[white]%}.%{$fg_bold[red]%})%}${BG_PROMPT}>%{$reset_color%} '
 
-# Use antigen
+# Tools that register ZLE widgets — load before syntax-highlighting so it wraps them
+source <(zoxide init zsh)
+source <(fzf --zsh)
+source <(direnv hook zsh)
+
+# Use antigen — zsh-syntax-highlighting must be applied last
 source $HOME/.scripts/boot/antigen.zsh
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen apply
-
-source <(zoxide init zsh)
-source <(fzf --zsh)
-source <(direnv hook zsh)
 
 # zprof

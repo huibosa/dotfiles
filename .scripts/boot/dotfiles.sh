@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-git clone --bare https://github.com/huibosa/dotfiles.git $HOME/.dotfiles
+[ -d "$HOME/.dotfiles" ] || git clone --bare https://github.com/huibosa/dotfiles.git $HOME/.dotfiles
 
 config() {
-    usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
+    /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
 }
 
 config checkout
