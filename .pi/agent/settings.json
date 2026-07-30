@@ -1,0 +1,31 @@
+{
+  "defaultProvider": "tokenhub",
+  "defaultModel": "glm-5.2",
+  "defaultThinkingLevel": "max",
+  "theme": "dark",
+  "quietStartup": false,
+  "retry": {
+    "maxRetries": 10
+  },
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 16384,
+    "keepRecentTokens": 20000
+  },
+  "enabledModels": [
+    "tokenhub/glm-5.2",
+    "tokenhub/deepseek-v4-flash",
+    "tokenhub/deepseek-v4-pro",
+    "tokenhub/kimi-k3",
+    "tokenhub/custom-model-b6-standard"
+  ],
+  "lastChangelogVersion": "0.83.0",
+  "hideThinkingBlock": true,
+  "showCacheMissNotices": true,
+  "packages": [
+    "npm:@narumitw/pi-btw",
+    "git:github.com/MasuRii/pi-tool-display",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@juicesharp/rpiv-todo"
+  ]
+}

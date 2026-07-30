@@ -111,3 +111,15 @@ __pycache__
 .agents
 !.claude/subagent_statusline.sh
 !.claude/CLAUDE.md
+
+# pi agent config
+!.pi/
+.pi/*
+!.pi/agent/
+.pi/agent/*
+!.pi/agent/settings.json
+!.pi/agent/keybindings.json
+!.pi/agent/models.json
+!.pi/agent/CLAUDE.md
+!.pi/agent/extensions/
+!.pi/agent/extensions/**

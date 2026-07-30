@@ -1,0 +1,61 @@
+/**
+ * Refresh Buffer — Claude-Code-style screen refresh for pi.
+ *
+ * Adds a key that clears the screen and scrollback and redraws the current
+ * TUI state from scratch. (The prompt editor already stays pinned to the
+ * bottom of the viewport when content exceeds the terminal height — that is
+ * pi's default viewport behavior, so nothing extra is needed for that part.)
+ *
+ * Default key: Ctrl+L   (override with PI_REFRESH_KEY, e.g. "ctrl+\\")
+ *
+ * This overrides pi's built-in Ctrl+L (model selector). The model selector is
+ * still available via /model, and Ctrl+P still cycles scoped models. To use a
+ * different key instead, set PI_REFRESH_KEY before starting pi.
+ *
+ * How it works: the input editor is replaced with a CustomEditor subclass that
+ * intercepts the refresh key in handleInput (before app keybindings run) and
+ * calls tui.requestRender(true), which forces a full redraw — clear screen +
+ * cursor home + clear scrollback, then re-render every component. Every other
+ * key is delegated to the default editor, so normal editing and all other
+ * keybindings are unchanged.
+ *
+ * Why intercept in handleInput instead of pi.registerShortcut(): Ctrl+L is a
+ * reserved built-in (app.model.select), and reserved keys are skipped by
+ * registerShortcut. Intercepting in the editor's handleInput fires only when
+ * the main editor is focused, so /tree, the model selector, /settings, etc.
+ * keep their own Ctrl+L behavior.
+ *
+ * Note: because this replaces the editor, it is mutually exclusive with other
+ * editor-replacing extensions (e.g. border-status-editor, modal-editor).
+ */
+
+import { CustomEditor, type ExtensionAPI, type KeybindingsManager } from "@earendil-works/pi-coding-agent";
+import type { EditorTheme, KeyId, TUI } from "@earendil-works/pi-tui";
+import { matchesKey } from "@earendil-works/pi-tui";
+
+const REFRESH_KEY = (process.env.PI_REFRESH_KEY ?? "ctrl+l") as KeyId;
+
+class RefreshEditor extends CustomEditor {
+	private readonly refreshTui: TUI;
+
+	constructor(tui: TUI, theme: EditorTheme, keybindings: KeybindingsManager) {
+		super(tui, theme, keybindings);
+		this.refreshTui = tui;
+	}
+
+	override handleInput(data: string): void {
+		if (matchesKey(data, REFRESH_KEY)) {
+			// Force a full redraw: clear screen + scrollback, re-render everything.
+			this.refreshTui.requestRender(true);
+			return;
+		}
+		super.handleInput(data);
+	}
+}
+
+export default function (pi: ExtensionAPI) {
+	pi.on("session_start", (_event, ctx) => {
+		if (ctx.mode !== "tui") return;
+		ctx.ui.setEditorComponent((tui, theme, keybindings) => new RefreshEditor(tui, theme, keybindings));
+	});
+}

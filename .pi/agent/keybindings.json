@@ -1,0 +1,12 @@
+{
+  "tui.editor.cursorUp": "ctrl+p",
+  "tui.editor.cursorDown": "ctrl+n",
+  "tui.editor.deleteCharBackward": ["backspace", "ctrl+h"],
+  "tui.select.up": ["up", "ctrl+p"],
+  "tui.select.down": ["down", "ctrl+n"],
+  "app.model.cycleForward": "ctrl+shift+p",
+  "app.model.cycleBackward": "ctrl+shift+n",
+  "app.model.select": ["alt+p", "super+p"],
+  "tui.editor.undo": ["ctrl+-", "ctrl+_", "ctrl+/"],
+  "tui.input.newLine": ["shift+enter", "ctrl+j", "ctrl+enter"]
+}
