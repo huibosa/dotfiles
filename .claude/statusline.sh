@@ -135,18 +135,31 @@ fi
 # Each turn writes one JSONL line per content block (thinking, tool_use, text)
 # and every line carries the *same* message.usage object from one API
 # response. Deduplicate by message.id so each API call is counted once;
-# without this the summer over-counts by ~2-3x. Also filter by current model
-# (multi-model sessions otherwise get foreign-model tokens re-priced at the
-# current model's rates) and skip isSidechain as defence.
-usage_json=$(python3 - "$session_id" "$claude_projects_dir" "$model_base" <<'PY'
+# without this the summer over-counts by ~2-3x. Skip isSidechain as defence.
+# Current-model tokens feed cc (the first number); grand_total prices EVERY
+# assistant message by its own model's table rate (the second number) so
+# multi-model sessions sum correctly instead of re-pricing at one rate.
+# Price table passed as argv[4]: {model_base: [in, out, cacheRead, cacheWrite]}.
+PRICES_JSON='{"glm-5.2":[1.18,4.14,0.30,0.0],"deepseek-v4-pro":[1.66,3.31,0.14,0.0],"deepseek-v4-flash":[0.14,0.28,0.03,0.0],"kimi-k3":[2.95,14.75,0.30,0.0],"custom-model-a1":[5.0,25.0,0.50,6.25],"custom-model-a2":[3.0,15.0,0.30,3.75],"custom-model-a3":[5.0,25.0,0.50,6.25],"custom-model-a4":[5.0,25.0,0.50,6.25],"custom-model-a6":[10.0,50.0,1.00,12.50],"custom-model-a7":[3.0,15.0,0.30,3.75]}'
+usage_json=$(python3 - "$session_id" "$claude_projects_dir" "$model_base" "$PRICES_JSON" <<'PY'
 import json, sys
 from pathlib import Path
 
 session_id = sys.argv[1]
 projects_dir = Path(sys.argv[2])
 model_base = sys.argv[3] if len(sys.argv) > 3 else ""
-result = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0, "messages": 0, "found": False}
+prices = json.loads(sys.argv[4]) if len(sys.argv) > 4 else {}
+result = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0, "messages": 0, "found": False, "grand_total": 0.0}
 seen_ids = set()
+
+def rate_for(model, usage):
+    # glm-5.1 has tiered pricing on (input + cache_read + cache_write) <= 32000
+    if model == "glm-5.1":
+        tot = int(usage.get("input_tokens", 0) or 0) + int(usage.get("cache_read_input_tokens", 0) or 0) + int(usage.get("cache_creation_input_tokens", 0) or 0)
+        if tot <= 32000:
+            return (0.83, 3.31, 0.18, 0.0)
+        return (1.10, 3.86, 0.28, 0.0)
+    return prices.get(model)
 
 if projects_dir.exists():
     matches = sorted(projects_dir.glob(f"**/{session_id}.jsonl"), key=lambda p: len(p.parts))
@@ -169,8 +182,7 @@ if projects_dir.exists():
                 msg = obj.get("message")
                 if not isinstance(msg, dict):
                     continue
-                if model_base and msg.get("model") != model_base:
-                    continue
+                mid = msg.get("model")
                 msg_id = msg.get("id")
                 if msg_id is not None:
                     if msg_id in seen_ids:
@@ -179,33 +191,38 @@ if projects_dir.exists():
                 usage = msg.get("usage")
                 if not isinstance(usage, dict):
                     continue
-                result["messages"] += 1
-                result["input"] += int(usage.get("input_tokens", 0) or 0)
-                result["output"] += int(usage.get("output_tokens", 0) or 0)
-                result["cache_read"] += int(usage.get("cache_read_input_tokens", 0) or 0)
-                result["cache_write"] += int(usage.get("cache_creation_input_tokens", 0) or 0)
+                # Current-model tokens feed cc (the first number).
+                if model_base and mid == model_base:
+                    result["messages"] += 1
+                    result["input"] += int(usage.get("input_tokens", 0) or 0)
+                    result["output"] += int(usage.get("output_tokens", 0) or 0)
+                    result["cache_read"] += int(usage.get("cache_read_input_tokens", 0) or 0)
+                    result["cache_write"] += int(usage.get("cache_creation_input_tokens", 0) or 0)
+                # grand_total: price every message by its OWN model's rate (second number).
+                if mid:
+                    rate = rate_for(mid, usage)
+                    if rate:
+                        i = int(usage.get("input_tokens", 0) or 0)
+                        o = int(usage.get("output_tokens", 0) or 0)
+                        cr = int(usage.get("cache_read_input_tokens", 0) or 0)
+                        cw = int(usage.get("cache_creation_input_tokens", 0) or 0)
+                        result["grand_total"] += (i*rate[0] + o*rate[1] + cr*rate[2] + cw*rate[3]) / 1_000_000.0
 
 print(json.dumps(result))
 PY
 )
 
 # Parse all usage_json fields in one jq call (was 4 separate calls)
-mapfile -t _u < <(printf '%s' "$usage_json" | jq -r '.found, .input, .output, .cache_read, .cache_write')
+mapfile -t _u < <(printf '%s' "$usage_json" | jq -r '.found, .input, .output, .cache_read, .cache_write, .grand_total')
 usage_found="${_u[0]}"
 cumulative_in="${_u[1]}"
 cumulative_out="${_u[2]}"
 cumulative_cache="${_u[3]}"
 cumulative_cache_write="${_u[4]}"
-
-# Authoritative cumulative cost from hook input — same number /status shows.
-# (Earlier versions of this script tried .cost.usage_by_model, but that field
-# does not exist in Claude Code 2.1.x; .cost.total_cost_usd is what's there.)
-# When this is set, the awk block below uses it verbatim instead of computing
-# cost from per-token math.
-stats_cost=$(printf '%s' "$input" | jq -r '.cost.total_cost_usd // ""' 2>/dev/null || true)
+grand_total="${_u[5]}"
 
 if [[ "$usage_found" != "true" ]]; then
-  cumulative_in=0; cumulative_out=0; cumulative_cache=0; cumulative_cache_write=0
+  cumulative_in=0; cumulative_out=0; cumulative_cache=0; cumulative_cache_write=0; grand_total=0
 fi
 
 # Single awk call: all token formatting + cost calculations (was ~13 separate awk calls)
@@ -218,7 +235,7 @@ mapfile -t _fmt < <(awk \
   -v pi="$p_in" -v po="$p_out" -v pcr="$p_cr" -v pcw="$p_cw" \
   -v cum_in="$cumulative_in"    -v cum_out="$cumulative_out" \
   -v cum_cr="$cumulative_cache" -v cum_cw="$cumulative_cache_write" \
-  -v sc="$stats_cost" \
+  -v gt="$grand_total" \
   -v st_in="$state_last_input"  -v st_out="$state_last_output" \
   -v st_cr="$state_last_cache_read" -v st_cw="$state_last_cache_write" \
 'function fmt(n) {
@@ -234,20 +251,28 @@ BEGIN {
     out_l = (co+0 == 0 && st_out+0 > 0) ? st_out+0 : co+0
     cr_l  = (cr+0 == 0 && st_cr+0  > 0) ? st_cr+0  : cr+0
     cw_l  = (cw+0 == 0 && st_cw+0  > 0) ? st_cw+0  : cw+0
-    # Cumulative cost (cc) prefers hook-input authoritative value (sc); falls
-    # back to per-token math only when sc is absent and pricing is known.
-    # Last-turn cost (lc) is per-token math when pricing is known; zero for
-    # unknown models since the hook input has no per-turn cost.
+    # Both last-turn (lc) and cumulative (cc) cost come from the per-token
+    # price table only. Models not in the table get zero cost here; the
+    # statusline renders a warning for them instead of any dollar figure —
+    # never falls back to the .cost.total_cost_usd value, which prices
+    # unknown custom-routed models at the Opus $5/$25 tier.
     if (warn+0) {
         lc = "0.000000"
-        cc = (sc != "" && sc != "null") ? sprintf("%.6f", sc+0) : "0.000000"
+        cc = "0.000000"
     } else {
         lc = sprintf("%.6f", (ci*pi + co*po + cr*pcr + cw*pcw) / 1000000)
-        cc = (sc != "" && sc != "null") \
-            ? sprintf("%.6f", sc+0) \
-            : sprintf("%.6f", (cum_in*pi + cum_out*po + cum_cr*pcr + cum_cw*pcw) / 1000000)
+        cc = sprintf("%.6f", (cum_in*pi + cum_out*po + cum_cr*pcr + cum_cw*pcw) / 1000000)
     }
+    lc2 = sprintf("%.2f", lc+0)
     cc2 = sprintf("%.2f", cc+0)
+    gt2 = sprintf("%.2f", gt+0)
+    # first = current model cumulative (cc); second = all-models grand total (gt).
+    # When equal (single-model session), show just one number.
+    if (cc2 == gt2) {
+        cost_split = cc2
+    } else {
+        cost_split = cc2 "/" gt2
+    }
     cache_total = cum_in + cum_cr + cum_cw
     ch_pct = (cache_total > 0) ? (cum_cr / cache_total * 100) : 0
     printf "%s\n%.1f%%\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%.1f\n",
@@ -256,7 +281,7 @@ BEGIN {
         fmt(in_l), fmt(out_l),
         fmt(cum_cr+0), fmt(cr_l),
         fmt(cum_cw+0), fmt(cw_l),
-        cc2, ch_pct
+        cost_split, ch_pct
 }')
 ctx_fmt="${_fmt[0]}"
 ctx_pct="${_fmt[1]}"
@@ -281,11 +306,7 @@ lbl=$'\033[34m'
 lblr=$'\033[0m'
 
 if [[ $warn -eq 1 ]]; then
-  if [[ -n "$stats_cost" && "$stats_cost" != "null" ]]; then
-    cost_fmt="[! unknown: ${model_id}] \$${cost_display}"
-  else
-    cost_fmt="[! unknown: ${model_id}]"
-  fi
+  cost_fmt="[! unknown: ${model_id}]"
 else
   cost_fmt="${lbl}${currency}${lblr}${cost_display}"
 fi
