@@ -308,6 +308,9 @@ lblr=$'\033[0m'
 if [[ $warn -eq 1 ]]; then
   cost_fmt="[! unknown: ${model_id}]"
 else
+  # Color the cost-split "/" like every other separator (sl), instead of the
+  # plain "/" that awk emits in cost_split.
+  [[ "$cost_display" == */* ]] && cost_display="${cost_display%%/*}${sl}${cost_display#*/}"
   cost_fmt="${lbl}${currency}${lblr}${cost_display}"
 fi
 io_seg="${lbl}↑${lblr}${in_fmt}${sl}${lbl}↓${lblr}${out_fmt}"
