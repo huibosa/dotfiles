@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 # Claude Code custom status line
+# Portable: runs on bash 3.2+ (macOS /bin/bash) and bash 4/5 (Linux).
+# Avoids `mapfile`/`readarray` (bash 4.0+) — uses `while read` loops instead.
 
 set -euo pipefail
 
 input=$(cat)
 
 # Parse all input fields in a single jq call (was 8 separate calls)
-mapfile -t _f < <(printf '%s' "$input" | jq -r '
+_f=()
+while IFS= read -r _line || [[ -n "$_line" ]]; do _f+=("$_line"); done < <(printf '%s' "$input" | jq -r '
   .model.id // "",
   (.session_id // "default"),
   (.effort.level // ""),
@@ -51,7 +54,8 @@ read_state() {
     (.last_cache_write // 0),
     (.last_cwd // "")
   ' "$file" 2>/dev/null) || return 1
-  mapfile -t _s <<< "$raw"
+  _s=()
+  while IFS= read -r _line || [[ -n "$_line" ]]; do _s+=("$_line"); done <<< "$raw"
   [[ ${#_s[@]} -eq 8 ]] || return 1
   state_last_cost="${_s[0]}"
   state_last_ctx="${_s[1]}"
@@ -213,7 +217,8 @@ PY
 )
 
 # Parse all usage_json fields in one jq call (was 4 separate calls)
-mapfile -t _u < <(printf '%s' "$usage_json" | jq -r '.found, .input, .output, .cache_read, .cache_write, .grand_total')
+_u=()
+while IFS= read -r _line || [[ -n "$_line" ]]; do _u+=("$_line"); done < <(printf '%s' "$usage_json" | jq -r '.found, .input, .output, .cache_read, .cache_write, .grand_total')
 usage_found="${_u[0]}"
 cumulative_in="${_u[1]}"
 cumulative_out="${_u[2]}"
@@ -226,7 +231,8 @@ if [[ "$usage_found" != "true" ]]; then
 fi
 
 # Single awk call: all token formatting + cost calculations (was ~13 separate awk calls)
-mapfile -t _fmt < <(awk \
+_fmt=()
+while IFS= read -r _line || [[ -n "$_line" ]]; do _fmt+=("$_line"); done < <(awk \
   -v warn="$warn" \
   -v ctx="$ctx_tokens"  -v ctx_s="$state_last_ctx" \
   -v pct="$used_pct"    -v pct_s="$state_last_pct" \
