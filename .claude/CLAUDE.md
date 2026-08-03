@@ -56,6 +56,7 @@
 - Check existing sessions first: `tmux list-sessions`
 - Name descriptively: `dev-server`, `api-server`
 - Before creating a tmux session, carefully choose the session name; never overwrite existing sessions
+- Prefer adding a new window to the current tmux session over creating a new session, unless told otherwise
 
 ### Background tasks & TaskOutput
 
@@ -64,7 +65,7 @@
 - Background tasks → wait passively for `<task-notification>`; never `sleep`-poll
 
 ### Codex CLI (`codex exec`)
-- Always use `--yolo` (alias for `--dangerously-bypass-approvals-and-sandbox`): skips approval prompts and bypasses the bubblewrap sandbox — required for non-interactive use; safe because Claude Code is already externally sandboxed
+- **Read-only review runs:** `devil-review` (and any read-only Codex review) uses `-c sandbox_mode="read-only" -c approval_policy="never"` instead of `--yolo`, to hard-enforce the no-modify contract. `--sandbox read-only` is not available on `codex exec resume`, so the `-c` overrides are used on both `exec` and `resume`. `--yolo` remains correct for task/delegation runs where Codex is expected to write.
 - Always pipe input via stdin: `codex exec --yolo "<prompt>" < /path/to/file` — avoids bubblewrap sandbox filesystem restrictions and closes stdin naturally at EOF
 - If there is no input file, write content to `/tmp` first, then pipe it in — never use `< /dev/null` (empty stdin) as it prevents codex from reading any input
 - Always run with `run_in_background: true` — codex runs are long. The output file streams live; read it directly when you want a peek
@@ -111,10 +112,19 @@ Skip tests that:
 ### Documentation
 - If docs are clearly outdated after a change, sync them
 
+### Design principles
+- Do not preserve backward compatibility. Remove obsolete paths instead of adding compatibility layers, fallbacks, or migrations.
+- Choose the simplest implementation that fully meets the current requirements. Avoid speculative abstractions, configuration, and indirection.
+- Grow the system in layers. Start from the smallest version that works end to end, and add each new capability on top of a product that already works. Never trade a working product for unfinished complexity.
+- Keep components modular and concerns clearly separated.
+- Prefer established, well-maintained libraries when they reduce overall complexity or improve reliability. Do not reimplement common functionality without a clear reason.
+- Lean on the dependencies already in the project before writing your own implementation or adding packages. Do not assume a library lacks a capability without checking its documentation and types.
+- Make architectural decisions for the long term. Do not accept a stopgap that only works for now and is meant to be replaced later.
+
 ## Safety
 
 ### High-risk operations
-- Deleting files, pushing to remotes, modifying env / CI / DB → require secondary confirmation
+- Deleting files, pushing to remotes, modifying environment config / CI pipelines / databases → require secondary confirmation
 - Never execute arbitrarily
 
 ### Blockers
