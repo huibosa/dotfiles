@@ -14,19 +14,12 @@
 
 ### Parallel work
 - Use forks (Agent without `subagent_type`) for research that would bloat your context
-- When background tasks or subagents are running, wait for all to complete before delivering the final answer; never speculate on in-flight results
-- **Never sleep-poll** (`sleep` / `Bash(sleep …)`) to wait for a background agent or task — it blocks harness notifications and causes infinite loops
-- If you need an agent's result to continue: use `run_in_background: false` (synchronous); the result is returned directly as the tool value
-- If background is needed: stop after spawning and wait passively — the harness sends a `<task-notification>` automatically when done
+- When multiple tasks/subagents run concurrently, wait for all to finish before delivering the final answer; never speculate on in-flight results
+- For async mechanics (background vs. sync, waiting, reading output), see Background tasks & TaskOutput
 
 ### Search
 - Use the `smart-search-cli` skill only for **web / external research** (finding libraries, looking up docs, researching approaches online) — invoke it via Skill before any other web search
 - For **codebase search** (reading files, finding symbols, understanding the local repo), use file tools, Grep, LSP, or Explore agents directly — do NOT invoke `smart-search-cli`
-
-### Search modes (only when explicitly invoked)
-- **[search-mode]** — exhaustive fan-out: multiple Explore agents in parallel plus direct Grep / ripgrep / AST-grep
-- **[analyze-mode]** — context first: 1-2 Explore agents plus targeted Grep / AST-grep / LSP
-- Default (no mode named): single targeted search
 
 ### Continuous improvement
 - If the same mistake recurs, propose a new rule for CLAUDE.md
@@ -60,9 +53,9 @@
 
 ### Background tasks & TaskOutput
 
-- `TaskOutput` fails → check session history for the launch tool result, then `Read` its output file path directly (skip for local_agent tasks — JSONL overflow; use the agent's return value instead)
-- Need result immediately → use `run_in_background: false`
-- Background tasks → wait passively for `<task-notification>`; never `sleep`-poll
+- Need the result to continue → use `run_in_background: false`; it's returned directly as the tool value
+- Otherwise → stop after spawning and wait passively for `<task-notification>`; **never** sleep-poll (`sleep` / `Bash(sleep …)`) — it blocks the notification and can loop forever
+- `TaskOutput` fails → find the launch tool result in session history, then `Read` its output file path directly (skip for local_agent tasks — JSONL overflow; use the agent's return value instead)
 
 ### Codex CLI (`codex exec`)
 - **Read-only review runs:** `devil-review` (and any read-only Codex review) uses `-c sandbox_mode="read-only" -c approval_policy="never"` instead of `--yolo`, to hard-enforce the no-modify contract. `--sandbox read-only` is not available on `codex exec resume`, so the `-c` overrides are used on both `exec` and `resume`. `--yolo` remains correct for task/delegation runs where Codex is expected to write.
@@ -70,10 +63,6 @@
 - If there is no input file, write content to `/tmp` first, then pipe it in — never use `< /dev/null` (empty stdin) as it prevents codex from reading any input
 - Always run with `run_in_background: true` — codex runs are long. The output file streams live; read it directly when you want a peek
 - Don't pipe through `tail`/`head` — those buffer until upstream closes, hiding live output. `tee` is fine: use `stdbuf -oL codex exec ... 2>&1 | tee "$OUT"` to get both shell-window visibility and a peekable file simultaneously; capture Codex's exit code with `${PIPESTATUS[0]}`
-
-### Git worktrees
-- Default location: `.worktrees/` at project root
-- Add `.worktrees/` to `.gitignore`
 
 ### File locations
 - Temp / scratch scripts → `/tmp` unless user specifies
